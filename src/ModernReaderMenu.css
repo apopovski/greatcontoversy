@@ -1,0 +1,134 @@
+
+.modern-reader-header {
+  display: flex;
+  align-items: center;
+  gap: 1.2em;
+  padding: 1.2rem 2rem 0.7rem 2rem;
+  background: #fff;
+  border-bottom: 1px solid #ececec;
+  flex-wrap: wrap;
+}
+
+.modern-reader-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #23235a;
+  margin-right: 1em;
+}
+
+.modern-reader-lang, .modern-reader-toc-dropdown {
+  font-size: 1rem;
+  padding: 0.3em 0.8em;
+  border-radius: 0.7rem;
+  border: 1px solid #ececec;
+  background: #fff;
+  color: #23235a;
+  margin-right: 1em;
+}
+
+.modern-reader-toc-dropdown {
+  min-width: 220px;
+  max-width: 350px;
+}
+
+.modern-reader-controls {
+  display: flex;
+  gap: 0.7em;
+  align-items: center;
+  margin-bottom: 1.2em;
+}
+
+.modern-reader-chapter-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #23235a;
+  margin: 0 1em;
+}
+
+.modern-reader-progress-bar {
+  height: 4px;
+  background: linear-gradient(90deg, #646cff 60%, #23235a 100%);
+  transition: width 0.2s;
+  z-index: 1000;
+}
+
+.modern-reader-content {
+  flex: 1;
+  padding: 2rem 2.5rem 2.5rem 2.5rem;
+  background: #fff;
+  overflow-y: auto;
+}
+
+.modern-reader-html {
+  font-size: 1.18rem;
+  line-height: 1.85;
+  color: #23235a;
+  max-width: 44rem;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 1px 8px #646cff11;
+  padding: 1.2em 1.5em;
+}
+
+@media (max-width: 900px) {
+  .modern-reader-flex {
+    flex-direction: column;
+  }
+  .modern-reader-sidebar {
+    width: 100vw;
+    border-right: none;
+    border-bottom: 1px solid #ececec;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1em;
+    padding: 1em 0.5em;
+    overflow-x: auto;
+  }
+  .modern-reader-toc ul {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5em;
+  }
+  .modern-reader-toc li {
+    margin-bottom: 0;
+  }
+  .modern-reader-main {
+    padding: 0;
+  }
+  .modern-reader-content {
+    padding: 1em 0.5em 1.5em 0.5em;
+  }
+}
+
+body.dark .modern-reader-sidebar {
+  background: #23242a;
+  border-color: #333;
+}
+body.dark .modern-reader-toc button,
+html.dark .modern-reader-toc button {
+  color: #e6e6e6;
+  background: #23242a;
+}
+body.dark .modern-reader-toc button:hover {
+  background: #646cff22;
+}
+body.dark .modern-reader-toc li.active button {
+  background: #646cff44;
+  color: #b3baff;
+}
+body.dark .modern-reader-header,
+html.dark .modern-reader-header {
+  background: #23242a;
+  border-bottom: 1px solid #333;
+}
+body.dark .modern-reader-chapter-title,
+html.dark .modern-reader-chapter-title {
+  color: #e6e6e6;
+}
+body.dark .modern-reader-html,
+html.dark .modern-reader-html {
+  color: #e6e6e6;
+  background: #23242a;
+  box-shadow: 0 1px 8px #0006;
+}

@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="uuid_id" version="2.0">
+    <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
+        <dc:identifier opf:scheme="calibre" id="calibre_id">b09b1158-4fea-4a80-a7c1-4824641c186d</dc:identifier>
+        <dc:identifier opf:scheme="uuid" id="uuid_id">b09b1158-4fea-4a80-a7c1-4824641c186d</dc:identifier>
+        <dc:title>Велика боротьба</dc:title>
+        <dc:creator opf:file-as="White, Ellen Gould" opf:role="aut">Ellen G. White</dc:creator>
+        <dc:contributor opf:file-as="calibre" opf:role="bkp">calibre (6.26.0) [https://calibre-ebook.com]</dc:contributor>
+        <dc:date>2012-12-28T06:00:00+00:00</dc:date>
+        <dc:publisher>Ellen G. White Estate, Inc.</dc:publisher>
+        <dc:rights>Copyright © 2012, Ellen G. White Estate, Inc.</dc:rights>
+        <dc:language>en</dc:language>
+    </metadata>
+    <guide>
+        <reference type="cover" title="Cover" href="cover.jpg"/>
+    </guide>
+</package>

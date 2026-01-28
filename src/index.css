@@ -1,0 +1,40 @@
+*, *::before, *::after {
+  background: var(--reader-bg) !important;
+  color: var(--reader-fg) !important;
+  border-color: var(--reader-border) !important;
+  transition: background 120ms, color 120ms;
+}
+/* Minimal global CSS for book reader app */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  background: var(--reader-bg) !important;
+  color: var(--reader-fg) !important;
+  border-color: var(--reader-border) !important;
+  transition: background 120ms, color 120ms;
+}
+
+a {
+  color: #646cff;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+a:hover {
+  color: #23235a;
+}
+
+button {
+  font-family: inherit;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+* {
+  box-sizing: inherit;
+}

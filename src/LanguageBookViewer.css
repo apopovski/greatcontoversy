@@ -1,0 +1,119 @@
+.modern-reader-container {
+  max-width: 700px;
+  margin: 3vh auto 0 auto;
+  background: #fff;
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px #0002;
+  border: 1.5px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  min-height: 80vh;
+  overflow: hidden;
+}
+
+.modern-reader-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem 2.5rem 1rem 2.5rem;
+  background: #f7f7fa;
+  border-bottom: 1px solid #ececec;
+}
+
+.modern-reader-title {
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: #23235a;
+  letter-spacing: 0.01em;
+}
+
+.modern-reader-controls {
+  display: flex;
+  gap: 1.2rem;
+  align-items: center;
+}
+
+.modern-reader-lang {
+  font-size: 1.1rem;
+  padding: 0.4em 1em;
+  border-radius: 0.8rem;
+  border: 1px solid #ececec;
+  background: #fff;
+  color: #23235a;
+}
+
+.modern-reader-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #646cff 60%, #23235a 100%);
+  transition: width 0.2s;
+  z-index: 1000;
+}
+
+.modern-reader-container {
+  max-width: 700px;
+  margin: 3vh auto 0 auto;
+  background: #fff;
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px #0002;
+  border: 1.5px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  min-height: 80vh;
+  overflow: hidden;
+  position: relative;
+}
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 1px 8px #646cff11;
+  padding: 1.2em 1.5em;
+}
+
+@media (max-width: 800px) {
+  .modern-reader-container {
+    max-width: 100vw;
+    border-radius: 0.7rem;
+    box-shadow: none;
+    border: none;
+    min-height: 100vh;
+  }
+  .modern-reader-header {
+    padding: 1.2rem 0.7rem 0.7rem 0.7rem;
+  }
+  .modern-reader-title {
+    font-size: 1.2rem;
+  }
+  .modern-reader-content {
+    padding: 1.2rem 0.7rem 1.2rem 0.7rem;
+  }
+  .modern-reader-html {
+    font-size: 0.98rem;
+    padding: 0.5em 0.2em;
+  }
+}
+
+body.dark .modern-reader-container,
+html.dark .modern-reader-container {
+  background: #23242a;
+  color: #e6e6e6;
+  border-color: #333;
+  box-shadow: 0 8px 32px #0008;
+}
+body.dark .modern-reader-header,
+html.dark .modern-reader-header {
+  background: #23242a;
+  border-bottom: 1px solid #333;
+}
+body.dark .modern-reader-title,
+html.dark .modern-reader-title {
+  color: #e6e6e6;
+}
+body.dark .modern-reader-html,
+html.dark .modern-reader-html {
+  color: #e6e6e6;
+  background: #23242a;
+  box-shadow: 0 1px 8px #0006;
+}

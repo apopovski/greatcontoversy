@@ -1,0 +1,21 @@
+{
+  "name": "The Great Book Reader",
+  "short_name": "BookReader",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f7f7f7",
+  "theme_color": "#23235a",
+  "description": "A modern, offline-capable book reading app with 42 chapters.",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
