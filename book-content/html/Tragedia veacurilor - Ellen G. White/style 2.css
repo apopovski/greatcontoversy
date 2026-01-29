@@ -1,0 +1,196 @@
+.calibre {
+    display: block;
+    font-size: 1em;
+    margin-bottom: 0;
+    margin-left: 5pt;
+    margin-right: 5pt;
+    margin-top: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0
+    }
+.calibre1 {
+    display: block;
+    font-size: 1em;
+    margin-bottom: 0;
+    margin-left: 5pt;
+    margin-right: 5pt;
+    margin-top: 0;
+    padding-left: 0;
+    padding-right: 0
+    }
+.calibre2 {
+    display: block;
+    margin-bottom: 0.25em;
+    margin-top: 0.25em;
+    text-align: left;
+    text-indent: 0
+    }
+.calibre3 {
+    display: list-item
+    }
+.calibre4 {
+    display: block;
+    list-style-type: decimal;
+    margin-bottom: 1em;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 1em
+    }
+.calibre5 {
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    -webkit-hyphens: none;
+    adobe-hyphenate: none;
+    display: block;
+    font-size: 1.66667em;
+    font-weight: bold;
+    hyphens: none;
+    line-height: 1.2;
+    margin-bottom: 1.33em;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 1.33em;
+    text-align: left
+    }
+.calibre6 {
+    font-style: italic;
+    font-weight: inherit
+    }
+.center {
+    display: block;
+    text-align: center
+    }
+.center1 {
+    display: block;
+    margin-bottom: 1em;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 1em;
+    text-align: center
+    }
+.center2 {
+    display: block;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    width: auto
+    }
+.center3 {
+    display: block;
+    margin-bottom: 0.25em;
+    margin-top: 0.25em;
+    text-align: center;
+    text-indent: 0
+    }
+.chapter {
+    display: block;
+    page-break-before: always
+    }
+.chapterhead {
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    -webkit-hyphens: none;
+    adobe-hyphenate: none;
+    display: block;
+    font-size: 2em;
+    font-weight: bold;
+    hyphens: none;
+    line-height: 1em;
+    margin-bottom: 1.2em;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0.83em;
+    padding-top: 1.6em;
+    text-align: center
+    }
+.footnote {
+    font-size: 0.75em;
+    line-height: normal;
+    vertical-align: super
+    }
+.footnote1 {
+    border-bottom-color: currentColor;
+    border-bottom-style: inset;
+    border-bottom-width: 1px;
+    border-left-color: currentColor;
+    border-left-style: inset;
+    border-left-width: 1px;
+    border-right-color: currentColor;
+    border-right-style: inset;
+    border-right-width: 1px;
+    border-top-color: currentColor;
+    border-top-style: inset;
+    border-top-width: 1px;
+    color: #000;
+    display: block;
+    height: 0.06em;
+    margin-bottom: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0.5em;
+    text-align: left;
+    width: 35%
+    }
+.no-num {
+    display: block;
+    list-style-image: none;
+    list-style-position: outside;
+    list-style-type: none;
+    margin-bottom: 1em;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 1em
+    }
+.pagebreak {
+    color: #9D0A0A;
+    font-style: normal
+    }
+.sectionhead {
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    -webkit-hyphens: none;
+    adobe-hyphenate: none;
+    display: block;
+    font-size: 2em;
+    font-weight: bold;
+    hyphens: none;
+    line-height: 1em;
+    margin-bottom: 1.2em;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0.67em;
+    padding-top: 1.6em;
+    text-align: center
+    }
+.sectionhead1 {
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    -webkit-hyphens: none;
+    adobe-hyphenate: none;
+    display: block;
+    font-size: 1.29167em;
+    font-weight: bold;
+    hyphens: none;
+    line-height: 1.2;
+    margin-bottom: 1.2em;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 1.67em;
+    padding-top: 1.6em;
+    text-align: center
+    }
+.standard-indented {
+    display: block;
+    margin-bottom: 0.25em;
+    margin-top: 0.25em;
+    text-align: left;
+    text-indent: 1.5em
+    }
+
+@page {
+    margin-bottom: 5pt;
+    margin-top: 5pt
+    }
+

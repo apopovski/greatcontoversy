@@ -1,0 +1,130 @@
+.calibre {
+    display: block;
+    font-size: 1em;
+    margin-bottom: 0;
+    margin-left: 5pt;
+    margin-right: 5pt;
+    margin-top: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0
+    }
+.calibre1 {
+    display: block
+    }
+.calibre2 {
+    display: block;
+    font-size: 1em;
+    margin-bottom: 0;
+    margin-left: 5pt;
+    margin-right: 5pt;
+    margin-top: 0;
+    padding-left: 0;
+    padding-right: 0
+    }
+.calibre3 {
+    display: block;
+    margin-bottom: 0.25em;
+    margin-top: 0.25em;
+    text-align: left
+    }
+.calibre4 {
+    display: block;
+    font-size: 1.66667em;
+    font-weight: bold;
+    line-height: 1.2;
+    margin-bottom: 1.33em;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 1.33em
+    }
+.center {
+    display: block;
+    margin-bottom: 1em;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 1em;
+    text-align: center
+    }
+.center1 {
+    display: block;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    width: auto
+    }
+.center2 {
+    display: block;
+    margin-bottom: 0.25em;
+    margin-top: 0.25em;
+    text-align: center
+    }
+.chapter {
+    display: block;
+    page-break-before: always
+    }
+.chapterhead {
+    display: block;
+    font-size: 1.83333em;
+    font-weight: bold;
+    line-height: 1.2;
+    margin-bottom: 1.2em;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 1em;
+    padding-top: 1.6em;
+    text-align: center
+    }
+.chapterhead1 {
+    display: block;
+    font-size: 2em;
+    font-weight: bold;
+    line-height: 1em;
+    margin-bottom: 1.2em;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0.83em;
+    padding-top: 1.6em;
+    text-align: center
+    }
+.pagebreak {
+    color: #9D0A0A
+    }
+.sectionhead {
+    display: block;
+    font-size: 2em;
+    font-weight: bold;
+    line-height: 1em;
+    margin-bottom: 1.2em;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0.67em;
+    padding-top: 1.6em;
+    text-align: center
+    }
+.sectionhead1 {
+    display: block;
+    font-size: 1.29167em;
+    font-weight: bold;
+    line-height: 1.2;
+    margin-bottom: 1.2em;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 1.67em;
+    padding-top: 1.6em;
+    text-align: center
+    }
+.standard-indented {
+    display: block;
+    margin-bottom: 0.25em;
+    margin-top: 0.25em;
+    text-align: left;
+    text-indent: 1.5em
+    }
+
+@page {
+    margin-bottom: 5pt;
+    margin-top: 5pt
+    }
+
