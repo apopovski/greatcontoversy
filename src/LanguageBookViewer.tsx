@@ -112,7 +112,7 @@ export function LanguageBookViewer() {
   // Fetch and parse HTML for ToC and chapters
   useEffect(() => {
     const fetchHtml = async () => {
-      const url = `/book-content/html/${encodeURIComponent(selectedLang)}/index.html`;
+      const url = `./book-content/html/${encodeURIComponent(selectedLang)}/index.html`;
       try {
         const res = await fetch(url);
         if (!res.ok) throw new Error("Failed to load book content");

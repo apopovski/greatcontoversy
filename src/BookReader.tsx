@@ -68,6 +68,13 @@ const LANGUAGE_ABBREV: Record<string, string> = {
   "alSra` al`Zym - Ellen G. White": 'AR',
 };
 
+const getBookTitleFromFolder = (folder: string) => (folder || '').split(' - Ellen')[0].trim();
+
+const COPYRIGHTS: Record<string, string> = {
+  // Use the localized book title (derived from the language folder) as the copyright holder.
+  ...Object.fromEntries(LANGUAGE_FOLDERS.map(f => [f, `© 2026 ${getBookTitleFromFolder(f)}`]))
+};
+
 function escapeRegExp(s: string) {
   return s.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&');
 }
@@ -130,9 +137,16 @@ function applyDropcap(html: string, langKey: string, chapterIndex: number, toc: 
     doc.querySelectorAll('style, link[rel="stylesheet"]').forEach(n => n.remove());
     // Also sanitize inline styles/classes/event handlers so the imported HTML
     // cannot prevent selection or shift layout.
+    // Remove inline styles and event handlers, but preserve our markup classes
+    // that are used for highlighting (`search-highlight`) and the dropcap.
     doc.querySelectorAll('*').forEach((el) => {
       if ((el as Element).hasAttribute('style')) (el as Element).removeAttribute('style');
-      if ((el as Element).hasAttribute('class')) (el as Element).removeAttribute('class');
+      if ((el as Element).hasAttribute('class')) {
+        const cls = ((el as Element).getAttribute('class') || '').split(/\s+/);
+        const isHighlight = el.tagName === 'MARK' && cls.includes('search-highlight');
+        const isDropcap = el.tagName === 'SPAN' && cls.includes('dropcap');
+        if (!isHighlight && !isDropcap) (el as Element).removeAttribute('class');
+      }
       Array.from((el as Element).attributes).forEach((a) => {
         if (a.name.startsWith('on')) (el as Element).removeAttribute(a.name);
       });
@@ -230,7 +244,7 @@ export default function BookReader() {
 
   useEffect(() => {
     setLoading(true);
-    const url = `/book-content/html/${encodeURIComponent(lang)}/index.html`;
+    const url = `./book-content/html/${encodeURIComponent(lang)}/index.html`;
     fetch(url)
       .then((r) => r.text())
       .then((html) => {
@@ -263,6 +277,16 @@ export default function BookReader() {
           });
         }
         setToc(entries);
+        // Choose a sensible default chapter to show first.
+        // Prefer a chapter titled "Introduction" (or common fallbacks like Preface/Foreword).
+        let defaultIdx = 0;
+        const introIdx = entries.findIndex((e) => /\bintroduction\b/i.test(e.title));
+        const prefaceIdx = entries.findIndex((e) => /\b(preface|foreword)\b/i.test(e.title));
+        const infoIdx = entries.findIndex((e) => /^information\s+about/i.test(e.title));
+        if (introIdx >= 0) defaultIdx = introIdx;
+        else if (prefaceIdx >= 0) defaultIdx = prefaceIdx;
+        else if (infoIdx >= 0 && infoIdx + 1 < entries.length) defaultIdx = infoIdx + 1;
+        setChapterIdx(defaultIdx);
         const chapterHtmls = entries.map((e) => {
           const id = e.href.replace(/^#/, '');
           const el = doc.getElementById(id);
@@ -380,15 +404,33 @@ export default function BookReader() {
   const highlightedHtml = getHighlightedHtml(currentHtml, highlighted);
   const displayedHtml = applyDropcap(highlightedHtml, lang, chapterIdx, toc);
 
+  // Derive a readable book title from the language folder name.
+  // Many folders are named like "<Localized Title> - Ellen G. White" so split off
+  // the author suffix to get the localized title for the header.
+  const displayTitle = (lang || '').split(' - Ellen')[0].trim();
+
   return (
     <div className="reader-root">
       <div className="reader-title-above-nav">
-        {`The Great Controversy${LANGUAGE_ABBREV[lang] ? ' — ' + LANGUAGE_ABBREV[lang] : ''}`}
+        {displayTitle}
       </div>
       {/* Language title removed — header icons now indicate language */}
       <header className="reader-header-bar">
         <div className="reader-header-bar-inner" style={{ width: isDesktop ? `${pageWidth}px` : '100%' }}>
           <div className="reader-header-controls">
+            {/* Previous chapter button */}
+            <button
+              className="reader-prev-chapter"
+              aria-label="Previous chapter"
+              disabled={chapterIdx <= 0}
+              onClick={() => {
+                if (chapterIdx > 0) setChapterIdx(chapterIdx - 1);
+              }}
+              style={{marginRight: 4}}
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            {/* Chapter menu (burger) */}
             <button
               className="reader-burger-icon"
               ref={burgerBtnRef}
@@ -424,6 +466,18 @@ export default function BookReader() {
             >
               <MdMenu size={28} />
             </button>
+            {/* Next chapter button */}
+            <button
+              className="reader-next-chapter"
+              aria-label="Next chapter"
+              disabled={chapterIdx >= chapters.length - 1}
+              onClick={() => {
+                if (chapterIdx < chapters.length - 1) setChapterIdx(chapterIdx + 1);
+              }}
+              style={{marginLeft: 4}}
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+            </button>
             <button
               ref={langBtnRef}
               className="reader-lang-icon"
@@ -439,6 +493,26 @@ export default function BookReader() {
               aria-label="Language"
             >
               <MdLanguage size={26} />
+            </button>
+            {/* Search icon - visible on mobile and desktop (previously only desktop) */}
+            <button
+              className="reader-search-icon"
+              ref={searchBtnRef}
+              onClick={() => {
+                const btn = searchBtnRef.current;
+                if (btn) {
+                  const r = btn.getBoundingClientRect();
+                  setSearchPanelStyle({ position: 'fixed', top: r.bottom + 8, left: r.left, minWidth: 320 });
+                }
+                setShowSearch(true);
+                setTimeout(() => {
+                  const el = document.querySelector('.reader-search-input') as HTMLInputElement | null;
+                  el?.focus();
+                }, 120);
+              }}
+              aria-label="Search"
+            >
+              <MdSearch size={24} />
             </button>
             {/* Title now shown above the header */}
             <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
@@ -491,25 +565,6 @@ export default function BookReader() {
                     value={pageWidth}
                     onChange={(e) => setPageWidth(Number(e.target.value))}
                   />
-                  <button
-                    className="reader-search-icon"
-                    ref={searchBtnRef}
-                    onClick={() => {
-                      const btn = searchBtnRef.current;
-                      if (btn) {
-                        const r = btn.getBoundingClientRect();
-                        setSearchPanelStyle({ position: 'fixed', top: r.bottom + 8, left: r.left, minWidth: 320 });
-                      }
-                      setShowSearch(true);
-                      setTimeout(() => {
-                        const el = document.querySelector('.reader-search-input') as HTMLInputElement | null;
-                        el?.focus();
-                      }, 120);
-                    }}
-                    aria-label="Search"
-                  >
-                    <MdSearch size={24} />
-                  </button>
                 </>
               )}
             </div>
@@ -555,6 +610,11 @@ export default function BookReader() {
         ) : (
           <div className="reader-wrapper" style={{ width: isDesktop ? `${pageWidth}px` : '100%', fontSize: `${textSize}px` }}>
             <div ref={contentRef} className="reader-book-html" dangerouslySetInnerHTML={{ __html: displayedHtml }} />
+            <footer className="reader-footer">
+              <div className="reader-footer-inner">
+                {(COPYRIGHTS[lang] || `© ${getBookTitleFromFolder(lang) || LANGUAGE_NAMES[lang] || lang}`)}
+              </div>
+            </footer>
           </div>
         )}
       </main>
@@ -604,8 +664,13 @@ export default function BookReader() {
                     key={`${r.idx}-${r.occ}-${i}`}
                     className="reader-search-result"
                     onClick={() => {
+                        // close search modal so the book content is visible,
+                        // then navigate to the chapter and request a scroll to the exact occurrence
+                        setShowSearch(false);
                         setChapterIdx(r.idx);
                         setSearchIdx(i);
+                        // ensure highlights are enabled for the target chapter
+                        setHighlighted((searchQuery || '').trim() || null);
                         // defer actual scrolling until the rendered HTML contains the highlights
                         setPendingScroll(r.occ);
                       }}
