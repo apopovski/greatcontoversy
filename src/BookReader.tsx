@@ -165,9 +165,20 @@ function applyDropcap(html: string, langKey: string, chapterIndex: number, toc: 
       return html;
     }
     if (heading) {
-      // walk siblings until we find a paragraph or blockquote with text
-      let sib: Element | null = (heading.nextElementSibling as Element | null);
+      // If transformChapterHeading wrapped the heading, prefer the wrapper's
+      // next sibling; otherwise start from heading.nextElementSibling. Skip
+      // any interim .chapter-heading wrappers so we land on the real content.
+      let sib: Element | null = null;
+      if (heading.parentElement && (heading.parentElement as Element).classList.contains('chapter-heading')) {
+        sib = heading.parentElement.nextElementSibling as Element | null;
+      } else {
+        sib = heading.nextElementSibling as Element | null;
+      }
       while (sib) {
+        if ((sib as Element).classList && (sib as Element).classList.contains('chapter-heading')) {
+          sib = sib.nextElementSibling as Element | null;
+          continue;
+        }
         if (/^P$/i.test(sib.tagName) || /^BLOCKQUOTE$/i.test(sib.tagName) || (sib.tagName === 'DIV' && sib.textContent && sib.textContent.trim().length)) {
           p = sib;
           break;
@@ -175,8 +186,10 @@ function applyDropcap(html: string, langKey: string, chapterIndex: number, toc: 
         sib = sib.nextElementSibling as Element | null;
       }
     }
-    // fallback: any paragraph, blockquote or div in the body
-    if (!p) p = doc.body.querySelector('p, blockquote, div');
+    // fallback: prefer a real paragraph or blockquote; only if none exist
+    // pick a div that isn't the chapter-heading wrapper.
+    if (!p) p = doc.body.querySelector('p, blockquote');
+    if (!p) p = doc.body.querySelector('div:not(.chapter-heading)');
     if (!p) return html;
     const walker = doc.createTreeWalker(p, NodeFilter.SHOW_TEXT, null as any);
     let tn = walker.nextNode();
@@ -204,6 +217,35 @@ function applyDropcap(html: string, langKey: string, chapterIndex: number, toc: 
       }
       tn = walker.nextNode();
     }
+    return doc.body.innerHTML;
+  } catch {
+    return html;
+  }
+}
+
+function transformChapterHeading(html: string) {
+  try {
+    const doc = new DOMParser().parseFromString(html || '', 'text/html');
+    const heading = doc.body.querySelector('h1,h2,h3,h4,h5,h6');
+    if (!heading) return html;
+    const raw = (heading.textContent || '').trim();
+    // Match patterns like "Chapter 1 — The Title" or "CHAPTER I - Title"
+    const m = raw.match(/^\s*(chapter|ch)\.?\s*([0-9]+|[IVXLCDM]+)\s*[—–\-:\u2014]\s*(.+)$/i);
+    if (!m) return html;
+    const num = m[2];
+    const title = m[3];
+    const level = heading.tagName.toLowerCase();
+    const wrapper = doc.createElement('div');
+    wrapper.className = 'chapter-heading';
+    const numEl = doc.createElement('div');
+    numEl.className = 'chapter-number';
+    numEl.textContent = `Chapter ${num}`;
+    const titleEl = doc.createElement(level);
+    titleEl.className = 'chapter-title';
+    titleEl.textContent = title;
+    wrapper.appendChild(numEl);
+    wrapper.appendChild(titleEl);
+    heading.parentNode?.replaceChild(wrapper, heading);
     return doc.body.innerHTML;
   } catch {
     return html;
@@ -508,7 +550,8 @@ export default function BookReader() {
 
   const currentHtml = chapters[chapterIdx] || '';
   const highlightedHtml = getHighlightedHtml(currentHtml, highlighted);
-  const displayedHtml = applyDropcap(highlightedHtml, lang, chapterIdx, toc);
+  const headingTransformedHtml = transformChapterHeading(highlightedHtml);
+  const displayedHtml = applyDropcap(headingTransformedHtml, lang, chapterIdx, toc);
 
   // Derive a readable book title from the language folder name.
   // Many folders are named like "<Localized Title> - Ellen G. White" so split off

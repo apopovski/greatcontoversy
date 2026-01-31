@@ -314,6 +314,28 @@ span.dropcap {
 /* Content area */
 .reader-content{padding:1.5em 0.5em 2.5em 0.5em;min-height:100vh;margin-left:auto;margin-right:auto;box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-start;align-items:flex-start;position:relative;top:0;background:var(--reader-bg)}
 
+/* Chapter heading: small number above the visible title */
+.chapter-heading{
+  display:block;
+  /* pulled up so the number sits closer to the title */
+  margin:1.0em 0 0.15em 0;
+  text-align:left;
+}
+.chapter-heading .chapter-number{
+  /* slightly smaller than body text, uppercase and tighter to the title */
+  font-size:0.78rem;
+  line-height:1;
+  opacity:0.95;
+  font-weight:700;
+  color:var(--reader-modal-fg);
+  margin-bottom:0.06rem;
+  text-transform:uppercase;
+  letter-spacing:0.06em;
+  display:block;
+}
+.chapter-heading .chapter-title{font-size:1.45rem;margin:0;font-weight:700}
+.chapter-heading .chapter-title + p{margin-top:0.6em}
+
 /* Footer */
 .reader-footer{margin-top:1.25rem;padding-top:12px;border-top:1px solid var(--reader-border);width:100%}
 .reader-footer-inner{max-width:1200px;margin:0 auto;padding:6px 12px;text-align:center;color:var(--reader-modal-fg);font-size:0.92rem;opacity:0.9}
