@@ -2740,9 +2740,7 @@ export default function BookReader() {
       ? `${cleanedChapterTitle} | ${localizedTitle}`
       : `${localizedTitle} | ${languageName}`;
 
-    const fallbackDescription = hasChapterView && cleanedChapterTitle
-      ? `${cleanedChapterTitle} (${languageName}) — read in The Great Controversy reader with offline support, search, and bookmarks.`
-      : `${localizedTitle} in ${languageName}. Read online or offline with search, bookmarks, and chapter navigation.`;
+    const fallbackDescription = `${localizedTitle} — Cosmic conflict between good and evil.`;
 
     document.title = pageTitle;
     document.documentElement.setAttribute('lang', abbr);
