@@ -36,6 +36,7 @@ const TAGLINES = {
   hi: 'अच्छाई और बुराई के बीच ब्रह्मांडीय संघर्ष',
   bn: 'ভাল ও মন্দের মধ্যে মহাজাগতিক সংঘর্ষ',
   id: 'Konflik kosmik antara yang baik dan yang jahat',
+  fr: 'Conflit cosmique entre le bien et le mal',
 };
 
 const BOOK_TITLES = {
@@ -65,6 +66,7 @@ const BOOK_TITLES = {
   hi: 'महान संघर्ष',
   bn: 'মহা বিবাদ',
   id: 'Kemenangan Akhir',
+  fr: 'La Tragédie des Siècles',
 };
 
 function replaceMeta(html, attrName, attrValue, contentValue) {
