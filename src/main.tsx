@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import { Analytics } from '@vercel/analytics/react';
 import App from './App';
 import './index.css';
 import { initAnalytics } from './utils/analytics';
@@ -45,5 +46,10 @@ if ('storage' in navigator && 'persist' in navigator.storage) {
 const container = document.getElementById('root');
 if (container) {
   const root = createRoot(container);
-  root.render(<App />);
+  root.render(
+    <>
+      <App />
+      <Analytics />
+    </>
+  );
 }
