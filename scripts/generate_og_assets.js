@@ -38,6 +38,7 @@ async function generateSharedOgImage() {
   await fs.mkdir(OG_IMAGES_DIR, { recursive: true });
   await sharp(SOURCE_SVG)
     .resize(WIDTH, HEIGHT, { fit: 'cover', position: 'center' })
+    .flatten({ background: '#ffffff' })
     .jpeg({ quality: 90, mozjpeg: true })
     .toFile(SHARED_IMAGE_ABSOLUTE_PATH);
 }
