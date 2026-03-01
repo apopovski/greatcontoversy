@@ -12,6 +12,7 @@ const TASKS = [
   { key: 'hi', file: 'extract_hindi.js' },
   { key: 'bn', file: 'extract_bengali.js' },
   { key: 'id', file: 'extract_indonesian.js' },
+  { key: 'fr', file: 'extract_french.js' },
 ];
 
 const maxConcurrency = Math.max(

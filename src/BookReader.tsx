@@ -119,6 +119,7 @@ const BENGALI_FOLDER = 'Bengali - Ellen G. White';
 const BENGALI_SOURCE_PATH = '/book-content/txt/GC-Bengali.txt';
 const INDONESIAN_FOLDER = 'Indonesian - Ellen G. White';
 const INDONESIAN_SOURCE_PATH = '/book-content/txt/GC-Indonesian.txt';
+const FRENCH_FOLDER = 'French - Ellen G. White';
 const CONTACT_WHATSAPP_NUMBER = '19562447002';
 const CONTACT_WHATSAPP_PREFILL = 'The Great Controversy — ';
 const CONTACT_WHATSAPP_LABELS: Record<string, string> = {
@@ -148,6 +149,7 @@ const CONTACT_WHATSAPP_LABELS: Record<string, string> = {
   [HINDI_FOLDER]: 'WhatsApp पर संपर्क करें',
   [BENGALI_FOLDER]: 'WhatsApp-এ যোগাযোগ করুন',
   [INDONESIAN_FOLDER]: 'Hubungi lewat WhatsApp',
+  [FRENCH_FOLDER]: 'Contact sur WhatsApp',
 };
 
 const DESKTOP_WIDTH_MIN = 640;
@@ -190,6 +192,7 @@ const LANGUAGE_FOLDERS = [
   HINDI_FOLDER,
   BENGALI_FOLDER,
   INDONESIAN_FOLDER,
+  FRENCH_FOLDER,
 ];
 
 const LANGUAGE_ABBREV: Record<string, string> = {
@@ -219,6 +222,7 @@ const LANGUAGE_ABBREV: Record<string, string> = {
   [HINDI_FOLDER]: 'hi',
   [BENGALI_FOLDER]: 'bn',
   [INDONESIAN_FOLDER]: 'id',
+  [FRENCH_FOLDER]: 'fr',
 };
 
 const BOOK_TITLE_OVERRIDES: Record<string, string> = {
@@ -248,6 +252,7 @@ const BOOK_TITLE_OVERRIDES: Record<string, string> = {
   [HINDI_FOLDER]: 'महान संघर्ष',
   [BENGALI_FOLDER]: 'মহা বিবাদ',
   [INDONESIAN_FOLDER]: 'Kemenangan Akhir',
+  [FRENCH_FOLDER]: 'La Tragédie des Siècles',
 };
 
 const META_TAGLINES: Record<string, string> = {
@@ -277,6 +282,7 @@ const META_TAGLINES: Record<string, string> = {
   hi: 'अच्छाई और बुराई के बीच ब्रह्मांडीय संघर्ष',
   bn: 'ভাল ও মন্দের মধ্যে মহাজাগতিক সংঘর্ষ',
   id: 'Konflik kosmik antara yang baik dan yang jahat',
+  fr: 'Conflit cosmique entre le bien et le mal',
 };
 
 const getBookTitleFromFolder = (folder: string) =>
@@ -309,6 +315,7 @@ const LANGUAGE_URL_NAMES: Record<string, string> = {
   [HINDI_FOLDER]: 'हिन्दी',
   [BENGALI_FOLDER]: 'বাংলা',
   [INDONESIAN_FOLDER]: 'Bahasa Indonesia',
+  [FRENCH_FOLDER]: 'Français',
 };
 
 const LANGUAGE_CHAPTER_LABELS: Record<string, string> = {
@@ -338,6 +345,7 @@ const LANGUAGE_CHAPTER_LABELS: Record<string, string> = {
   [HINDI_FOLDER]: 'पाठ',
   [BENGALI_FOLDER]: 'অধ্যায়',
   [INDONESIAN_FOLDER]: 'Bab',
+  [FRENCH_FOLDER]: 'Chapitre',
 };
 
 const LANGUAGE_CONTENTS_LABELS: Record<string, string> = {
@@ -367,6 +375,7 @@ const LANGUAGE_CONTENTS_LABELS: Record<string, string> = {
   [HINDI_FOLDER]: 'विषय सूची',
   [BENGALI_FOLDER]: 'সূচিপত্র',
   [INDONESIAN_FOLDER]: 'Daftar Isi',
+  [FRENCH_FOLDER]: 'Sommaire',
 };
 
 const LANGUAGE_CONTINUE_LABELS: Record<string, string> = {
@@ -396,6 +405,37 @@ const LANGUAGE_CONTINUE_LABELS: Record<string, string> = {
   [HINDI_FOLDER]: 'जारी रखें',
   [BENGALI_FOLDER]: 'চালিয়ে যান',
   [INDONESIAN_FOLDER]: 'Lanjutkan',
+  [FRENCH_FOLDER]: 'Continuer',
+};
+
+const COPY_TOAST_LABELS: Record<string, string> = {
+  en: 'Copied',
+  es: 'Copiado',
+  de: 'Kopiert',
+  it: 'Copiato',
+  da: 'Kopieret',
+  no: 'Kopiert',
+  pt: 'Copiado',
+  sm: 'Ua kopi',
+  et: 'Kopeeritud',
+  ro: 'Copiat',
+  hr: 'Kopirano',
+  bg: 'Копирано',
+  sk: 'Skopírované',
+  cs: 'Zkopírováno',
+  uk: 'Скопійовано',
+  ru: 'Скопировано',
+  pl: 'Skopiowano',
+  ar: 'تم النسخ',
+  am: 'ተቀድቷል',
+  zh: '已复制',
+  sr: 'Копирано',
+  fa: 'کپی شد',
+  af: 'Gekopieer',
+  hi: 'कॉपी किया गया',
+  bn: 'কপি হয়েছে',
+  id: 'Disalin',
+  fr: 'Copié',
 };
 
 const COPYRIGHTS: Record<string, string> = {
@@ -427,6 +467,24 @@ function slugifyAscii(input: string) {
     .slice(0, 80);
 }
 
+function transliterateForRoute(input: string) {
+  const map: Record<string, string> = {
+    А: 'A', а: 'a', Б: 'B', б: 'b', В: 'V', в: 'v', Г: 'G', г: 'g',
+    Д: 'D', д: 'd', Ђ: 'Dj', ђ: 'dj', Е: 'E', е: 'e', Ё: 'E', ё: 'e',
+    Ж: 'Zh', ж: 'zh', З: 'Z', з: 'z', И: 'I', и: 'i', Й: 'I', й: 'i',
+    Ј: 'J', ј: 'j', К: 'K', к: 'k', Л: 'L', л: 'l', Љ: 'Lj', љ: 'lj',
+    М: 'M', м: 'm', Н: 'N', н: 'n', Њ: 'Nj', њ: 'nj', О: 'O', о: 'o',
+    П: 'P', п: 'p', Р: 'R', р: 'r', С: 'S', с: 's', Т: 'T', т: 't',
+    Ћ: 'C', ћ: 'c', У: 'U', у: 'u', Ф: 'F', ф: 'f', Х: 'H', х: 'h',
+    Ц: 'C', ц: 'c', Ч: 'Ch', ч: 'ch', Џ: 'Dz', џ: 'dz', Ш: 'Sh', ш: 'sh',
+    Ы: 'Y', ы: 'y', Э: 'E', э: 'e', Ю: 'Yu', ю: 'yu', Я: 'Ya', я: 'ya',
+    Ь: '', ь: '', Ъ: '', ъ: 'a', І: 'I', і: 'i', Ї: 'Yi', ї: 'yi',
+    Є: 'Ye', є: 'ye', Ґ: 'G', ґ: 'g',
+  };
+
+  return Array.from(input || '').map((ch) => map[ch] ?? ch).join('');
+}
+
 function getChapterNumber(title: string) {
   const t = (title || '').trim();
   const m = t.match(/\bchapter\s+(\d+)\b/i);
@@ -443,10 +501,34 @@ function stripChapterPrefix(title: string) {
     .trim();
 }
 
+const ROUTE_CHAPTER_PREFIX_OVERRIDES: Record<string, string> = {
+  sr: 'poglavlje',
+  ar: 'alfasl',
+  fa: 'fasl',
+  am: 'meiraf',
+  zh: 'zhang',
+  hi: 'paath',
+  bn: 'oddhay',
+};
+
 function getChapterRoutePrefix(langKey: string) {
+  const code = (LANGUAGE_ABBREV[langKey] || '').toLowerCase();
+  const forcedPrefix = ROUTE_CHAPTER_PREFIX_OVERRIDES[code];
+  if (forcedPrefix) return forcedPrefix;
   const localized = (LANGUAGE_CHAPTER_LABELS[langKey] || 'Chapter').trim();
-  // Keep route prefix localized; allow unicode slugs, fallback to ASCII "chapter".
-  return slugify(localized) || 'chapter';
+  const transliterated = transliterateForRoute(localized);
+  return slugifyAscii(transliterated) || slugify(localized) || 'chapter';
+}
+
+function getChapterRouteSlug(langKey: string, chapterTitle: string, chapterNumber: number) {
+  const prefix = getChapterRoutePrefix(langKey);
+  const stripped = stripChapterPrefix(chapterTitle);
+  const transliteratedTitle = transliterateForRoute(stripped || chapterTitle || '')
+    .replace(new RegExp(`^\\s*${prefix}\\s+[ivxlcdm\\d]+\\s*[-—–:]*\\s*`, 'i'), '')
+    .replace(/^\s*[ivxlcdm\d]+\s*[-—–:]+\s*/i, '')
+    .trim();
+  const titleSlug = slugifyAscii(transliteratedTitle);
+  return titleSlug ? `${prefix}-${chapterNumber}-${titleSlug}` : `${prefix}-${chapterNumber}`;
 }
 
 const LANG_SLUG_TO_FOLDER: Record<string, string> = Object.fromEntries(
@@ -1745,7 +1827,15 @@ export default function BookReader() {
   const handleCopy = async () => {
     try {
       const bookTitle = getBookTitleFromFolder(lang);
-      const baseUrl = `${window.location.origin}${window.location.pathname}`;
+      const abbr = (LANGUAGE_ABBREV[lang] || '').toLowerCase();
+      const chapterTitle = toc[chapterIdx]?.title || '';
+      const chapterNumber = getChapterNumber(chapterTitle) ?? (chapterIdx + 1);
+      const chapterPrefix = getChapterRoutePrefix(lang);
+      const chapterSlug = getChapterRouteSlug(lang, chapterTitle, chapterNumber);
+      const chapterPath = showOpeningToc
+        ? `/${abbr}`
+        : `/${abbr}/${chapterPrefix}-${chapterNumber}/${chapterSlug}`;
+      const baseUrl = `${window.location.origin}${chapterPath}`;
       const url = selectedAnchorId ? `${baseUrl}#${selectedAnchorId}` : window.location.href;
       const payloadText = `${selectedText}${selectedText ? '\n\n' : ''}${bookTitle}\n${url}`;
       if (navigator.clipboard?.writeText) {
@@ -2495,8 +2585,8 @@ export default function BookReader() {
     const chapterNumber = getChapterNumber(chapterTitle) ?? (chapterIdx + 1);
     const chapterRoutePrefix = getChapterRoutePrefix(lang);
     const strippedTitle = stripChapterPrefix(chapterTitle);
-    const slug = slugifyAscii(strippedTitle || chapterTitle) || `chapter-${chapterNumber}`;
-    const path = `/${abbr}/${encodeURIComponent(chapterRoutePrefix)}-${chapterNumber}/${slug}`;
+    const slug = getChapterRouteSlug(lang, chapterTitle, chapterNumber);
+    const path = `/${abbr}/${chapterRoutePrefix}-${chapterNumber}/${slug}`;
     if (window.location.pathname !== path) {
       window.history.replaceState({}, '', path);
     }
@@ -2929,6 +3019,7 @@ export default function BookReader() {
     !!bookmark &&
     bookmark.lang === lang &&
     bookmark.chapterIdx === chapterIdx;
+  const copyToastLabel = COPY_TOAST_LABELS[(LANGUAGE_ABBREV[lang] || 'en').toLowerCase()] || COPY_TOAST_LABELS.en;
 
   const handleBookmark = () => {
     if (showOpeningToc && bookmark) {
@@ -3641,7 +3732,7 @@ export default function BookReader() {
             zIndex: 10001,
           }}
         >
-          Copied
+          {copyToastLabel}
         </div>
       )}
     </div>

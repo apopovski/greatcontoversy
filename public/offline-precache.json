@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-03-01T17:32:30.144Z",
-  "count": 175,
+  "generatedAt": "2026-03-01T18:27:06.470Z",
+  "count": 177,
   "assets": [
     "/",
     "/The-Great-Controversy.txt",
@@ -67,6 +67,7 @@
     "/book-content/html/El Conflicto de los Siglos - Ellen G. White/index.html",
     "/book-content/html/El Conflicto de los Siglos - Ellen G. White/metadata.opf",
     "/book-content/html/El Conflicto de los Siglos - Ellen G. White/style.css",
+    "/book-content/html/French - Ellen G. White/index.html",
     "/book-content/html/Il gran conflitto - Ellen G. White/cover.jpg",
     "/book-content/html/Il gran conflitto - Ellen G. White/images/00000.jpeg",
     "/book-content/html/Il gran conflitto - Ellen G. White/index.html",
@@ -170,6 +171,7 @@
     "/book-content/txt/GC-Bengali.txt",
     "/book-content/txt/GC-Chinese.txt",
     "/book-content/txt/GC-Farsi.txt",
+    "/book-content/txt/GC-French.txt",
     "/book-content/txt/GC-Hindi.txt",
     "/book-content/txt/GC-Indonesian.txt",
     "/book-content/txt/GC-Serbian.txt",
