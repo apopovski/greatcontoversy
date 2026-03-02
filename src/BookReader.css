@@ -814,6 +814,35 @@ div.reader.header-title {
   border-radius: 999px;
 }
 
+.reader-scroll-percent{
+  position: fixed;
+  right: 14px;
+  bottom: 16px;
+  z-index: 3900;
+  min-width: 58px;
+  text-align: center;
+  font-size: 0.86rem;
+  font-weight: 700;
+  padding: 7px 10px;
+  border-radius: 999px;
+  color: var(--reader-modal-fg);
+  background: color-mix(in srgb, var(--reader-modal-bg) 84%, transparent);
+  border: 1px solid var(--reader-border);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+@media (max-width: 640px) {
+  .reader-scroll-percent {
+    right: 10px;
+    bottom: 12px;
+    font-size: 0.82rem;
+    min-width: 54px;
+    padding: 6px 9px;
+  }
+}
+
 /* Debug overlay shown when enabled to capture selection state and fallback matching */
 .reader-debug-overlay{position:fixed;left:12px;bottom:18px;background:rgba(0,0,0,0.78);color:#fff;padding:10px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.36);z-index:6000;font-size:0.9rem;line-height:1.2;max-width:360px}
 .reader-debug-overlay button{background:rgba(255,255,255,0.06);border:0;color:#fff;padding:6px 8px;border-radius:6px;cursor:pointer}

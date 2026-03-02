@@ -1561,6 +1561,7 @@ export default function BookReader() {
   const [showSearch, setShowSearch] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const [chapterReadPercent, setChapterReadPercent] = useState(0);
   const [showCopyToast, setShowCopyToast] = useState(false);
   const [copyToastPos, setCopyToastPos] = useState({ top: 0, left: 0 });
   const [analyticsConsentStatus, setAnalyticsConsentStatus] = useState<'granted' | 'denied' | 'unknown'>(() => getAnalyticsConsentStatus());
@@ -1798,6 +1799,48 @@ export default function BookReader() {
   useEffect(() => {
     localStorage.setItem('reader-page-width', String(pageWidth));
   }, [pageWidth]);
+
+  useEffect(() => {
+    if (showOpeningToc || loading) {
+      setChapterReadPercent(0);
+      return;
+    }
+
+    let ticking = false;
+    const headerOffset = 64;
+
+    const updateProgress = () => {
+      ticking = false;
+      const el = contentRef.current;
+      if (!el) return;
+
+      const rect = el.getBoundingClientRect();
+      const scrollTop = window.scrollY || document.documentElement.scrollTop || 0;
+      const chapterTop = scrollTop + rect.top;
+      const chapterHeight = Math.max(el.scrollHeight, rect.height, 1);
+      const chapterBottom = chapterTop + chapterHeight;
+      const readingLineY = scrollTop + headerOffset;
+
+      const raw = ((readingLineY - chapterTop) / Math.max(1, chapterBottom - chapterTop)) * 100;
+      const clamped = Math.max(0, Math.min(100, Math.round(raw)));
+      setChapterReadPercent(clamped);
+    };
+
+    const onScrollOrResize = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(updateProgress);
+    };
+
+    updateProgress();
+    window.addEventListener('scroll', onScrollOrResize, { passive: true });
+    window.addEventListener('resize', onScrollOrResize);
+
+    return () => {
+      window.removeEventListener('scroll', onScrollOrResize);
+      window.removeEventListener('resize', onScrollOrResize);
+    };
+  }, [chapterIdx, showOpeningToc, loading]);
 
   useEffect(() => {
     if (!showShareMenu) return;
@@ -3909,6 +3952,15 @@ export default function BookReader() {
           }}
         >
           {copyToastLabel}
+        </div>
+      )}
+      {!showOpeningToc && !loading && (
+        <div
+          className="reader-scroll-percent"
+          aria-label={`Chapter read ${chapterReadPercent}%`}
+          title={`Chapter read ${chapterReadPercent}%`}
+        >
+          {chapterReadPercent}%
         </div>
       )}
     </div>
