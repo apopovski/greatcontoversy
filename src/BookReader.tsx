@@ -169,18 +169,16 @@ type DesktopWidthPreset = 'small' | 'medium' | 'wide';
 
 function getDesktopWidthPresets(viewportWidth: number, limit: number) {
   const boundedLimit = Math.max(DESKTOP_WIDTH_MIN, Math.min(DESKTOP_WIDTH_MAX, limit));
+  const available = Math.max(0, boundedLimit - DESKTOP_WIDTH_MIN);
   const small = Math.max(
     DESKTOP_WIDTH_MIN,
-    Math.min(boundedLimit, getRecommendedDesktopWidth(viewportWidth))
+    Math.min(boundedLimit, DESKTOP_WIDTH_MIN + Math.round(available * 0.5))
+  );
+  const medium = Math.max(
+    small,
+    Math.min(boundedLimit, DESKTOP_WIDTH_MIN + Math.round(available * 0.75))
   );
   const wide = boundedLimit;
-  const available = Math.max(0, wide - small);
-  const medium = (() => {
-    if (available <= 0) return small;
-    // Keep medium clearly wider than small whenever there is room.
-    const targetDelta = Math.max(32, Math.round(available * 0.6));
-    return Math.min(wide - 1, small + targetDelta);
-  })();
 
   return { small, medium, wide };
 }
@@ -1711,6 +1709,22 @@ export default function BookReader() {
     () => getDesktopWidthPresets(window.innerWidth || 1280, desktopWidthLimit),
     [desktopWidthLimit]
   );
+  const desktopPresetOrder: DesktopWidthPreset[] = ['small', 'medium', 'wide'];
+  const currentDesktopPresetIndex = Math.max(0, desktopPresetOrder.indexOf(desktopWidthPreset));
+  const canDecreaseDesktopWidth = currentDesktopPresetIndex > 0;
+  const canIncreaseDesktopWidth = currentDesktopPresetIndex < desktopPresetOrder.length - 1;
+  const widthIndicatorPercent =
+    desktopWidthPreset === 'small' ? 50 : desktopWidthPreset === 'medium' ? 75 : 100;
+
+  const changeDesktopWidthPreset = (direction: 'decrease' | 'increase') => {
+    setDesktopWidthPreset((prev) => {
+      const idx = Math.max(0, desktopPresetOrder.indexOf(prev));
+      const nextIdx = direction === 'decrease'
+        ? Math.max(0, idx - 1)
+        : Math.min(desktopPresetOrder.length - 1, idx + 1);
+      return desktopPresetOrder[nextIdx];
+    });
+  };
 
   const getAnchoredPanelStyle = (btn: HTMLButtonElement | null, preferredWidth = 260): React.CSSProperties => {
     const viewportWidth = window.innerWidth;
@@ -3391,22 +3405,42 @@ export default function BookReader() {
                 {isDark ? <MdDarkMode size={22} /> : <MdLightMode size={22} />}
               </button>
               {isDesktop && (
-                <button
-                  className="reader-width-toggle"
-                  aria-label={`Content width: ${desktopWidthPreset}. Click to change.`}
-                  title={`Content width: ${desktopWidthPreset}. Click to change.`}
-                  onClick={() => {
-                    setDesktopWidthPreset((prev) =>
-                      prev === 'small' ? 'medium' : prev === 'medium' ? 'wide' : 'small'
-                    );
-                  }}
-                >
-                  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <rect x="7" y="4" width="8" height="4" rx="1" stroke="currentColor" strokeWidth="1.5" fill={desktopWidthPreset === 'small' ? 'currentColor' : 'none'} />
-                    <rect x="4" y="9" width="14" height="4" rx="1" stroke="currentColor" strokeWidth="1.5" fill={desktopWidthPreset === 'medium' ? 'currentColor' : 'none'} />
-                    <rect x="2" y="14" width="18" height="4" rx="1" stroke="currentColor" strokeWidth="1.5" fill={desktopWidthPreset === 'wide' ? 'currentColor' : 'none'} />
-                  </svg>
-                </button>
+                <div className="reader-width-control" role="group" aria-label="Adjust content width">
+                  <button
+                    className="reader-width-arrow-btn"
+                    aria-label="Decrease content width"
+                    title="Decrease content width"
+                    onClick={() => changeDesktopWidthPreset('decrease')}
+                    disabled={!canDecreaseDesktopWidth}
+                  >
+                    ←
+                  </button>
+                  <div
+                    className="reader-width-indicator"
+                    aria-label={`Content width ${desktopWidthPreset}`}
+                    title={`Content width ${desktopWidthPreset}`}
+                  >
+                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <line x1="3" y1="11" x2="19" y2="11" stroke="currentColor" strokeWidth="1.5" opacity="0.35" />
+                      <polyline points="5,9 3,11 5,13" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                      <polyline points="17,9 19,11 17,13" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    <span
+                      className="reader-width-indicator-active"
+                      style={{ width: `${widthIndicatorPercent}%` }}
+                      aria-hidden="true"
+                    />
+                  </div>
+                  <button
+                    className="reader-width-arrow-btn"
+                    aria-label="Increase content width"
+                    title="Increase content width"
+                    onClick={() => changeDesktopWidthPreset('increase')}
+                    disabled={!canIncreaseDesktopWidth}
+                  >
+                    →
+                  </button>
+                </div>
               )}
             </div>
           </div>

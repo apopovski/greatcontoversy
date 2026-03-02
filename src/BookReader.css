@@ -133,21 +133,73 @@ html,body,#root,.reader-root{height:100%;margin:0;padding:0;background:var(--rea
 .reader-darkmode-toggle{width:32px;height:32px;padding:4px;border-radius:6px}
 .reader-darkmode-toggle svg{width:18px;height:18px}
 
-.reader-width-toggle{
-  width:32px;
-  height:32px;
+.reader-width-control{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:2px;
+  border-radius:8px;
+  border:1px solid rgba(100,110,255,0.15);
+  background:rgba(100,110,255,0.04);
+}
+
+.reader-width-arrow-btn{
+  width:26px;
+  height:26px;
   border:0;
-  background:none;
   border-radius:6px;
+  background:none;
+  color:inherit;
+  cursor:pointer;
+  font-size:14px;
+  line-height:1;
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  cursor:pointer;
-  color:inherit;
+  transition:background 120ms ease, color 120ms ease, transform 90ms ease;
 }
-.reader-width-toggle:hover{
+
+.reader-width-arrow-btn:hover:not(:disabled){
   color:var(--reader-accent);
-  background:rgba(100,110,255,0.08);
+  background:rgba(100,110,255,0.12);
+}
+
+.reader-width-arrow-btn:focus-visible{
+  outline:2px solid var(--reader-accent);
+  outline-offset:2px;
+  background:rgba(100,110,255,0.12);
+}
+
+.reader-width-arrow-btn:disabled{
+  opacity:0.4;
+  cursor:not-allowed;
+}
+
+.reader-width-arrow-btn:active:not(:disabled){
+  transform:scale(0.94);
+}
+
+.reader-width-indicator{
+  width:28px;
+  height:26px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  color:inherit;
+  position:relative;
+}
+
+.reader-width-indicator-active{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%, -50%);
+  height:2.75px;
+  border-radius:999px;
+  background:currentColor;
+  width:50%;
+  transition:width 160ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events:none;
 }
 
 /* Header share icon */
@@ -450,7 +502,7 @@ span.dropcap {
   /* Appearance controls at the end */
   .reader-text-size-controls { order: 5; }
   .reader-darkmode-toggle { order: 6; }
-  .reader-width-toggle { order: 7; }
+  .reader-width-control { order: 7; }
 }
 
 /* RTL desktop layout */
@@ -467,7 +519,7 @@ span.dropcap {
   html[dir='rtl'] .reader-share-icon { order: 4; }
   html[dir='rtl'] .reader-text-size-controls { order: 3; }
   html[dir='rtl'] .reader-darkmode-toggle { order: 2; }
-  html[dir='rtl'] .reader-width-toggle { order: 1; }
+  html[dir='rtl'] .reader-width-control { order: 1; }
 }
 .reader-wrapper,.reader-main{position:relative;z-index:1}
 
