@@ -800,6 +800,34 @@ div.reader.header-title {
   backdrop-filter: blur(8px);
 }
 
+/* Runtime perf: reduce heavy blur/compositing on mobile and touch devices */
+@media (max-width: 900px), (hover: none) {
+  .reader-search-modal {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(8, 12, 20, 0.32);
+  }
+
+  .reader-share-popup-content,
+  .reader-share-panel {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .reader-search-card {
+    box-shadow: 0 10px 28px rgba(16, 24, 40, 0.22);
+  }
+}
+
+/* Avoid hover transform work on touch-only devices */
+@media (hover: none) {
+  .reader-search-result:hover,
+  .share-action-btn:hover,
+  .reader-share-popup-content button:hover {
+    transform: none;
+  }
+}
+
 .reader-share-popup-content button {
   background: var(--reader-bg);
   border: 0;

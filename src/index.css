@@ -1,9 +1,3 @@
-*, *::before, *::after {
-  background: var(--reader-bg) !important;
-  color: var(--reader-fg) !important;
-  border-color: var(--reader-border) !important;
-  transition: background 120ms, color 120ms;
-}
 /* Minimal global CSS for book reader app */
 
 html, body {
@@ -11,10 +5,8 @@ html, body {
   padding: 0;
   box-sizing: border-box;
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  background: var(--reader-bg) !important;
-  color: var(--reader-fg) !important;
-  border-color: var(--reader-border) !important;
-  transition: background 120ms, color 120ms;
+  background: var(--reader-bg);
+  color: var(--reader-fg);
 }
 
 a {
@@ -37,4 +29,12 @@ button {
 
 * {
   box-sizing: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -1,16 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { book } from "./data/book";
-import { getDefaultLanguage, getAvailableLanguages } from "./utils/language";
-import { useTextSize } from "./utils/useTextSize";
-import { useBookmark } from "./utils/useBookmark";
-import { useSearch } from "./utils/useSearch";
-import { useAudioPlayer } from "./utils/useAudioPlayer";
-import { useShareQuote } from "./utils/useShareQuote";
-
-import { icons } from "./assets/icons";
-import BookReader from "./BookReader";
-import Splash from "./components/Splash";
+import React, { Suspense, useEffect, useState } from "react";
 import { getAnalyticsConsentStatus, setAnalyticsConsent } from './utils/analytics';
+const BookReader = React.lazy(() => import('./BookReader'));
+const Splash = React.lazy(() => import('./components/Splash'));
 
 type ErrorBoundaryProps = { children: React.ReactNode };
 type ErrorBoundaryState = { hasError: boolean; error: unknown };
@@ -76,18 +67,24 @@ function App() {
 
   return (
     <ErrorBoundary>
-      {showSplash && (
-        <Splash
-          onStart={() => {
-            localStorage.setItem('gc_seen_splash_v1','1');
-            localStorage.setItem('gc_jump_to_toc','1');
-            setShowSplash(false);
-          }}
-          onClose={() => setShowSplash(false)}
-          onChooseLanguage={() => setShowSplash(false)}
-        />
+      <Suspense fallback={null}>
+        {showSplash && (
+          <Splash
+            onStart={() => {
+              localStorage.setItem('gc_seen_splash_v1','1');
+              localStorage.setItem('gc_jump_to_toc','1');
+              setShowSplash(false);
+            }}
+            onClose={() => setShowSplash(false)}
+            onChooseLanguage={() => setShowSplash(false)}
+          />
+        )}
+      </Suspense>
+      {!showSplash && (
+        <Suspense fallback={null}>
+          <BookReader />
+        </Suspense>
       )}
-      <BookReader />
       {consentStatus === 'unknown' && (
         <div className="analytics-consent-banner" role="dialog" aria-live="polite" aria-label="Cookie consent">
           <div className="analytics-consent-text">

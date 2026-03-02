@@ -1,8 +1,7 @@
-html, body, #root, .app-container, .reader-root, .reader-root * {
+html, body, #root, .app-container, .reader-root {
   background: var(--reader-bg) !important;
   color: var(--reader-fg) !important;
   border-color: var(--reader-border) !important;
-  transition: background 120ms, color 120ms;
 }
 /* --- Dark Mode Styles --- */
 /* body.dark {
