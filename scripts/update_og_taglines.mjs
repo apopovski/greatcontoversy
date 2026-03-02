@@ -105,7 +105,7 @@ async function run() {
     const fallbackTitle = getBookTitleFromOgTitle(ogTitleMatch?.[1] || 'The Great Controversy');
     const bookTitle = BOOK_TITLES[code] || fallbackTitle;
     const nextTitle = bookTitle;
-    const nextDescription = `${bookTitle} — ${tagline}.`;
+    const nextDescription = `${tagline}.`;
 
     html = replaceTitleTag(html, nextTitle);
     html = replaceMeta(html, 'property', 'og:title', nextTitle);

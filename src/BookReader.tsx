@@ -165,6 +165,26 @@ function getRecommendedDesktopWidth(viewportWidth: number) {
   );
 }
 
+type DesktopWidthPreset = 'small' | 'medium' | 'wide';
+
+function getDesktopWidthPresets(viewportWidth: number, limit: number) {
+  const boundedLimit = Math.max(DESKTOP_WIDTH_MIN, Math.min(DESKTOP_WIDTH_MAX, limit));
+  const small = Math.max(
+    DESKTOP_WIDTH_MIN,
+    Math.min(boundedLimit, getRecommendedDesktopWidth(viewportWidth))
+  );
+  const medium = Math.max(
+    DESKTOP_WIDTH_MIN,
+    Math.min(boundedLimit, small + 60)
+  );
+  const wide = Math.max(
+    DESKTOP_WIDTH_MIN,
+    Math.min(boundedLimit, small + 120)
+  );
+
+  return { small, medium, wide };
+}
+
 const LANGUAGE_FOLDERS = [
   'The Great Controversy - Ellen G. White 2',
   'El Conflicto de los Siglos - Ellen G. White',
@@ -1521,6 +1541,10 @@ export default function BookReader() {
   const [desktopWidthLimit, setDesktopWidthLimit] = useState(() =>
     Math.max(DESKTOP_WIDTH_MIN, Math.min(DESKTOP_WIDTH_MAX, (window.innerWidth || 1280) - 48))
   );
+  const [desktopWidthPreset, setDesktopWidthPreset] = useState<DesktopWidthPreset>(() => {
+    const saved = localStorage.getItem('reader-width-preset');
+    return saved === 'small' || saved === 'medium' || saved === 'wide' ? saved : 'small';
+  });
   const [textSize, setTextSize] = useState(() => {
     const v = localStorage.getItem('reader-text-size');
     return v ? Number(v) : 18;
@@ -1683,6 +1707,11 @@ export default function BookReader() {
   const [sharePanelStyle, setSharePanelStyle] = useState<React.CSSProperties | null>(null);
   const [morePanelStyle, setMorePanelStyle] = useState<React.CSSProperties | null>(null);
 
+  const desktopWidthPresets = useMemo(
+    () => getDesktopWidthPresets(window.innerWidth || 1280, desktopWidthLimit),
+    [desktopWidthLimit]
+  );
+
   const getAnchoredPanelStyle = (btn: HTMLButtonElement | null, preferredWidth = 260): React.CSSProperties => {
     const viewportWidth = window.innerWidth;
     const margin = 12;
@@ -1730,13 +1759,19 @@ export default function BookReader() {
         Math.min(DESKTOP_WIDTH_MAX, window.innerWidth - 48)
       );
       setDesktopWidthLimit(limit);
-      setPageWidth((w) => Math.min(w, limit));
+      const presets = getDesktopWidthPresets(window.innerWidth || 1280, limit);
+      setPageWidth(presets[desktopWidthPreset]);
     };
 
     updateDesktopWidth();
     window.addEventListener('resize', updateDesktopWidth);
     return () => window.removeEventListener('resize', updateDesktopWidth);
-  }, []);
+  }, [desktopWidthPreset]);
+
+  useEffect(() => {
+    localStorage.setItem('reader-width-preset', desktopWidthPreset);
+    setPageWidth(desktopWidthPresets[desktopWidthPreset]);
+  }, [desktopWidthPreset, desktopWidthPresets]);
 
   useEffect(() => {
     localStorage.setItem('reader-page-width', String(pageWidth));
@@ -1816,8 +1851,8 @@ export default function BookReader() {
         const folder = LANG_SLUG_TO_FOLDER[abbr];
         if (folder) return { folder, idx: null, num: null, showToc: true };
       }
-      // New format: /{lang}/{label}-{num}/{slug}
-      m = path.match(/^\/([^/]+)\/[^/]+-(\d+)\/([^/]+)?(?:\/)?$/i);
+      // New format: /{lang}/{label}-{num}/{slug} or /{lang}/{label}-{num}
+      m = path.match(/^\/([^/]+)\/[^/]+-(\d+)(?:\/([^/]+))?(?:\/)?$/i);
       if (m) {
         const abbr = decodeURIComponent(m[1] || '').toLowerCase();
         const num = Math.max(1, parseInt(m[2], 10));
@@ -2953,7 +2988,7 @@ export default function BookReader() {
       : `${localizedTitle} | ${languageName}`;
 
     const localizedTagline = META_TAGLINES[abbr] || META_TAGLINES.en;
-    const fallbackDescription = `${localizedTitle} — ${localizedTagline}.`;
+    const fallbackDescription = `${localizedTagline}.`;
 
     document.title = pageTitle;
     document.documentElement.setAttribute('lang', abbr);
@@ -3356,16 +3391,22 @@ export default function BookReader() {
                 {isDark ? <MdDarkMode size={22} /> : <MdLightMode size={22} />}
               </button>
               {isDesktop && (
-                <>
-                  <input
-                    className="reader-width-slider"
-                    type="range"
-                    min={DESKTOP_WIDTH_MIN}
-                    max={desktopWidthLimit}
-                    value={pageWidth}
-                    onChange={(e) => setPageWidth(Number(e.target.value))}
-                  />
-                </>
+                <button
+                  className="reader-width-toggle"
+                  aria-label={`Content width: ${desktopWidthPreset}. Click to change.`}
+                  title={`Content width: ${desktopWidthPreset}. Click to change.`}
+                  onClick={() => {
+                    setDesktopWidthPreset((prev) =>
+                      prev === 'small' ? 'medium' : prev === 'medium' ? 'wide' : 'small'
+                    );
+                  }}
+                >
+                  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <rect x="2" y="5" width="4" height="12" rx="1" stroke="currentColor" strokeWidth="1.5" fill={desktopWidthPreset === 'small' ? 'currentColor' : 'none'} />
+                    <rect x="9" y="4" width="4" height="14" rx="1" stroke="currentColor" strokeWidth="1.5" fill={desktopWidthPreset === 'medium' ? 'currentColor' : 'none'} />
+                    <rect x="16" y="3" width="4" height="16" rx="1" stroke="currentColor" strokeWidth="1.5" fill={desktopWidthPreset === 'wide' ? 'currentColor' : 'none'} />
+                  </svg>
+                </button>
               )}
             </div>
           </div>

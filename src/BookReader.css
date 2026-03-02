@@ -133,6 +133,23 @@ html,body,#root,.reader-root{height:100%;margin:0;padding:0;background:var(--rea
 .reader-darkmode-toggle{width:32px;height:32px;padding:4px;border-radius:6px}
 .reader-darkmode-toggle svg{width:18px;height:18px}
 
+.reader-width-toggle{
+  width:32px;
+  height:32px;
+  border:0;
+  background:none;
+  border-radius:6px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  color:inherit;
+}
+.reader-width-toggle:hover{
+  color:var(--reader-accent);
+  background:rgba(100,110,255,0.08);
+}
+
 /* Header share icon */
 .reader-share-icon{
   background:none;
@@ -372,7 +389,7 @@ html,body,#root,.reader-root{height:100%;margin:0;padding:0;background:var(--rea
   transform: translateY(var(--dropcap-nudge));
   margin-right: 0.18ch;
   padding-top: 0;
-  color: var(--reader-accent);
+  color: #000 !important;
   /* slight inner glow / antique look */
   text-shadow: 0 1px 0 rgba(255,255,255,0.35), 0 2px 6px rgba(0,0,0,0.08);
   /* subtle background ribbon to make the letter feel 'set' into the page */
@@ -383,7 +400,7 @@ html,body,#root,.reader-root{height:100%;margin:0;padding:0;background:var(--rea
 }
 
 html[data-theme='dark'] .dropcap {
-  color: #fff;
+  color: #fff !important;
 }
 
 /* Ensure dropcap has no left border (explicit override) */
@@ -433,7 +450,7 @@ span.dropcap {
   /* Appearance controls at the end */
   .reader-text-size-controls { order: 5; }
   .reader-darkmode-toggle { order: 6; }
-  .reader-width-slider { order: 7; }
+  .reader-width-toggle { order: 7; }
 }
 
 /* RTL desktop layout */
@@ -450,7 +467,7 @@ span.dropcap {
   html[dir='rtl'] .reader-share-icon { order: 4; }
   html[dir='rtl'] .reader-text-size-controls { order: 3; }
   html[dir='rtl'] .reader-darkmode-toggle { order: 2; }
-  html[dir='rtl'] .reader-width-slider { order: 1; }
+  html[dir='rtl'] .reader-width-toggle { order: 1; }
 }
 .reader-wrapper,.reader-main{position:relative;z-index:1}
 
