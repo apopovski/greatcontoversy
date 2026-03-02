@@ -528,7 +528,7 @@ function getChapterRouteSlug(langKey: string, chapterTitle: string, chapterNumbe
     .replace(/^\s*[ivxlcdm\d]+\s*[-—–:]+\s*/i, '')
     .trim();
   const titleSlug = slugifyAscii(transliteratedTitle);
-  return titleSlug ? `${prefix}-${chapterNumber}-${titleSlug}` : `${prefix}-${chapterNumber}`;
+  return titleSlug || `${prefix}-${chapterNumber}`;
 }
 
 const LANG_SLUG_TO_FOLDER: Record<string, string> = Object.fromEntries(
@@ -635,6 +635,85 @@ function addParagraphIds(html: string, chapterNumber: number) {
         el.id = `gc-p-${chapterNumber}-${idx + 1}`;
       }
     });
+    return doc.body.innerHTML;
+  } catch {
+    return html || '';
+  }
+}
+
+function findAppendixChapterIndex(entries: TocEntry[]) {
+  if (!Array.isArray(entries) || !entries.length) return -1;
+  const appendixPatterns = [
+    /\bappendix\b/i,
+    /\bappendice\b/i,
+    /\banexo\b/i,
+    /\bannex\b/i,
+    /\banhang\b/i,
+    /\bprilog\b/i,
+    /\bдодаток\b/i,
+    /\bприложение\b/i,
+    /\b附录\b/i,
+  ];
+
+  const idx = entries.findIndex((e) => appendixPatterns.some((re) => re.test((e?.title || '').trim())));
+  return idx;
+}
+
+function cleanParagraphRefsAndLinkAppendix(
+  html: string,
+  appendixPath: string | null,
+  isAppendixChapter: boolean
+) {
+  try {
+    const doc = new DOMParser().parseFromString(html || '', 'text/html');
+    const blocks = Array.from(doc.querySelectorAll('p, blockquote'));
+    const appendixWordRe = /\b(appendix|appendice|appendixen|anexo|annex|anhang|prilog|додаток|приложение)\b|附录/iu;
+
+    blocks.forEach((el) => {
+      const text = el.textContent || '';
+
+      // Remove bracketed page markers like [447] from displayed paragraph text.
+      if (/\[\d{1,4}\]/.test(text)) {
+        el.innerHTML = (el.innerHTML || '').replace(/\s*\[(\d{1,4})\]/g, '');
+      }
+
+      // In non-appendix chapters, convert "(see Appendix)" into a deep link
+      // to the matching page marker inside the appendix chapter.
+      if (!isAppendixChapter && appendixPath) {
+        const pageMatch = text.match(/\[(\d{1,4})\]/);
+        const hasAppendixParen = /\([^)]*\)/.test(text) && appendixWordRe.test(text);
+
+        if (pageMatch && pageMatch[1] && hasAppendixParen) {
+          const pageNum = pageMatch[1];
+          const target = `${appendixPath}#app-page-${pageNum}`;
+
+          // Link appendix keyword inside the first parenthetical appendix reference,
+          // preserving localized surrounding text (e.g., "see", "voir", etc.).
+          if (!el.querySelector(`a[href="${target}"]`)) {
+            el.innerHTML = (el.innerHTML || '').replace(/\(([^)]*)\)/u, (full, inner) => {
+              if (!appendixWordRe.test(inner)) return full;
+              const linkedInner = String(inner).replace(appendixWordRe, (w: string) => `<a href="${target}">${w}</a>`);
+              return `(${linkedInner})`;
+            });
+          }
+        }
+      }
+
+      // In appendix chapter, inject anchors for "Page N" so links can land correctly.
+      if (isAppendixChapter) {
+        const pg = (el.textContent || '').match(/\bpage\s+(\d{1,4})\b/i);
+        if (pg && pg[1]) {
+          const anchorId = `app-page-${pg[1]}`;
+          if (!doc.getElementById(anchorId)) {
+            const anchor = doc.createElement('span');
+            anchor.id = anchorId;
+            anchor.setAttribute('aria-hidden', 'true');
+            el.prepend(anchor);
+          }
+        }
+      }
+    });
+
     return doc.body.innerHTML;
   } catch {
     return html || '';
@@ -2787,6 +2866,16 @@ export default function BookReader() {
   }, [pendingScroll, chapterIdx, highlighted]);
 
   const currentHtml = getChapterHtml(chapterIdx);
+  const appendixChapterIdx = useMemo(() => findAppendixChapterIndex(toc), [toc]);
+  const appendixPath = useMemo(() => {
+    if (appendixChapterIdx < 0 || appendixChapterIdx >= toc.length) return null;
+    const chapterTitle = toc[appendixChapterIdx]?.title || '';
+    const chapterNumber = getChapterNumber(chapterTitle) ?? (appendixChapterIdx + 1);
+    const chapterPrefix = getChapterRoutePrefix(lang);
+    const chapterSlug = getChapterRouteSlug(lang, chapterTitle, chapterNumber);
+    const abbr = (LANGUAGE_ABBREV[lang] || '').toLowerCase();
+    return `/${abbr}/${chapterPrefix}-${chapterNumber}/${chapterSlug}`;
+  }, [appendixChapterIdx, toc, lang]);
   // Avoid re-running expensive DOMParser work on every render when nothing
   // relevant changed. Pipeline the transforms so each step only re-computes
   // when its dependencies change.
@@ -2794,9 +2883,13 @@ export default function BookReader() {
     () => getHighlightedHtml(currentHtml, highlighted),
     [currentHtml, highlighted]
   );
+  const appendixLinkedHtml = useMemo(
+    () => cleanParagraphRefsAndLinkAppendix(highlightedHtml, appendixPath, chapterIdx === appendixChapterIdx),
+    [highlightedHtml, appendixPath, chapterIdx, appendixChapterIdx]
+  );
   const headingTransformedHtml = useMemo(
-    () => transformChapterHeading(highlightedHtml),
-    [highlightedHtml]
+    () => transformChapterHeading(appendixLinkedHtml),
+    [appendixLinkedHtml]
   );
   const htmlWithParagraphIds = useMemo(
     () => addParagraphIds(headingTransformedHtml, chapterIdx + 1),
