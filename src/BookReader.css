@@ -3,6 +3,7 @@
 :root{
   --reader-bg: #fff;
   --reader-fg: #111;
+  --reader-muted: #5f6b7a;
   --reader-header: #fff;
   --reader-border: #e6e6f0;
   --reader-highlight: #fff59d;
@@ -15,6 +16,7 @@
 html[data-theme='dark']{
   --reader-bg: #0f1112;
   --reader-fg: #e6e6e6;
+  --reader-muted: #aab4c1;
   --reader-header: #181a1b;
   --reader-border: #2b2b2b;
   --reader-highlight: rgba(255,224,102,0.12);
@@ -122,7 +124,7 @@ html,body,#root,.reader-root{height:100%;margin:0;padding:0;background:var(--rea
 }
 .reader-burger-icon:hover,.reader-lang-icon:hover,.reader-search-icon:hover,.reader-darkmode-toggle:hover,
 .reader-prev-chapter:hover,.reader-next-chapter:hover {
-  color: var(--reader-accent);
+  color: #000;
 }
 .reader-prev-chapter[disabled],.reader-next-chapter[disabled] {
   opacity: 0.4;
@@ -380,6 +382,10 @@ html,body,#root,.reader-root{height:100%;margin:0;padding:0;background:var(--rea
   /* ensure consistent vertical placement in different browsers */
 }
 
+html[data-theme='dark'] .dropcap {
+  color: #fff;
+}
+
 /* Ensure dropcap has no left border (explicit override) */
 span.dropcap {
   border-left: 0 none transparent !important;
@@ -554,7 +560,7 @@ span.dropcap {
 .reader-search-card{width:min(920px,94%);max-height:72vh;display:flex;flex-direction:column;background:var(--reader-modal-bg);color:var(--reader-modal-fg);border-radius:12px;box-shadow:0 20px 60px rgba(16,24,40,0.35);overflow:hidden}
 .reader-search-card .reader-search-bar{display:flex;gap:8px;align-items:center;padding:12px;border-bottom:1px solid rgba(0,0,0,0.06);background:transparent}
 .reader-search-input{flex:1;padding:10px 12px;border-radius:8px;border:1px solid var(--reader-border);font-size:1rem;background:transparent;color:inherit;outline:none}
-.reader-search-input::placeholder{color:#9aa4b2}
+.reader-search-input::placeholder{color:var(--reader-muted)}
 .reader-search-close{background:none;border:none;padding:8px;font-size:1.35rem;cursor:pointer;color:inherit}
 .reader-search-results{padding:12px;overflow:auto;display:grid;gap:8px;max-height:calc(80vh - 68px);background:linear-gradient(to bottom, transparent, rgba(0,0,0,0.02));
   /* left-align search result items */
@@ -578,7 +584,7 @@ span.dropcap {
   text-align: left;
 }
 .reader-search-result:hover{background:rgba(100,110,255,0.06);transform:translateY(-1px)}
-.reader-search-noresults{padding:18px;text-align:center;color:#888}
+.reader-search-noresults{padding:18px;text-align:center;color:var(--reader-muted)}
 
 /* Opening Table of Contents (inline opening page) */
 .reader-opening-toc-inline{
