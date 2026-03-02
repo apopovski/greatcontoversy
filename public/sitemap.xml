@@ -1,34 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/</loc>
+    <loc>https://greatcontroversy.app/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
-  <url><loc>/en</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>/es</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>/de</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>/it</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>/da</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>/no</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>/pt</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>/sm</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>/et</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>/ro</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>/hr</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>/bg</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>/sk</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>/cs</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>/uk</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>/ru</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>/pl</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>/ar</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>/am</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>/zh</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>/sr</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>/fa</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>/af</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>/hi</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>/bn</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>/id</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://greatcontroversy.app/en</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://greatcontroversy.app/es</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://greatcontroversy.app/de</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://greatcontroversy.app/it</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://greatcontroversy.app/da</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://greatcontroversy.app/no</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://greatcontroversy.app/pt</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://greatcontroversy.app/sm</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://greatcontroversy.app/et</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://greatcontroversy.app/ro</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://greatcontroversy.app/hr</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://greatcontroversy.app/bg</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://greatcontroversy.app/sk</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://greatcontroversy.app/cs</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://greatcontroversy.app/uk</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://greatcontroversy.app/ru</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://greatcontroversy.app/pl</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://greatcontroversy.app/ar</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://greatcontroversy.app/am</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://greatcontroversy.app/zh</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://greatcontroversy.app/sr</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://greatcontroversy.app/fa</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://greatcontroversy.app/af</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://greatcontroversy.app/hi</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://greatcontroversy.app/bn</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://greatcontroversy.app/id</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://greatcontroversy.app/fr</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
 </urlset>
