@@ -184,7 +184,7 @@ function getDesktopWidthPresets(viewportWidth: number, limit: number) {
   const firstIncrement = available / 2.5;
   const medium = Math.max(
     small,
-    Math.min(boundedLimit, DESKTOP_WIDTH_MIN + Math.round(firstIncrement))
+    Math.min(boundedLimit, small + Math.round(firstIncrement))
   );
   const wide = boundedLimit;
 
