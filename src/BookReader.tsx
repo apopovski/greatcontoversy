@@ -1819,6 +1819,15 @@ export default function BookReader() {
       const chapterTop = scrollTop + rect.top;
       const chapterHeight = Math.max(el.scrollHeight, rect.height, 1);
       const chapterBottom = chapterTop + chapterHeight;
+      const viewportBottom = scrollTop + window.innerHeight;
+
+      // Snap to 100% when the viewport reaches the chapter end.
+      // This avoids values like 98–99% at absolute bottom due to header offset math.
+      if (viewportBottom >= chapterBottom - 2) {
+        setChapterReadPercent(100);
+        return;
+      }
+
       const readingLineY = scrollTop + headerOffset;
 
       const raw = ((readingLineY - chapterTop) / Math.max(1, chapterBottom - chapterTop)) * 100;
