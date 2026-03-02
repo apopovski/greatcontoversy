@@ -169,8 +169,15 @@ type DesktopWidthPreset = 'small' | 'medium' | 'wide';
 
 function getDesktopWidthPresets(viewportWidth: number, limit: number) {
   const boundedLimit = Math.max(DESKTOP_WIDTH_MIN, Math.min(DESKTOP_WIDTH_MAX, limit));
-  const available = Math.max(0, boundedLimit - DESKTOP_WIDTH_MIN);
-  const small = DESKTOP_WIDTH_MIN;
+  // Screen-size adaptive baseline:
+  // keep small around ~48% of viewport (within configured bounds),
+  // but always leave enough room for meaningful jumps to medium/wide.
+  const adaptiveSmall = Math.round(viewportWidth * 0.48);
+  const small = Math.max(
+    DESKTOP_WIDTH_MIN,
+    Math.min(Math.max(DESKTOP_WIDTH_MIN, boundedLimit - 120), adaptiveSmall)
+  );
+  const available = Math.max(0, boundedLimit - small);
   // Keep increments in a 1 : 1.5 ratio:
   // small -> medium = d, medium -> wide = 1.5d
   // total available span = 2.5d => d = available / 2.5
