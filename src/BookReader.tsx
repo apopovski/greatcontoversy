@@ -170,13 +170,10 @@ type DesktopWidthPreset = 'small' | 'medium' | 'wide';
 function getDesktopWidthPresets(viewportWidth: number, limit: number) {
   const boundedLimit = Math.max(DESKTOP_WIDTH_MIN, Math.min(DESKTOP_WIDTH_MAX, limit));
   const available = Math.max(0, boundedLimit - DESKTOP_WIDTH_MIN);
-  const small = Math.max(
-    DESKTOP_WIDTH_MIN,
-    Math.min(boundedLimit, DESKTOP_WIDTH_MIN + Math.round(available * 0.5))
-  );
+  const small = DESKTOP_WIDTH_MIN;
   const medium = Math.max(
     small,
-    Math.min(boundedLimit, DESKTOP_WIDTH_MIN + Math.round(available * 0.75))
+    Math.min(boundedLimit, DESKTOP_WIDTH_MIN + Math.round(available * 0.5))
   );
   const wide = boundedLimit;
 
@@ -1714,7 +1711,7 @@ export default function BookReader() {
   const canDecreaseDesktopWidth = currentDesktopPresetIndex > 0;
   const canIncreaseDesktopWidth = currentDesktopPresetIndex < desktopPresetOrder.length - 1;
   const widthIndicatorPercent =
-    desktopWidthPreset === 'small' ? 50 : desktopWidthPreset === 'medium' ? 75 : 100;
+    desktopWidthPreset === 'small' ? 20 : desktopWidthPreset === 'medium' ? 60 : 100;
 
   const changeDesktopWidthPreset = (direction: 'decrease' | 'increase') => {
     setDesktopWidthPreset((prev) => {
