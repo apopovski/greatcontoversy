@@ -173,14 +173,14 @@ function getDesktopWidthPresets(viewportWidth: number, limit: number) {
     DESKTOP_WIDTH_MIN,
     Math.min(boundedLimit, getRecommendedDesktopWidth(viewportWidth))
   );
-  const medium = Math.max(
-    DESKTOP_WIDTH_MIN,
-    Math.min(boundedLimit, small + 60)
-  );
-  const wide = Math.max(
-    DESKTOP_WIDTH_MIN,
-    Math.min(boundedLimit, small + 120)
-  );
+  const wide = boundedLimit;
+  const available = Math.max(0, wide - small);
+  const medium = (() => {
+    if (available <= 0) return small;
+    // Keep medium clearly wider than small whenever there is room.
+    const targetDelta = Math.max(32, Math.round(available * 0.6));
+    return Math.min(wide - 1, small + targetDelta);
+  })();
 
   return { small, medium, wide };
 }
@@ -3402,9 +3402,9 @@ export default function BookReader() {
                   }}
                 >
                   <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <rect x="2" y="5" width="4" height="12" rx="1" stroke="currentColor" strokeWidth="1.5" fill={desktopWidthPreset === 'small' ? 'currentColor' : 'none'} />
-                    <rect x="9" y="4" width="4" height="14" rx="1" stroke="currentColor" strokeWidth="1.5" fill={desktopWidthPreset === 'medium' ? 'currentColor' : 'none'} />
-                    <rect x="16" y="3" width="4" height="16" rx="1" stroke="currentColor" strokeWidth="1.5" fill={desktopWidthPreset === 'wide' ? 'currentColor' : 'none'} />
+                    <rect x="7" y="4" width="8" height="4" rx="1" stroke="currentColor" strokeWidth="1.5" fill={desktopWidthPreset === 'small' ? 'currentColor' : 'none'} />
+                    <rect x="4" y="9" width="14" height="4" rx="1" stroke="currentColor" strokeWidth="1.5" fill={desktopWidthPreset === 'medium' ? 'currentColor' : 'none'} />
+                    <rect x="2" y="14" width="18" height="4" rx="1" stroke="currentColor" strokeWidth="1.5" fill={desktopWidthPreset === 'wide' ? 'currentColor' : 'none'} />
                   </svg>
                 </button>
               )}
