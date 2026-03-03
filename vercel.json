@@ -28,7 +28,7 @@
       "destination": "/og/sr.html"
     },
     {
-      "source": "/:lang(en|es|de|it|da|no|pt|sm|et|ro|hr|bg|sk|cs|uk|ru|pl|ar|am|zh|sr|fa|af|hi|bn|id|fr)",
+      "source": "/:lang(en|es|de|it|da|no|pt|sm|et|ro|hr|bg|sk|cs|uk|ru|pl|ar|am|zh|ko|sr|fa|af|hi|bn|id|fr)",
       "has": [
         {
           "type": "header",
@@ -39,7 +39,7 @@
       "destination": "/og/:lang.html"
     },
     {
-      "source": "/:lang(en|es|de|it|da|no|pt|sm|et|ro|hr|bg|sk|cs|uk|ru|pl|ar|am|zh|sr|fa|af|hi|bn|id|fr)/",
+      "source": "/:lang(en|es|de|it|da|no|pt|sm|et|ro|hr|bg|sk|cs|uk|ru|pl|ar|am|zh|ko|sr|fa|af|hi|bn|id|fr)/",
       "has": [
         {
           "type": "header",
