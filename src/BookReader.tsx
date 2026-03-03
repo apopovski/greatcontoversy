@@ -1619,12 +1619,26 @@ export default function BookReader() {
   const moreBtnRef = useRef<HTMLButtonElement | null>(null);
   const moreMenuRef = useRef<HTMLDivElement | null>(null);
 
+  const scrollToTop = () => {
+    try {
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    } catch {
+      window.scrollTo(0, 0);
+    }
+  };
+
   // Handlers for next/prev chapter (for audio auto-next)
   const handleNextChapter = () => {
-    if (chapterIdx < toc.length - 1) setChapterIdx(chapterIdx + 1);
+    if (chapterIdx < toc.length - 1) {
+      setChapterIdx(chapterIdx + 1);
+      scrollToTop();
+    }
   };
   const handlePrevChapter = () => {
-    if (chapterIdx > 0) setChapterIdx(chapterIdx - 1);
+    if (chapterIdx > 0) {
+      setChapterIdx(chapterIdx - 1);
+      scrollToTop();
+    }
   };
   // Get current chapter title
   const chapterTitle = toc[chapterIdx]?.title || '';
@@ -3339,7 +3353,10 @@ export default function BookReader() {
                 disabled={showOpeningToc || chapterIdx <= 0}
                 onClick={() => {
                   if (showOpeningToc) return;
-                  if (chapterIdx > 0) setChapterIdx(chapterIdx - 1);
+                  if (chapterIdx > 0) {
+                    setChapterIdx(chapterIdx - 1);
+                    scrollToTop();
+                  }
                 }}
               >
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -3354,7 +3371,10 @@ export default function BookReader() {
                 disabled={showOpeningToc || chapterIdx >= chapterIds.length - 1}
                 onClick={() => {
                   if (showOpeningToc) return;
-                  if (chapterIdx < chapterIds.length - 1) setChapterIdx(chapterIdx + 1);
+                  if (chapterIdx < chapterIds.length - 1) {
+                    setChapterIdx(chapterIdx + 1);
+                    scrollToTop();
+                  }
                 }}
               >
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
