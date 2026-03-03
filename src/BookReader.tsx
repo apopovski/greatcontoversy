@@ -467,6 +467,287 @@ const LANGUAGE_CONTINUE_LABELS: Record<string, string> = {
   [FRENCH_FOLDER]: 'Continuer',
 };
 
+const HERO_COPY: Record<string, {
+  line1: string;
+  line2: string;
+  line3: string;
+  line4: string;
+  startReading: string;
+  chooseLanguage: string;
+  availability: string;
+}> = {
+  en: {
+    line1: 'Empires have risen.',
+    line2: 'Truth has been suppressed.',
+    line3: 'Prophecy has been fulfilled.',
+    line4: 'What comes next?',
+    startReading: 'Start Reading',
+    chooseLanguage: 'Choose Language',
+    availability: 'Available in 30 Languages • Read Worldwide',
+  },
+  es: {
+    line1: 'Los imperios se han levantado.',
+    line2: 'La verdad ha sido suprimida.',
+    line3: 'La profecía se ha cumplido.',
+    line4: '¿Qué viene después?',
+    startReading: 'Comenzar a leer',
+    chooseLanguage: 'Elegir idioma',
+    availability: 'Disponible en 30 idiomas • Se lee en todo el mundo',
+  },
+  de: {
+    line1: 'Reiche sind aufgestiegen.',
+    line2: 'Die Wahrheit wurde unterdrückt.',
+    line3: 'Die Prophetie hat sich erfüllt.',
+    line4: 'Was kommt als Nächstes?',
+    startReading: 'Jetzt lesen',
+    chooseLanguage: 'Sprache wählen',
+    availability: 'In 30 Sprachen verfügbar • Weltweit gelesen',
+  },
+  it: {
+    line1: 'Gli imperi sono sorti.',
+    line2: 'La verità è stata soppressa.',
+    line3: 'La profezia si è adempiuta.',
+    line4: 'Cosa viene dopo?',
+    startReading: 'Inizia a leggere',
+    chooseLanguage: 'Scegli lingua',
+    availability: 'Disponibile in 30 lingue • Letto in tutto il mondo',
+  },
+  da: {
+    line1: 'Imperier er rejst.',
+    line2: 'Sandheden er blevet undertrykt.',
+    line3: 'Profetien er blevet opfyldt.',
+    line4: 'Hvad kommer nu?',
+    startReading: 'Begynd at læse',
+    chooseLanguage: 'Vælg sprog',
+    availability: 'Tilgængelig på 30 sprog • Læses verden over',
+  },
+  no: {
+    line1: 'Imperier har reist seg.',
+    line2: 'Sannheten har blitt undertrykt.',
+    line3: 'Profetien har blitt oppfylt.',
+    line4: 'Hva kommer nå?',
+    startReading: 'Start lesingen',
+    chooseLanguage: 'Velg språk',
+    availability: 'Tilgjengelig på 30 språk • Lest over hele verden',
+  },
+  pt: {
+    line1: 'Impérios se levantaram.',
+    line2: 'A verdade foi suprimida.',
+    line3: 'A profecia se cumpriu.',
+    line4: 'O que vem a seguir?',
+    startReading: 'Começar a ler',
+    chooseLanguage: 'Escolher idioma',
+    availability: 'Disponível em 30 idiomas • Lido no mundo todo',
+  },
+  sm: {
+    line1: 'Ua tulaʻi emepaea.',
+    line2: 'Ua taofia le upu moni.',
+    line3: 'Ua taunuu valoaga.',
+    line4: 'O le ā le isi mea?',
+    startReading: 'Amata Faitau',
+    chooseLanguage: 'Filifili Gagana',
+    availability: 'E avanoa i gagana e 30 • Faitau i le lalolagi atoa',
+  },
+  et: {
+    line1: 'Impeeriumid on tõusnud.',
+    line2: 'Tõde on maha surutud.',
+    line3: 'Prohvetikuulutus on täitunud.',
+    line4: 'Mis tuleb järgmiseks?',
+    startReading: 'Alusta lugemist',
+    chooseLanguage: 'Vali keel',
+    availability: 'Saadaval 30 keeles • Loetakse kogu maailmas',
+  },
+  ro: {
+    line1: 'Imperiile s-au ridicat.',
+    line2: 'Adevărul a fost suprimat.',
+    line3: 'Profeția s-a împlinit.',
+    line4: 'Ce urmează?',
+    startReading: 'Începe citirea',
+    chooseLanguage: 'Alege limba',
+    availability: 'Disponibil în 30 de limbi • Citit în întreaga lume',
+  },
+  hr: {
+    line1: 'Carstva su se uzdigla.',
+    line2: 'Istina je bila potisnuta.',
+    line3: 'Proročanstvo se ispunilo.',
+    line4: 'Što slijedi?',
+    startReading: 'Počni čitati',
+    chooseLanguage: 'Odaberi jezik',
+    availability: 'Dostupno na 30 jezika • Čita se širom svijeta',
+  },
+  bg: {
+    line1: 'Империи се издигнаха.',
+    line2: 'Истината беше потискана.',
+    line3: 'Пророчеството се изпълни.',
+    line4: 'Какво следва?',
+    startReading: 'Започни да четеш',
+    chooseLanguage: 'Избери език',
+    availability: 'Налична на 30 езика • Чете се по целия свят',
+  },
+  sk: {
+    line1: 'Ríše povstali.',
+    line2: 'Pravda bola potláčaná.',
+    line3: 'Proroctvo sa naplnilo.',
+    line4: 'Čo príde ďalej?',
+    startReading: 'Začať čítať',
+    chooseLanguage: 'Vybrať jazyk',
+    availability: 'Dostupné v 30 jazykoch • Čítané po celom svete',
+  },
+  cs: {
+    line1: 'Říše povstaly.',
+    line2: 'Pravda byla potlačena.',
+    line3: 'Proroctví se naplnilo.',
+    line4: 'Co přijde dál?',
+    startReading: 'Začít číst',
+    chooseLanguage: 'Vybrat jazyk',
+    availability: 'Dostupné ve 30 jazycích • Čteno po celém světě',
+  },
+  uk: {
+    line1: 'Імперії постали.',
+    line2: 'Правду було пригнічено.',
+    line3: 'Пророцтво здійснилося.',
+    line4: 'Що далі?',
+    startReading: 'Почати читати',
+    chooseLanguage: 'Обрати мову',
+    availability: 'Доступно 30 мовами • Читають у всьому світі',
+  },
+  ru: {
+    line1: 'Империи поднимались.',
+    line2: 'Истина подавлялась.',
+    line3: 'Пророчество исполнилось.',
+    line4: 'Что дальше?',
+    startReading: 'Начать чтение',
+    chooseLanguage: 'Выбрать язык',
+    availability: 'Доступно на 30 языках • Читают по всему миру',
+  },
+  pl: {
+    line1: 'Imperia powstały.',
+    line2: 'Prawda była tłumiona.',
+    line3: 'Proroctwo się wypełniło.',
+    line4: 'Co dalej?',
+    startReading: 'Rozpocznij czytanie',
+    chooseLanguage: 'Wybierz język',
+    availability: 'Dostępne w 30 językach • Czytane na całym świecie',
+  },
+  ar: {
+    line1: 'قامت إمبراطوريات.',
+    line2: 'قُمِعت الحقيقة.',
+    line3: 'تحققت النبوءة.',
+    line4: 'ماذا بعد؟',
+    startReading: 'ابدأ القراءة',
+    chooseLanguage: 'اختر اللغة',
+    availability: 'متاح بـ30 لغة • يُقرأ حول العالم',
+  },
+  am: {
+    line1: 'ንጉሳት ተነሱ።',
+    line2: 'እውነት ተገፋች።',
+    line3: 'ትንቢት ተፈጸመ።',
+    line4: 'ቀጣይ ምንድን ነው?',
+    startReading: 'ማንበብ ጀምር',
+    chooseLanguage: 'ቋንቋ ምረጥ',
+    availability: 'በ30 ቋንቋዎች ይገኛል • በዓለም አቀፍ ይነበባል',
+  },
+  zh: {
+    line1: '帝国曾兴起。',
+    line2: '真理曾被压制。',
+    line3: '预言已经应验。',
+    line4: '接下来会发生什么？',
+    startReading: '开始阅读',
+    chooseLanguage: '选择语言',
+    availability: '提供30种语言 • 全球阅读',
+  },
+  ko: {
+    line1: '제국들이 일어났습니다.',
+    line2: '진리는 억눌렸습니다.',
+    line3: '예언은 성취되었습니다.',
+    line4: '다음은 무엇일까요?',
+    startReading: '읽기 시작',
+    chooseLanguage: '언어 선택',
+    availability: '30개 언어 제공 • 전 세계에서 읽습니다',
+  },
+  ja: {
+    line1: '帝国は興り、',
+    line2: '真理は抑えられ、',
+    line3: '預言は成就しました。',
+    line4: '次に何が来るのか？',
+    startReading: '読み始める',
+    chooseLanguage: '言語を選ぶ',
+    availability: '30言語で提供 • 世界中で読まれています',
+  },
+  sr: {
+    line1: 'Царства су се уздизала.',
+    line2: 'Истина је била потискивана.',
+    line3: 'Пророштво се испунило.',
+    line4: 'Шта следи?',
+    startReading: 'Почни читање',
+    chooseLanguage: 'Изабери језик',
+    availability: 'Доступно на 30 језика • Чита се широм света',
+  },
+  fa: {
+    line1: 'امپراتوری‌ها برخاسته‌اند.',
+    line2: 'حقیقت سرکوب شده است.',
+    line3: 'نبوت تحقق یافته است.',
+    line4: 'بعد چه می‌آید؟',
+    startReading: 'شروع مطالعه',
+    chooseLanguage: 'انتخاب زبان',
+    availability: 'در ۳۰ زبان موجود است • در سراسر جهان خوانده می‌شود',
+  },
+  af: {
+    line1: 'Ryke het opgestaan.',
+    line2: 'Die waarheid is onderdruk.',
+    line3: 'Profesie is vervul.',
+    line4: 'Wat kom volgende?',
+    startReading: 'Begin lees',
+    chooseLanguage: 'Kies taal',
+    availability: 'Beskikbaar in 30 tale • Wêreldwyd gelees',
+  },
+  hi: {
+    line1: 'साम्राज्य उठे हैं।',
+    line2: 'सत्य दबाया गया है।',
+    line3: 'भविष्यवाणी पूरी हो चुकी है।',
+    line4: 'अब आगे क्या?',
+    startReading: 'पढ़ना शुरू करें',
+    chooseLanguage: 'भाषा चुनें',
+    availability: '30 भाषाओं में उपलब्ध • दुनिया भर में पढ़ी जाती है',
+  },
+  bn: {
+    line1: 'সাম্রাজ্য উঠেছে।',
+    line2: 'সত্যকে দমন করা হয়েছে।',
+    line3: 'ভবিষ্যদ্বাণী পূর্ণ হয়েছে।',
+    line4: 'এরপর কী?',
+    startReading: 'পড়া শুরু করুন',
+    chooseLanguage: 'ভাষা বেছে নিন',
+    availability: '৩০টি ভাষায় উপলভ্য • বিশ্বজুড়ে পড়া হয়',
+  },
+  id: {
+    line1: 'Kerajaan telah bangkit.',
+    line2: 'Kebenaran telah ditekan.',
+    line3: 'Nubuat telah digenapi.',
+    line4: 'Apa yang berikutnya?',
+    startReading: 'Mulai membaca',
+    chooseLanguage: 'Pilih bahasa',
+    availability: 'Tersedia dalam 30 bahasa • Dibaca di seluruh dunia',
+  },
+  ur: {
+    line1: 'سلطنتیں اُبھری ہیں۔',
+    line2: 'سچائی دبائی گئی ہے۔',
+    line3: 'پیشگوئی پوری ہو چکی ہے۔',
+    line4: 'اب آگے کیا؟',
+    startReading: 'مطالعہ شروع کریں',
+    chooseLanguage: 'زبان منتخب کریں',
+    availability: '30 زبانوں میں دستیاب • دنیا بھر میں پڑھی جاتی ہے',
+  },
+  fr: {
+    line1: 'Des empires se sont levés.',
+    line2: 'La vérité a été étouffée.',
+    line3: 'La prophétie s’est accomplie.',
+    line4: 'Que vient-il ensuite ?',
+    startReading: 'Commencer la lecture',
+    chooseLanguage: 'Choisir la langue',
+    availability: 'Disponible en 30 langues • Lu dans le monde entier',
+  },
+};
+
 const COPY_TOAST_LABELS: Record<string, string> = {
   en: 'Copied',
   es: 'Copiado',
@@ -1897,6 +2178,7 @@ export default function BookReader() {
     return false;
   });
   const sharePopupRef = useRef<HTMLDivElement | null>(null);
+  const openingContentRef = useRef<HTMLElement | null>(null);
   const selectionRangeRef = useRef<Range | null>(null);
   const isSelectingRef = useRef(false);
   const pendingChapterIdxRef = useRef<number | null>(null);
@@ -3621,7 +3903,26 @@ export default function BookReader() {
   const noContentsAvailableLabel = lang === CHINESE_FOLDER ? '暂无目录' : 'No contents available';
   const contactWhatsAppLabel = CONTACT_WHATSAPP_LABELS[lang] || 'Contact on WhatsApp';
   const continueLabel = LANGUAGE_CONTINUE_LABELS[lang] || 'Continue';
+  const languageCode = (LANGUAGE_ABBREV[lang] || 'en').toLowerCase();
+  const heroCopy = HERO_COPY[languageCode] || HERO_COPY.en;
   const isRtl = (lang || '').toLowerCase().includes('alsra') || lang === FARSI_FOLDER || lang === URDU_FOLDER;
+
+  const scrollToOpeningContent = React.useCallback(() => {
+    const target = openingContentRef.current;
+    if (!target) return;
+    try {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch {
+      target.scrollIntoView();
+    }
+  }, []);
+
+  const openLanguageChooser = React.useCallback(() => {
+    const panelW = 260;
+    const left = Math.max(12, Math.floor((window.innerWidth - panelW) / 2));
+    setLangPanelStyle({ position: 'fixed', top: 84, left, minWidth: panelW });
+    setShowLangMenu(true);
+  }, []);
 
   const languageMenuFolders = useMemo(() => {
     const englishFolder = 'The Great Controversy - Ellen G. White 2';
@@ -4068,7 +4369,7 @@ export default function BookReader() {
               return (
                 <li key={t.href}>
                   <button
-                    className={`${i === chapterIdx ? 'active' : ''}${chapterNum ? '' : ' no-active-bg'}`.trim()}
+                    className={i === chapterIdx ? 'active' : ''}
                     onClick={() => {
                       setChapterIdx(i);
                       setShowChaptersMenu(false);
@@ -4090,57 +4391,87 @@ export default function BookReader() {
             {loading ? (
               <div>Loading…</div>
             ) : (
-              <section className="reader-opening-toc-inline" aria-label={tableOfContentsLabel}>
-                <div className="reader-opening-toc-inline-header">
-                  <div className="reader-opening-toc-inline-titles">
-                    <div className="reader-opening-subtitle">{contentsLabel}</div>
+              <>
+                <section className="reader-opening-hero" aria-label={displayTitle}>
+                  <div className="reader-opening-hero-content">
+                    <h1 className="reader-opening-hero-title">
+                      <span>{heroCopy.line1}</span>
+                      <span>{heroCopy.line2}</span>
+                      <span>{heroCopy.line3}</span>
+                      <span>{heroCopy.line4}</span>
+                    </h1>
+                    <p className="reader-opening-hero-meta">{heroCopy.availability}</p>
+                    <div className="reader-opening-hero-actions">
+                      <button
+                        className="reader-opening-start"
+                        onClick={scrollToOpeningContent}
+                        aria-label={heroCopy.startReading}
+                      >
+                        {heroCopy.startReading}
+                      </button>
+                      <button
+                        className="reader-opening-language"
+                        onClick={openLanguageChooser}
+                        aria-label={heroCopy.chooseLanguage}
+                      >
+                        {heroCopy.chooseLanguage}
+                      </button>
+                    </div>
                   </div>
-                  <div className="reader-opening-toc-inline-actions">
-                    <button
-                      className="reader-opening-continue"
-                      onClick={() => {
-                        setShowOpeningToc(false);
-                        try {
-                          window.scrollTo({ top: 0, behavior: 'smooth' });
-                        } catch {
-                          window.scrollTo(0, 0);
-                        }
-                      }}
-                      aria-label={continueLabel}
-                    >
-                      {continueLabel}
-                    </button>
-                  </div>
-                </div>
+                </section>
 
-                <ul className="reader-toc-list reader-opening-toc-list">
-                  {toc.length === 0 && <li className="reader-toc-empty">{noContentsAvailableLabel}</li>}
-                  {toc.map((t, i) => {
-                    const chapterNum = getChapterNumber(t.title);
-                    const titleOnly = chapterNum ? stripChapterPrefix(t.title) : t.title;
-                    const chapterLabel = LANGUAGE_CHAPTER_LABELS[lang] || 'Chapter';
-                    return (
-                      <li key={t.href}>
-                        <button
-                          className={`${i === chapterIdx ? 'active' : ''}${chapterNum ? '' : ' no-active-bg'}`.trim()}
-                          onClick={() => {
-                            setChapterIdx(i);
-                            setShowOpeningToc(false);
-                            try {
-                              window.scrollTo({ top: 0, behavior: 'smooth' });
-                            } catch {
-                              window.scrollTo(0, 0);
-                            }
-                          }}
-                        >
-                          {chapterNum && <span className="reader-toc-num">{chapterLabel} {chapterNum}</span>}
-                          <span className={`reader-toc-title${chapterNum ? '' : ' full-title'}`}>{titleOnly}</span>
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </section>
+                <section ref={openingContentRef} className="reader-opening-toc-inline" aria-label={tableOfContentsLabel}>
+                  <div className="reader-opening-toc-inline-header">
+                    <div className="reader-opening-toc-inline-titles">
+                      <div className="reader-opening-subtitle">{contentsLabel}</div>
+                    </div>
+                    <div className="reader-opening-toc-inline-actions">
+                      <button
+                        className="reader-opening-continue"
+                        onClick={() => {
+                          setShowOpeningToc(false);
+                          try {
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          } catch {
+                            window.scrollTo(0, 0);
+                          }
+                        }}
+                        aria-label={continueLabel}
+                      >
+                        {continueLabel}
+                      </button>
+                    </div>
+                  </div>
+
+                  <ul className="reader-toc-list reader-opening-toc-list">
+                    {toc.length === 0 && <li className="reader-toc-empty">{noContentsAvailableLabel}</li>}
+                    {toc.map((t, i) => {
+                      const chapterNum = getChapterNumber(t.title);
+                      const titleOnly = chapterNum ? stripChapterPrefix(t.title) : t.title;
+                      const chapterLabel = LANGUAGE_CHAPTER_LABELS[lang] || 'Chapter';
+                      return (
+                        <li key={t.href}>
+                          <button
+                            className={i === chapterIdx ? 'active' : ''}
+                            onClick={() => {
+                              setChapterIdx(i);
+                              setShowOpeningToc(false);
+                              try {
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                              } catch {
+                                window.scrollTo(0, 0);
+                              }
+                            }}
+                          >
+                            {chapterNum && <span className="reader-toc-num">{chapterLabel} {chapterNum}</span>}
+                            <span className={`reader-toc-title${chapterNum ? '' : ' full-title'}`}>{titleOnly}</span>
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </section>
+              </>
             )}
 
             <footer className="reader-footer">

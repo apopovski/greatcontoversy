@@ -8,38 +8,36 @@ const __dirname = path.dirname(__filename);
 
 const ROOT = path.join(__dirname, '..');
 const OG_DIR = path.join(ROOT, 'public', 'og');
-const OG_TITLE_SUFFIX = 'Cosmic conflict between good and evil revealed.';
-
-const TAGLINES = {
-  en: 'Cosmic conflict between good and evil',
-  es: 'Conflicto cósmico entre el bien y el mal',
-  de: 'Kosmischer Konflikt zwischen Gut und Böse',
-  it: 'Conflitto cosmico tra il bene e il male',
-  da: 'Kosmisk konflikt mellem godt og ondt',
-  no: 'Kosmisk konflikt mellom godt og ondt',
-  pt: 'Conflito cósmico entre o bem e o mal',
-  sm: 'Feteʻenaʻiga faale-vateatea i le va o le lelei ma le leaga',
-  et: 'Kosmiline konflikt hea ja kurja vahel',
-  ro: 'Conflict cosmic între bine și rău',
-  hr: 'Kozmički sukob između dobra i zla',
-  bg: 'Космически конфликт между доброто и злото',
-  sk: 'Kozmický konflikt medzi dobrom a zlom',
-  cs: 'Kosmický konflikt mezi dobrem a zlem',
-  uk: 'Космічний конфлікт між добром і злом',
-  ru: 'Космический конфликт между добром и злом',
-  pl: 'Kosmiczny konflikt między dobrem a złem',
-  ar: 'صراع كوني بين الخير والشر',
-  am: 'በመልካምና በክፉ መካከል ያለ ኮስሚክ ግጭት',
-  zh: '善与恶之间的宇宙冲突',
-  ja: '善と悪の間の宇宙的争闘',
-  ko: '선과 악 사이의 우주적 대쟁투',
-  sr: 'Космички сукоб између добра и зла',
-  fa: 'نبرد کیهانی میان خیر و شر',
-  af: 'Kosmiese konflik tussen goed en kwaad',
-  hi: 'अच्छाई और बुराई के बीच ब्रह्मांडीय संघर्ष',
-  bn: 'ভাল ও মন্দের মধ্যে মহাজাগতিক সংঘর্ষ',
-  id: 'Konflik kosmik antara yang baik dan yang jahat',
-  fr: 'Conflit cosmique entre le bien et le mal',
+const OG_TEXT_BY_LANG = {
+  en: 'Cosmic conflict between good and evil revealed.',
+  es: 'Conflicto cósmico entre el bien y el mal revelado.',
+  de: 'Kosmischer Konflikt zwischen Gut und Böse offenbart.',
+  it: 'Conflitto cosmico tra il bene e il male rivelato.',
+  da: 'Kosmisk konflikt mellem godt og ondt åbenbaret.',
+  no: 'Kosmisk konflikt mellom godt og ondt avdekket.',
+  pt: 'Conflito cósmico entre o bem e o mal revelado.',
+  sm: 'Ua faailoa mai le feteʻenaʻiga faale-vateatea i le va o le lelei ma le leaga.',
+  et: 'Hea ja kurja vaheline kosmiline konflikt on paljastatud.',
+  ro: 'Conflictul cosmic dintre bine și rău, dezvăluit.',
+  hr: 'Otkriven kozmički sukob između dobra i zla.',
+  bg: 'Разкрит е космическият конфликт между доброто и злото.',
+  sk: 'Kozmický konflikt medzi dobrom a zlom odhalený.',
+  cs: 'Kosmický konflikt mezi dobrem a zlem odhalen.',
+  uk: 'Розкрито космічний конфлікт між добром і злом.',
+  ru: 'Раскрыт космический конфликт между добром и злом.',
+  pl: 'Kosmiczny konflikt między dobrem a złem ujawniony.',
+  ar: 'تم الكشف عن الصراع الكوني بين الخير والشر.',
+  am: 'በመልካምና በክፉ መካከል ያለው ኮስሚክ ግጭት ተገልጧል።',
+  zh: '善与恶之间的宇宙冲突已揭示。',
+  ja: '善と悪の間の宇宙的争闘が明らかに。',
+  ko: '선과 악 사이의 우주적 대쟁투가 드러납니다.',
+  sr: 'Откривен космички сукоб између добра и зла.',
+  fa: 'نبرد کیهانی میان خیر و شر آشکار شده است.',
+  af: 'Kosmiese konflik tussen goed en kwaad geopenbaar.',
+  hi: 'अच्छाई और बुराई के बीच ब्रह्मांडीय संघर्ष प्रकट हुआ।',
+  bn: 'ভাল ও মন্দের মধ্যে মহাজাগতিক সংঘর্ষ উন্মোচিত।',
+  id: 'Konflik kosmik antara yang baik dan yang jahat terungkap.',
+  fr: 'Conflit cosmique entre le bien et le mal révélé.',
 };
 
 const BOOK_TITLES = {
@@ -102,15 +100,15 @@ async function run() {
 
   for (const file of htmlFiles) {
     const code = file.slice(0, 2).toLowerCase();
-    const tagline = TAGLINES[code] || TAGLINES.en;
+    const localizedOgText = OG_TEXT_BY_LANG[code] || OG_TEXT_BY_LANG.en;
     const fullPath = path.join(OG_DIR, file);
     let html = await fs.readFile(fullPath, 'utf8');
 
     const ogTitleMatch = html.match(/<meta\s+property="og:title"\s+content="([^"]+)"\s*\/?>/i);
     const fallbackTitle = getBookTitleFromOgTitle(ogTitleMatch?.[1] || 'The Great Controversy');
     const bookTitle = BOOK_TITLES[code] || fallbackTitle;
-    const nextTitle = `${bookTitle} — ${OG_TITLE_SUFFIX}`;
-    const nextDescription = `${tagline}.`;
+    const nextTitle = `${bookTitle} — ${localizedOgText}`;
+    const nextDescription = localizedOgText;
 
     html = replaceTitleTag(html, nextTitle);
     html = replaceMeta(html, 'property', 'og:title', nextTitle);

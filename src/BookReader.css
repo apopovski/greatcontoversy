@@ -399,7 +399,6 @@ html[data-theme='dark'] .reader-timeline-range{
 .reader-toc-list button{white-space:normal;overflow-wrap:anywhere;word-break:break-word}
 .reader-toc-list button .full-title{grid-column:1/-1}
 .reader-toc-list button.active{background:rgba(100,110,255,0.08);font-weight:700}
-.reader-toc-list button.active.no-active-bg{background:transparent}
 
 /* Force white text for all book/TOC text in dark mode (handles language/source-specific inline styles) */
 html[data-theme='dark'] .reader-book-html,
@@ -674,6 +673,101 @@ span.dropcap {
 .reader-search-noresults{padding:18px;text-align:center;color:var(--reader-muted)}
 
 /* Opening Table of Contents (inline opening page) */
+.reader-opening-hero{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  border-radius:16px;
+  margin:8px 0 14px;
+  padding:28px 18px;
+  position:relative;
+  overflow:hidden;
+  background:radial-gradient(1200px 520px at 50% -10%, rgba(255,214,120,0.08), transparent 55%), linear-gradient(160deg, #0a1325 0%, #0f1b2d 52%, #161c25 100%);
+  border:1px solid rgba(212,175,55,0.22);
+  box-shadow:0 24px 64px rgba(4,8,16,0.45), inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+.reader-opening-hero-content{
+  width:min(900px, 96%);
+  margin:0 auto;
+  opacity:0;
+  transform:translateY(18px);
+  animation:readerHeroFadeIn 680ms ease-out 120ms forwards;
+}
+
+@keyframes readerHeroFadeIn{
+  from{opacity:0;transform:translateY(18px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.reader-opening-hero-title{
+  margin:0;
+  display:grid;
+  gap:8px;
+  font-family: 'Garamond', 'Baskerville', 'Times New Roman', serif;
+  color:#e8c26a;
+  letter-spacing:0.01em;
+  line-height:1.18;
+  font-size:clamp(1.5rem, 2.8vw, 2.6rem);
+  text-shadow:0 1px 0 rgba(255,255,255,0.08), 0 8px 22px rgba(0,0,0,0.45);
+}
+
+.reader-opening-hero-title span{display:block}
+
+.reader-opening-hero-meta{
+  margin:18px auto 0;
+  color:rgba(243,248,255,0.88);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  font-size:clamp(0.94rem, 1.9vw, 1.05rem);
+  letter-spacing:0.01em;
+}
+
+.reader-opening-hero-actions{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
+  margin-top:24px;
+  flex-wrap:wrap;
+}
+
+.reader-opening-start,
+.reader-opening-language{
+  border-radius:999px;
+  cursor:pointer;
+  font-weight:700;
+  font-size:1rem;
+  padding:12px 24px;
+  transition:transform 140ms ease, box-shadow 180ms ease, background 180ms ease, color 180ms ease;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+}
+
+.reader-opening-start{
+  border:1px solid rgba(232,194,106,0.72);
+  background:linear-gradient(180deg, #f4d28a 0%, #d3a84e 100%);
+  color:#1a1d24;
+  min-width:190px;
+  box-shadow:0 10px 28px rgba(212,175,55,0.28);
+}
+
+.reader-opening-start:hover{
+  transform:translateY(-2px);
+  box-shadow:0 14px 30px rgba(212,175,55,0.36);
+}
+
+.reader-opening-language{
+  border:1px solid rgba(235,240,250,0.28);
+  background:rgba(255,255,255,0.02);
+  color:#f5f7fb;
+}
+
+.reader-opening-language:hover{
+  transform:translateY(-2px);
+  background:rgba(255,255,255,0.08);
+}
+
 .reader-opening-toc-inline{
   border:1px solid var(--reader-border);
   background:linear-gradient(to bottom, rgba(100,110,255,0.05), transparent 40%);
@@ -719,6 +813,24 @@ span.dropcap {
 .reader-opening-toc-list{margin-top:10px}
 
 @media (max-width:720px){
+  .reader-opening-hero{
+    min-height:calc(100vh - 80px);
+    border-radius:14px;
+    padding:20px 12px;
+  }
+  .reader-opening-hero-title{
+    font-size:clamp(1.35rem, 6.2vw, 1.85rem);
+    gap:6px;
+  }
+  .reader-opening-hero-actions{
+    margin-top:18px;
+    gap:10px;
+  }
+  .reader-opening-start,
+  .reader-opening-language{
+    width:100%;
+    max-width:340px;
+  }
   .reader-opening-toc-inline{padding:12px;border-radius:12px}
   .reader-opening-title{font-size:1.2rem}
 }
