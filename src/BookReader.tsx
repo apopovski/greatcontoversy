@@ -4075,7 +4075,7 @@ export default function BookReader() {
                     }}
                   >
                     {chapterNum && <span className="reader-toc-num">{(LANGUAGE_CHAPTER_LABELS[lang] || 'Chapter')} {chapterNum}</span>}
-                    <span className="reader-toc-title">{titleOnly}</span>
+                    <span className={`reader-toc-title${chapterNum ? '' : ' full-title'}`}>{titleOnly}</span>
                   </button>
                 </li>
               );
@@ -4134,7 +4134,7 @@ export default function BookReader() {
                           }}
                         >
                           {chapterNum && <span className="reader-toc-num">{chapterLabel} {chapterNum}</span>}
-                          <span className="reader-toc-title">{titleOnly}</span>
+                          <span className={`reader-toc-title${chapterNum ? '' : ' full-title'}`}>{titleOnly}</span>
                         </button>
                       </li>
                     );
