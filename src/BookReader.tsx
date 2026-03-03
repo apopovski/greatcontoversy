@@ -4424,7 +4424,10 @@ export default function BookReader() {
                     <div className="reader-opening-hero-content">
                       <h1 className="reader-opening-hero-booktitle">The Great Controversy</h1>
                       <div className="reader-opening-hero-visual" aria-hidden="true">
-                        <img src="/graphics/The-Great-Controversy-Spash-white-2.svg" alt="" className="reader-opening-hero-image" />
+                        <picture>
+                          <source media="(max-width: 720px)" srcSet="/graphics/The-Great-Controversy-Spash-mobile.svg" />
+                          <img src="/graphics/The-Great-Controversy-Spash-white-2.svg" alt="" className="reader-opening-hero-image" />
+                        </picture>
                       </div>
                       <div className="reader-opening-hero-lines" aria-label="Hero intro lines">
                         {heroMainLines.map((line) => (
