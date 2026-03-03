@@ -4422,10 +4422,10 @@ export default function BookReader() {
                 <div className={`reader-opening-hero-shell${heroOpening ? ' is-opening' : ''}${heroOpened ? ' is-opened' : ''}`}>
                   <section className="reader-opening-hero" aria-label={displayTitle}>
                     <div className="reader-opening-hero-content">
-                      <div className="reader-opening-hero-visual" aria-hidden="true">
-                        <img src="/graphics/The-Great-Controversy-Spash-white.svg" alt="" className="reader-opening-hero-image" />
-                      </div>
                       <h1 className="reader-opening-hero-booktitle">The Great Controversy</h1>
+                      <div className="reader-opening-hero-visual" aria-hidden="true">
+                        <img src="/graphics/The-Great-Controversy-Spash-white-2.svg" alt="" className="reader-opening-hero-image" />
+                      </div>
                       <div className="reader-opening-hero-lines" aria-label="Hero intro lines">
                         {heroMainLines.map((line) => (
                           <p key={line}>{line}</p>
