@@ -703,11 +703,7 @@ span.dropcap {
   padding:20px 18px 10px;
   position:relative;
   overflow:hidden;
-  background-color:#0a1325;
-  background-image:url('/graphics/The-Great-Controversy-Spash-white-2.svg');
-  background-repeat:no-repeat;
-  background-position:center center;
-  background-size:cover;
+  background:radial-gradient(1200px 520px at 50% -10%, rgba(255,214,120,0.08), transparent 55%), linear-gradient(160deg, #0a1325 0%, #0f1b2d 52%, #161c25 100%);
   border:0;
   box-shadow:0 24px 64px rgba(4,8,16,0.45), inset 0 1px 0 rgba(255,255,255,0.06);
   width:100vw;
@@ -721,6 +717,8 @@ span.dropcap {
   transform:translateY(-5vh);
   opacity:0;
   animation:readerHeroFadeIn 680ms ease-out 120ms forwards;
+  position:relative;
+  z-index:2;
 }
 
 @keyframes readerHeroFadeIn{
@@ -733,6 +731,8 @@ span.dropcap {
   justify-content:center;
   align-items:center;
   margin:0 auto;
+  position:relative;
+  z-index:1;
 }
 
 .reader-opening-hero-image{
@@ -742,6 +742,30 @@ span.dropcap {
   object-fit:contain;
   filter:drop-shadow(0 12px 30px rgba(0,0,0,0.28));
   opacity:0.96;
+}
+
+@media (min-width:721px){
+  .reader-opening-hero-visual{
+    position:absolute;
+    inset:0;
+    margin:0;
+    z-index:0;
+  }
+
+  .reader-opening-hero-visual picture{
+    display:block;
+    width:100%;
+    height:100%;
+  }
+
+  .reader-opening-hero-image{
+    width:100%;
+    height:100%;
+    max-height:none;
+    object-fit:cover;
+    filter:none;
+    opacity:1;
+  }
 }
 
 .reader-opening-hero-booktitle{
@@ -868,8 +892,6 @@ span.dropcap {
     min-height:100vh;
     height:100vh;
     padding:16px 12px 8px;
-    background-image:url('/graphics/The-Great-Controversy-Spash-mobile-2.svg');
-    background-position:center top;
   }
   .reader-opening-hero-content{
     transform:translateY(-3.2vh);
