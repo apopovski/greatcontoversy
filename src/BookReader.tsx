@@ -2141,6 +2141,8 @@ export default function BookReader() {
   const [showSearch, setShowSearch] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const [heroOpening, setHeroOpening] = useState(false);
+  const [heroOpened, setHeroOpened] = useState(false);
   const [chapterReadPercent, setChapterReadPercent] = useState(0);
   const [showCopyToast, setShowCopyToast] = useState(false);
   const [copyToastPos, setCopyToastPos] = useState({ top: 0, left: 0 });
@@ -3905,6 +3907,7 @@ export default function BookReader() {
   const continueLabel = LANGUAGE_CONTINUE_LABELS[lang] || 'Continue';
   const languageCode = (LANGUAGE_ABBREV[lang] || 'en').toLowerCase();
   const heroCopy = HERO_COPY[languageCode] || HERO_COPY.en;
+  const heroAvailability = (heroCopy.availability || '').split('•')[0].trim();
   const isRtl = (lang || '').toLowerCase().includes('alsra') || lang === FARSI_FOLDER || lang === URDU_FOLDER;
 
   const scrollToOpeningContent = React.useCallback(() => {
@@ -3916,6 +3919,25 @@ export default function BookReader() {
       target.scrollIntoView();
     }
   }, []);
+
+  const handleStartReading = React.useCallback(() => {
+    if (heroOpening || heroOpened) return;
+    setHeroOpening(true);
+    window.setTimeout(() => {
+      scrollToOpeningContent();
+    }, 160);
+    window.setTimeout(() => {
+      setHeroOpening(false);
+      setHeroOpened(true);
+    }, 620);
+  }, [heroOpening, heroOpened, scrollToOpeningContent]);
+
+  useEffect(() => {
+    if (showOpeningToc) {
+      setHeroOpening(false);
+      setHeroOpened(false);
+    }
+  }, [showOpeningToc, lang]);
 
   const openLanguageChooser = React.useCallback(() => {
     const panelW = 260;
@@ -4392,33 +4414,33 @@ export default function BookReader() {
               <div>Loading…</div>
             ) : (
               <>
-                <section className="reader-opening-hero" aria-label={displayTitle}>
-                  <div className="reader-opening-hero-content">
-                    <h1 className="reader-opening-hero-title">
-                      <span>{heroCopy.line1}</span>
-                      <span>{heroCopy.line2}</span>
-                      <span>{heroCopy.line3}</span>
-                      <span>{heroCopy.line4}</span>
-                    </h1>
-                    <p className="reader-opening-hero-meta">{heroCopy.availability}</p>
-                    <div className="reader-opening-hero-actions">
-                      <button
-                        className="reader-opening-start"
-                        onClick={scrollToOpeningContent}
-                        aria-label={heroCopy.startReading}
-                      >
-                        {heroCopy.startReading}
-                      </button>
-                      <button
-                        className="reader-opening-language"
-                        onClick={openLanguageChooser}
-                        aria-label={heroCopy.chooseLanguage}
-                      >
-                        {heroCopy.chooseLanguage}
-                      </button>
+                <div className={`reader-opening-hero-shell${heroOpening ? ' is-opening' : ''}${heroOpened ? ' is-opened' : ''}`}>
+                  <section className="reader-opening-hero" aria-label={displayTitle}>
+                    <div className="reader-opening-hero-content">
+                      <div className="reader-opening-hero-visual" aria-hidden="true">
+                        <img src="/graphics/The-Great-Controversy-Spash.svg" alt="" className="reader-opening-hero-image" />
+                      </div>
+                      <h1 className="reader-opening-hero-booktitle">{displayTitle}</h1>
+                      <p className="reader-opening-hero-meta">{heroAvailability}</p>
+                      <div className="reader-opening-hero-actions">
+                        <button
+                          className="reader-opening-start"
+                          onClick={handleStartReading}
+                          aria-label={heroCopy.startReading}
+                        >
+                          {heroCopy.startReading}
+                        </button>
+                        <button
+                          className="reader-opening-language"
+                          onClick={openLanguageChooser}
+                          aria-label={heroCopy.chooseLanguage}
+                        >
+                          {heroCopy.chooseLanguage}
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                </section>
+                  </section>
+                </div>
 
                 <section ref={openingContentRef} className="reader-opening-toc-inline" aria-label={tableOfContentsLabel}>
                   <div className="reader-opening-toc-inline-header">
