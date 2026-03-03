@@ -1,7 +1,6 @@
 import React, { Suspense, useEffect, useState } from "react";
 import { getAnalyticsConsentStatus, setAnalyticsConsent } from './utils/analytics';
 const BookReader = React.lazy(() => import('./BookReader'));
-const Splash = React.lazy(() => import('./components/Splash'));
 
 type ErrorBoundaryProps = { children: React.ReactNode };
 type ErrorBoundaryState = { hasError: boolean; error: unknown };
@@ -35,16 +34,6 @@ import "./App.css";
 import { useDarkMode } from "./utils/useDarkMode";
 
 function App() {
-  const [showSplash, setShowSplash] = useState(() => {
-    try {
-      const u = new URL(window.location.href);
-      if (u.searchParams.has('splash')) return true;
-    } catch (e) {
-      // ignore
-    }
-    return !localStorage.getItem('gc_seen_splash_v1');
-  });
-
   const [dark] = useDarkMode();
   const [consentStatus, setConsentStatus] = useState<'granted' | 'denied' | 'unknown'>(() => getAnalyticsConsentStatus());
 
@@ -68,23 +57,8 @@ function App() {
   return (
     <ErrorBoundary>
       <Suspense fallback={null}>
-        {showSplash && (
-          <Splash
-            onStart={() => {
-              localStorage.setItem('gc_seen_splash_v1','1');
-              localStorage.setItem('gc_jump_to_toc','1');
-              setShowSplash(false);
-            }}
-            onClose={() => setShowSplash(false)}
-            onChooseLanguage={() => setShowSplash(false)}
-          />
-        )}
+        <BookReader />
       </Suspense>
-      {!showSplash && (
-        <Suspense fallback={null}>
-          <BookReader />
-        </Suspense>
-      )}
       {consentStatus === 'unknown' && (
         <div className="analytics-consent-banner" role="dialog" aria-live="polite" aria-label="Cookie consent">
           <div className="analytics-consent-text">
