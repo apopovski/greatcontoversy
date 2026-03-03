@@ -12,7 +12,7 @@
 .splash-bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #f8f9ff 0%, #eef6ff 40%, #e8f0ff 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #fdfdfd 52%, #f8f8f8 100%);
   z-index: 0;
 }
 
@@ -33,7 +33,7 @@
   height: auto;
   object-fit: contain;
   transform: translateY(-2vh);
-  filter: drop-shadow(0 18px 36px rgba(8,12,20,0.08));
+  filter: drop-shadow(0 18px 36px rgba(8,12,20,0.06));
 }
 .splash-art-link {
   pointer-events: auto;
@@ -57,15 +57,18 @@
   font: inherit;
   cursor: pointer;
 }
-.splash-title-link:hover, .splash-title-link:focus { border-color: rgba(11,107,255,0.18); color: #003b9e; }
+.splash-title-link:hover, .splash-title-link:focus { border-color: rgba(0,0,0,0.22); color: #111827; }
 
 /* animated subtle gradient layer */
 .splash-bg::before {
   content: '';
   position: absolute;
   inset: -20%;
-  background: radial-gradient(closest-side at 10% 20%, rgba(250,230,255,0.12), transparent 15%), radial-gradient(closest-side at 90% 80%, rgba(220,240,255,0.12), transparent 18%);
-  filter: blur(32px) saturate(110%);
+  background:
+    radial-gradient(closest-side at 12% 18%, rgba(255, 244, 214, 0.2), transparent 18%),
+    radial-gradient(closest-side at 88% 78%, rgba(255, 255, 255, 0.72), transparent 20%),
+    radial-gradient(closest-side at 50% 110%, rgba(0, 0, 0, 0.04), transparent 48%);
+  filter: blur(36px) saturate(104%);
   animation: bg-shift 12s linear infinite alternate;
   z-index: 0;
 }
@@ -176,17 +179,17 @@
 
 /* === THEME VARIABLES === */
 :root {
-  --splash-bg1: #f8f9ff;
-  --splash-bg2: #eef6ff;
-  --splash-bg3: #e8f0ff;
+  --splash-bg1: #ffffff;
+  --splash-bg2: #fdfdfd;
+  --splash-bg3: #f7f7f7;
   --splash-dark-bg1: #08102a;
   --splash-dark-bg2: #0b2a63;
   --splash-dark-bg3: #09203f;
   --splash-dark-bg4: #071326;
-  --splash-accent1: #ffc8b4;
-  --splash-accent2: #78c8ff;
-  --splash-accent3: #b4ffc8;
-  --splash-accent4: #ffc8e6;
+  --splash-accent1: #fff3d6;
+  --splash-accent2: #f1f5f9;
+  --splash-accent3: #f6f6f6;
+  --splash-accent4: #f3efe6;
 }
 
 [data-theme="dark"] {
@@ -212,22 +215,25 @@
   content: '';
   position: absolute;
   inset: -30%;
-  background: radial-gradient(30% 30% at 10% 20%, var(--splash-accent1, #ffc8b4) 12%, transparent 18%), radial-gradient(40% 40% at 90% 80%, var(--splash-accent2, #78c8ff) 12%, transparent 22%);
-  filter: blur(60px) saturate(150%);
+  background:
+    radial-gradient(30% 30% at 10% 20%, var(--splash-accent1, #fff3d6) 12%, transparent 18%),
+    radial-gradient(40% 40% at 90% 80%, var(--splash-accent2, #f1f5f9) 12%, transparent 22%),
+    radial-gradient(46% 34% at 50% 100%, rgba(0, 0, 0, 0.05) 2%, transparent 50%);
+  filter: blur(52px) saturate(112%);
   animation: bg-shift 16s ease-in-out infinite alternate;
   z-index: 0;
-  mix-blend-mode: screen;
+  mix-blend-mode: normal;
 }
 
 .splash-bg::after {
   content: '';
   position: absolute;
-  inset: -20%;
-  background: conic-gradient(from 120deg at 50% 50%, var(--splash-accent1, #ffc8b4) 6%, var(--splash-accent2, #78c8ff) 6%, var(--splash-accent3, #b4ffc8) 5%, var(--splash-accent4, #ffc8e6) 5%);
-  filter: blur(48px) saturate(140%);
-  opacity: 0.9;
-  mix-blend-mode: overlay;
-  animation: bg-rotate 28s linear infinite, bg-hue 10s ease-in-out infinite alternate;
+  inset: 0;
+  background:
+    radial-gradient(70% 45% at 50% -8%, rgba(255,255,255,0.72), rgba(255,255,255,0) 64%),
+    linear-gradient(180deg, rgba(255,255,255,0) 68%, rgba(0,0,0,0.035) 100%);
+  opacity: 1;
+  animation: none;
   z-index: 0;
 }
 
@@ -256,5 +262,5 @@
   .splash-graphic { position: absolute; inset: 0; z-index: 0; }
   .splash-graphic .splash-art { width: 110vw; height: auto; opacity: 0.96; transform: translateY(-6vh); }
   /* ensure overlayed text is visible on mobile */
-  .splash-content { z-index: 2; background: linear-gradient(180deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.6) 60%); padding-top: 10vh; }
+  .splash-content { z-index: 2; background: linear-gradient(180deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.78) 58%, rgba(255,255,255,0.92) 100%); padding-top: 10vh; }
 }
