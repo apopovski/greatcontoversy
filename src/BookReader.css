@@ -405,6 +405,10 @@ html[data-theme='dark'] .reader-book-html,
 html[data-theme='dark'] .reader-book-html *,
 html[data-theme='dark'] .reader-chapters-panel,
 html[data-theme='dark'] .reader-chapters-panel *,
+html[data-theme='dark'] .reader-lang-panel,
+html[data-theme='dark'] .reader-lang-panel *,
+html[data-theme='dark'] .reader-lang-dropdown-list,
+html[data-theme='dark'] .reader-lang-dropdown-list *,
 html[data-theme='dark'] .reader-opening-toc-inline,
 html[data-theme='dark'] .reader-opening-toc-inline * {
   color: #fff !important;
@@ -412,7 +416,7 @@ html[data-theme='dark'] .reader-opening-toc-inline * {
 
 .reader-lang-panel ul{list-style:none;margin:0;padding:0}
 .reader-lang-panel li{margin:0}
-.reader-lang-panel button{width:100%;text-align:left;padding:8px;border:0;background:none;cursor:pointer;font-size:1.05rem;line-height:1.18}
+.reader-lang-panel button{width:100%;text-align:left;padding:8px;border:0;background:none;cursor:pointer;font-size:1.05rem;line-height:1.18;color:inherit}
 
 /* Search highlights and dropcap */
 .search-highlight {
