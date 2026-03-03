@@ -399,6 +399,7 @@ html[data-theme='dark'] .reader-timeline-range{
 .reader-toc-list button{white-space:normal;overflow-wrap:anywhere;word-break:break-word}
 .reader-toc-list button .full-title{grid-column:1/-1}
 .reader-toc-list button.active{background:rgba(100,110,255,0.08);font-weight:700}
+.reader-toc-list button.active.no-active-bg{background:transparent}
 
 /* Force white text for all book/TOC text in dark mode (handles language/source-specific inline styles) */
 html[data-theme='dark'] .reader-book-html,

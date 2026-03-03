@@ -4068,7 +4068,7 @@ export default function BookReader() {
               return (
                 <li key={t.href}>
                   <button
-                    className={i === chapterIdx ? 'active' : ''}
+                    className={`${i === chapterIdx ? 'active' : ''}${chapterNum ? '' : ' no-active-bg'}`.trim()}
                     onClick={() => {
                       setChapterIdx(i);
                       setShowChaptersMenu(false);
@@ -4122,7 +4122,7 @@ export default function BookReader() {
                     return (
                       <li key={t.href}>
                         <button
-                          className={i === chapterIdx ? 'active' : ''}
+                          className={`${i === chapterIdx ? 'active' : ''}${chapterNum ? '' : ' no-active-bg'}`.trim()}
                           onClick={() => {
                             setChapterIdx(i);
                             setShowOpeningToc(false);
