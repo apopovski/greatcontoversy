@@ -8,6 +8,7 @@ const __dirname = path.dirname(__filename);
 
 const ROOT = path.join(__dirname, '..');
 const OG_DIR = path.join(ROOT, 'public', 'og');
+const OG_TITLE_SUFFIX = 'Cosmic conflict between good and evil revealed.';
 
 const TAGLINES = {
   en: 'Cosmic conflict between good and evil',
@@ -108,7 +109,7 @@ async function run() {
     const ogTitleMatch = html.match(/<meta\s+property="og:title"\s+content="([^"]+)"\s*\/?>/i);
     const fallbackTitle = getBookTitleFromOgTitle(ogTitleMatch?.[1] || 'The Great Controversy');
     const bookTitle = BOOK_TITLES[code] || fallbackTitle;
-    const nextTitle = bookTitle;
+    const nextTitle = `${bookTitle} — ${OG_TITLE_SUFFIX}`;
     const nextDescription = `${tagline}.`;
 
     html = replaceTitleTag(html, nextTitle);

@@ -3983,7 +3983,6 @@ export default function BookReader() {
               <section className="reader-opening-toc-inline" aria-label={tableOfContentsLabel}>
                 <div className="reader-opening-toc-inline-header">
                   <div className="reader-opening-toc-inline-titles">
-                    <h1 className="reader-opening-title">{displayTitle}</h1>
                     <div className="reader-opening-subtitle">{contentsLabel}</div>
                   </div>
                   <div className="reader-opening-toc-inline-actions">
