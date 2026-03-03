@@ -32,6 +32,7 @@ export const LANGUAGE_NAMES: Record<string, string> = {
   "alSra` al`Zym - Ellen G. White": 'Arabic',
   'Amharic - Ellen G. White': 'Amharic',
   'Chinese - Ellen G. White': 'Chinese',
+  'Japanese - Ellen G. White': 'Japanese',
   'Korean - Ellen G. White': 'Korean',
   'Serbian - Ellen G. White': 'Serbian',
   'Farsi - Ellen G. White': 'Farsi',

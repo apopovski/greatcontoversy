@@ -109,6 +109,8 @@ const CHINESE_FOLDER = 'Chinese - Ellen G. White';
 const CHINESE_SOURCE_PATH = '/book-content/txt/GC-Chinese.txt';
 const KOREAN_FOLDER = 'Korean - Ellen G. White';
 const KOREAN_SOURCE_PATH = '/book-content/html/GC Koren.txt';
+const JAPANESE_FOLDER = 'Japanese - Ellen G. White';
+const JAPANESE_SOURCE_PATH = '/book-content/html/Japanese.txt';
 const SERBIAN_FOLDER = 'Serbian - Ellen G. White';
 const SERBIAN_SOURCE_PATH = '/book-content/txt/GC-Serbian.txt';
 const FARSI_FOLDER = 'Farsi - Ellen G. White';
@@ -146,6 +148,7 @@ const CONTACT_WHATSAPP_LABELS: Record<string, string> = {
   [AMHARIC_FOLDER]: 'በWhatsApp ያግኙን',
   [CHINESE_FOLDER]: '通过 WhatsApp 联系',
   [KOREAN_FOLDER]: 'WhatsApp으로 문의',
+  [JAPANESE_FOLDER]: 'WhatsAppで連絡',
   [SERBIAN_FOLDER]: 'Kontaktirajte preko WhatsApp-а',
   [FARSI_FOLDER]: 'ارتباط از طریق واتساپ',
   [AFRIKAANS_FOLDER]: 'Kontak op WhatsApp',
@@ -216,6 +219,7 @@ const LANGUAGE_FOLDERS = [
   AMHARIC_FOLDER,
   CHINESE_FOLDER,
   KOREAN_FOLDER,
+  JAPANESE_FOLDER,
   SERBIAN_FOLDER,
   FARSI_FOLDER,
   AFRIKAANS_FOLDER,
@@ -247,6 +251,7 @@ const LANGUAGE_ABBREV: Record<string, string> = {
   [AMHARIC_FOLDER]: 'am',
   [CHINESE_FOLDER]: 'zh',
   [KOREAN_FOLDER]: 'ko',
+  [JAPANESE_FOLDER]: 'ja',
   [SERBIAN_FOLDER]: 'sr',
   [FARSI_FOLDER]: 'fa',
   [AFRIKAANS_FOLDER]: 'af',
@@ -278,6 +283,7 @@ const BOOK_TITLE_OVERRIDES: Record<string, string> = {
   [AMHARIC_FOLDER]: 'ታላቁ ተጋድሎ',
   [CHINESE_FOLDER]: '善恶之争',
   [KOREAN_FOLDER]: '각 시대의 대쟁투',
+  [JAPANESE_FOLDER]: '各時代の大争闘',
   [SERBIAN_FOLDER]: 'Велика борба између Христа и Сотоне',
   [FARSI_FOLDER]: 'نبرد عظیم',
   [AFRIKAANS_FOLDER]: 'Die Groot Stryd',
@@ -309,6 +315,7 @@ const META_TAGLINES: Record<string, string> = {
   am: 'በመልካምና በክፉ መካከል ያለ ኮስሚክ ግጭት',
   zh: '善与恶之间的宇宙冲突',
   ko: '선과 악 사이의 우주적 대쟁투',
+  ja: '善と悪の間の宇宙的争闘',
   sr: 'Космички сукоб између добра и зла',
   fa: 'نبرد کیهانی میان خیر و شر',
   af: 'Kosmiese konflik tussen goed en kwaad',
@@ -343,6 +350,7 @@ const LANGUAGE_URL_NAMES: Record<string, string> = {
   [AMHARIC_FOLDER]: 'አማርኛ',
   [CHINESE_FOLDER]: '中文',
   [KOREAN_FOLDER]: '한국어',
+  [JAPANESE_FOLDER]: '日本語',
   [SERBIAN_FOLDER]: 'Српски',
   [FARSI_FOLDER]: 'فارسی',
   [AFRIKAANS_FOLDER]: 'Afrikaans',
@@ -374,6 +382,7 @@ const LANGUAGE_CHAPTER_LABELS: Record<string, string> = {
   [AMHARIC_FOLDER]: 'ምዕራፍ',
   [CHINESE_FOLDER]: '章',
   [KOREAN_FOLDER]: '장',
+  [JAPANESE_FOLDER]: '章',
   [SERBIAN_FOLDER]: 'Поглавље',
   [FARSI_FOLDER]: 'فصل',
   [AFRIKAANS_FOLDER]: 'Hoofstuk',
@@ -405,6 +414,7 @@ const LANGUAGE_CONTENTS_LABELS: Record<string, string> = {
   [AMHARIC_FOLDER]: 'ይዘት',
   [CHINESE_FOLDER]: '目录',
   [KOREAN_FOLDER]: '목차',
+  [JAPANESE_FOLDER]: '目次',
   [SERBIAN_FOLDER]: 'Садржај',
   [FARSI_FOLDER]: 'فهرست',
   [AFRIKAANS_FOLDER]: 'Inhoud',
@@ -436,6 +446,7 @@ const LANGUAGE_CONTINUE_LABELS: Record<string, string> = {
   [AMHARIC_FOLDER]: 'ቀጥል',
   [CHINESE_FOLDER]: '继续',
   [KOREAN_FOLDER]: '계속',
+  [JAPANESE_FOLDER]: '続ける',
   [SERBIAN_FOLDER]: 'Настави',
   [FARSI_FOLDER]: 'ادامه',
   [AFRIKAANS_FOLDER]: 'Gaan voort',
@@ -467,6 +478,7 @@ const COPY_TOAST_LABELS: Record<string, string> = {
   am: 'ተቀድቷል',
   zh: '已复制',
   ko: '복사됨',
+  ja: 'コピーしました',
   sr: 'Копирано',
   fa: 'کپی شد',
   af: 'Gekopieer',
@@ -546,6 +558,7 @@ const ROUTE_CHAPTER_PREFIX_OVERRIDES: Record<string, string> = {
   am: 'meiraf',
   zh: 'zhang',
   ko: 'jang',
+  ja: 'sho',
   hi: 'paath',
   bn: 'oddhay',
 };
@@ -764,7 +777,7 @@ function applyDropcap(html: string, langKey: string, chapterIndex: number, toc: 
     const name = LANGUAGE_NAMES[langKey] || '';
     // Do not apply dropcap for Arabic/Chinese languages
     // (RTL and CJK layouts often need custom typography handling)
-    if (name.toLowerCase() === 'arabic' || name.toLowerCase() === 'farsi' || name.toLowerCase() === 'persian' || langKey === CHINESE_FOLDER || langKey === FARSI_FOLDER || langKey === HINDI_FOLDER || langKey === BENGALI_FOLDER) return html;
+    if (name.toLowerCase() === 'arabic' || name.toLowerCase() === 'farsi' || name.toLowerCase() === 'persian' || langKey === CHINESE_FOLDER || langKey === JAPANESE_FOLDER || langKey === FARSI_FOLDER || langKey === HINDI_FOLDER || langKey === BENGALI_FOLDER) return html;
     if (typeof chapterIndex !== 'number' || chapterIndex < 0) return html;
     const doc = new DOMParser().parseFromString(html || '', 'text/html');
     // Strip any styles or stylesheet links from the parsed chapter to avoid
@@ -1161,6 +1174,97 @@ function parseKoreanBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; 
   if (introClean) {
     sections.unshift({
       id: 'ko-intro',
+      title: introTitle,
+      lines: introLines,
+    });
+  }
+
+  const toParagraphs = (sectionLines: string[]) => {
+    const paras: string[] = [];
+    let buf: string[] = [];
+    const flush = () => {
+      const t = buf.join(' ').replace(/\s+/g, ' ').trim();
+      if (t) paras.push(`<p>${escapeHtml(t)}</p>`);
+      buf = [];
+    };
+
+    sectionLines.forEach((ln) => {
+      const t = (ln || '').trim();
+      if (!t) flush();
+      else buf.push(t);
+    });
+    flush();
+    return paras.join('\n');
+  };
+
+  const toc: TocEntry[] = sections.map((s) => ({ title: s.title, href: `#${s.id}` }));
+  const chapterIds = sections.map((s) => s.id);
+  const chapterHtml = sections.map((s) => {
+    const heading = `<h2 class="chapterhead">${escapeHtml(s.title)}</h2>`;
+    const body = toParagraphs(s.lines);
+    return `<div id="${s.id}">\n${heading}\n${body}\n</div>`;
+  });
+
+  return { toc, chapterIds, chapterHtml };
+}
+
+function parseJapaneseBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; chapterHtml: string[] } {
+  const lines = (raw || '').replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n').split('\n');
+  const chapterHeading = /^\s*第\s*([0-9０-９一二三四五六七八九十百千〇零]{1,8})\s*章\s*[—–\-:：]\s*(.*?)\s*$/u;
+
+  type Section = { id: string; title: string; lines: string[] };
+  const sections: Section[] = [];
+  let introLines: string[] = [];
+  let current: Section | null = null;
+  let chapterCount = 0;
+
+  const normalizeJapaneseTitle = (chapterNo: string, chapterTail: string) => {
+    const tail = (chapterTail || '')
+      .replace(/^\s*[-—–:：]+\s*/u, '')
+      .replace(/\s+/gu, ' ')
+      .trim();
+    return tail ? `第${chapterNo}章—${tail}` : `第${chapterNo}章`;
+  };
+
+  const pushCurrent = () => {
+    if (!current) return;
+    sections.push(current);
+    current = null;
+  };
+
+  for (const line of lines) {
+    const trimmed = (line || '').trim();
+    const m = trimmed.match(chapterHeading);
+    if (m) {
+      pushCurrent();
+      chapterCount += 1;
+      current = {
+        id: `ja-ch-${chapterCount}`,
+        title: normalizeJapaneseTitle((m[1] || '').trim(), (m[2] || '').trim()),
+        lines: [],
+      };
+      continue;
+    }
+
+    if (current) current.lines.push(line);
+    else introLines.push(line);
+  }
+  pushCurrent();
+
+  while (introLines.length && !introLines[0].trim()) introLines.shift();
+  if (introLines[0]?.trim() === '各時代の大争闘') introLines.shift();
+
+  let introTitle = 'まえがき';
+  const prefaceIdx = introLines.findIndex((ln) => /^\s*まえがき\s*$/u.test((ln || '').trim()));
+  if (prefaceIdx >= 0) {
+    introTitle = 'まえがき';
+    introLines.splice(prefaceIdx, 1);
+  }
+
+  const introClean = introLines.join('\n').trim();
+  if (introClean) {
+    sections.unshift({
+      id: 'ja-intro',
       title: introTitle,
       lines: introLines,
     });
@@ -2522,7 +2626,7 @@ export default function BookReader() {
       throw new Error('Not found');
     };
 
-    if (lang === AMHARIC_FOLDER || lang === CHINESE_FOLDER || lang === KOREAN_FOLDER || lang === SERBIAN_FOLDER || lang === FARSI_FOLDER || lang === AFRIKAANS_FOLDER || lang === HINDI_FOLDER || lang === BENGALI_FOLDER || lang === INDONESIAN_FOLDER) {
+    if (lang === AMHARIC_FOLDER || lang === CHINESE_FOLDER || lang === KOREAN_FOLDER || lang === JAPANESE_FOLDER || lang === SERBIAN_FOLDER || lang === FARSI_FOLDER || lang === AFRIKAANS_FOLDER || lang === HINDI_FOLDER || lang === BENGALI_FOLDER || lang === INDONESIAN_FOLDER) {
       const sourcePath =
         lang === AMHARIC_FOLDER
           ? AMHARIC_SOURCE_PATH
@@ -2530,6 +2634,8 @@ export default function BookReader() {
             ? CHINESE_SOURCE_PATH
             : lang === KOREAN_FOLDER
               ? KOREAN_SOURCE_PATH
+              : lang === JAPANESE_FOLDER
+                ? JAPANESE_SOURCE_PATH
             : lang === SERBIAN_FOLDER
               ? SERBIAN_SOURCE_PATH
               : lang === FARSI_FOLDER
@@ -2554,6 +2660,8 @@ export default function BookReader() {
                 ? parseChineseBook(raw)
                 : lang === KOREAN_FOLDER
                   ? parseKoreanBook(raw)
+                  : lang === JAPANESE_FOLDER
+                    ? parseJapaneseBook(raw)
                 : lang === SERBIAN_FOLDER
                   ? parseSerbianBook(raw)
                   : lang === FARSI_FOLDER
