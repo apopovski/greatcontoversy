@@ -745,11 +745,15 @@ span.dropcap {
 }
 
 @media (min-width:721px){
+  .reader-opening-hero{
+    background-image:url('/graphics/The-Great-Controversy-Spash-white-2.svg');
+    background-repeat:no-repeat;
+    background-position:center center;
+    background-size:cover;
+  }
+
   .reader-opening-hero-visual{
-    position:absolute;
-    inset:0;
-    margin:0;
-    z-index:0;
+    display:none;
   }
 
   .reader-opening-hero-visual picture{
