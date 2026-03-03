@@ -693,13 +693,14 @@ span.dropcap {
 
 .reader-opening-hero{
   min-height:100vh;
+  height:100vh;
   display:flex;
   align-items:center;
   justify-content:center;
   text-align:center;
   border-radius:0;
-  margin:0 0 14px;
-  padding:28px 18px;
+  margin:0;
+  padding:20px 18px 10px;
   position:relative;
   overflow:hidden;
   background:radial-gradient(1200px 520px at 50% -10%, rgba(255,214,120,0.08), transparent 55%), linear-gradient(160deg, #0a1325 0%, #0f1b2d 52%, #161c25 100%);
@@ -713,8 +714,8 @@ span.dropcap {
 .reader-opening-hero-content{
   width:min(940px, 96%);
   margin:0 auto;
+  transform:translateY(-5vh);
   opacity:0;
-  transform:translateY(18px);
   animation:readerHeroFadeIn 680ms ease-out 120ms forwards;
 }
 
@@ -740,7 +741,7 @@ span.dropcap {
 }
 
 .reader-opening-hero-booktitle{
-  margin:0 auto 14px;
+  margin:0 auto 12px;
   font-family:'Cinzel', 'Trajan Pro', 'Copperplate', 'Baskerville', serif;
   font-size:clamp(2rem, 4.4vw, 3.4rem);
   line-height:1.08;
@@ -751,16 +752,23 @@ span.dropcap {
 }
 
 .reader-opening-hero-lines{
-  margin:16px auto 0;
-  color:rgba(243,248,255,0.94);
+  margin:6px auto 0;
+  color:rgba(249,252,255,0.99);
   font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
-  font-size:clamp(1rem, 2vw, 1.2rem);
-  line-height:1.45;
-  letter-spacing:0.008em;
+  font-size:clamp(1.16rem, 2.5vw, 1.58rem);
+  line-height:1.38;
+  letter-spacing:0.012em;
+  font-weight:700;
+  text-shadow:0 2px 10px rgba(0,0,0,0.36);
+  max-width:78ch;
 }
 
 .reader-opening-hero-lines p{
-  margin:0;
+  margin:0 0 0.42em;
+}
+
+.reader-opening-hero-lines p:last-child{
+  margin-bottom:0;
 }
 
 .reader-opening-hero-actions{
@@ -853,20 +861,25 @@ span.dropcap {
 
 @media (max-width:720px){
   .reader-opening-hero{
-    min-height:calc(100vh - 80px);
-    padding:20px 12px;
+    min-height:100vh;
+    height:100vh;
+    padding:16px 12px 8px;
+  }
+  .reader-opening-hero-content{
+    transform:translateY(-3.2vh);
   }
   .reader-opening-hero-image{
     width:min(520px, 96vw);
-    max-height:44vh;
+    max-height:40vh;
   }
   .reader-opening-hero-booktitle{
-    font-size:clamp(1.45rem, 7vw, 2.1rem);
+    font-size:clamp(1.6rem, 7.2vw, 2.4rem);
     margin:0 auto 10px;
   }
   .reader-opening-hero-lines{
-    font-size:clamp(0.98rem, 4.1vw, 1.08rem);
-    margin-top:12px;
+    font-size:clamp(1.04rem, 4.8vw, 1.22rem);
+    margin-top:6px;
+    line-height:1.34;
   }
   .reader-opening-hero-actions{
     margin-top:18px;
