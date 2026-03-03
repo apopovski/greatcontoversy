@@ -1803,12 +1803,19 @@ function parseUrduBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; ch
 
 export default function BookReader() {
   type ReaderBookmark = { lang: string; chapterIdx: number; ts: number };
+  type SearchResult = {
+    idx: number;
+    occ: number;
+    paragraphIdx?: number;
+    paragraphId?: string;
+    snippet?: string;
+  };
   // --- SEARCH & SHARE POPUP STATE ---
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<Array<{ idx: number; occ: number }>>([]);
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [searchIdx, setSearchIdx] = useState(0);
   const [highlighted, setHighlighted] = useState<string | null>(null);
-  const [pendingScroll, setPendingScroll] = useState<{ idx: number; occ: number } | null>(null);
+  const [pendingScroll, setPendingScroll] = useState<SearchResult | null>(null);
   const [showSharePopup, setShowSharePopup] = useState(false);
   const [selectedText, setSelectedText] = useState('');
   const [selectedAnchorId, setSelectedAnchorId] = useState<string | null>(null);
@@ -3141,37 +3148,124 @@ export default function BookReader() {
     return text;
   }
 
+  function parseSearchQuery(rawInput: string) {
+    const raw = (rawInput || '').trim();
+    let exact = false;
+    let query = raw;
+    if ((raw.startsWith('"') && raw.endsWith('"')) || (raw.startsWith("'") && raw.endsWith("'"))) {
+      query = raw.slice(1, -1).trim();
+      exact = true;
+    }
+
+    if (exact) {
+      return {
+        raw,
+        query,
+        exact,
+        isAnd: false,
+        terms: query ? [query] : [],
+      };
+    }
+
+    const andTerms = raw
+      .split('&')
+      .map((p) => p.trim())
+      .filter(Boolean);
+
+    if (andTerms.length >= 2) {
+      return {
+        raw,
+        query: raw,
+        exact: false,
+        isAnd: true,
+        terms: andTerms,
+      };
+    }
+
+    return {
+      raw,
+      query,
+      exact: false,
+      isAnd: false,
+      terms: query ? [query] : [],
+    };
+  }
+
+  function scrollToParagraphResult(result: SearchResult) {
+    const el = contentRef.current;
+    if (!el) return false;
+
+    if (result.paragraphId) {
+      const targetById = document.getElementById(result.paragraphId);
+      if (targetById) {
+        try { targetById.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch { targetById.scrollIntoView(); }
+        return true;
+      }
+    }
+
+    if (typeof result.paragraphIdx === 'number') {
+      const blocks = Array.from(el.querySelectorAll('p, blockquote')) as HTMLElement[];
+      const target = blocks[result.paragraphIdx];
+      if (target) {
+        try { target.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch { target.scrollIntoView(); }
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   function runSearch() {
     // Support exact-phrase searches when the user wraps the query in
     // quotes (single or double). E.g. "the Lord" will only match that
     // exact phrase (word-boundary delimited), while unquoted queries
     // remain fuzzy/case-insensitive substring matches.
-    const raw = (searchQuery || '').trim();
-    let exact = false;
-    let query = raw;
-    // detect quoted phrase like "..." or '...'
-    if ((raw.startsWith('"') && raw.endsWith('"')) || (raw.startsWith("'") && raw.endsWith("'"))) {
-      query = raw.slice(1, -1).trim();
-      exact = true;
-    }
+    const parsedQuery = parseSearchQuery(searchQuery);
+    const { query, exact, isAnd, terms } = parsedQuery;
     if (!query) {
       setSearchResults([]);
       setHighlighted(null);
+      setPendingScroll(null);
       return;
     }
 
-    const esc = escapeRegExp(query);
-    const results: { idx: number; occ: number }[] = [];
-    for (let idx = 0; idx < chapterIds.length; idx++) {
-      const text = getChapterText(idx);
-      let m: RegExpExecArray | null;
-      let occ = 0;
-      const pattern = exact ? `\\b${esc}\\b` : esc;
-      const runner = new RegExp(pattern, 'gi');
-      while ((m = runner.exec(text)) !== null) {
-        results.push({ idx, occ });
-        occ++;
-        if (runner.lastIndex === m.index) runner.lastIndex++;
+    const results: SearchResult[] = [];
+
+    if (isAnd) {
+      const loweredTerms = terms.map((t) => t.toLocaleLowerCase());
+      for (let idx = 0; idx < chapterIds.length; idx++) {
+        const chapterHtml = getChapterHtml(idx);
+        const doc = new DOMParser().parseFromString(chapterHtml || '', 'text/html');
+        const blocks = Array.from(doc.body.querySelectorAll('p, blockquote'));
+        blocks.forEach((block, pIdx) => {
+          const txt = ((block.textContent || '').replace(/\s+/g, ' ').trim());
+          if (!txt) return;
+          const lowered = txt.toLocaleLowerCase();
+          const hasAll = loweredTerms.every((term) => lowered.includes(term));
+          if (!hasAll) return;
+          const paragraphId = (block as HTMLElement).id || `gc-p-${idx + 1}-${pIdx + 1}`;
+          results.push({
+            idx,
+            occ: 0,
+            paragraphIdx: pIdx,
+            paragraphId,
+            snippet: txt,
+          });
+        });
+      }
+    } else {
+      const esc = escapeRegExp(query);
+      for (let idx = 0; idx < chapterIds.length; idx++) {
+        const text = getChapterText(idx);
+        let m: RegExpExecArray | null;
+        let occ = 0;
+        const pattern = exact ? `\\b${esc}\\b` : esc;
+        const runner = new RegExp(pattern, 'gi');
+        while ((m = runner.exec(text)) !== null) {
+          results.push({ idx, occ });
+          occ++;
+          if (runner.lastIndex === m.index) runner.lastIndex++;
+        }
       }
     }
 
@@ -3179,10 +3273,14 @@ export default function BookReader() {
     if (results.length) {
       const first = results[0];
       setChapterIdx(first.idx);
-      // Highlight using the (possibly unquoted) search term
-      setHighlighted(query);
+      // In AND mode, results are paragraph-based and not a single phrase highlight.
+      setHighlighted(isAnd ? null : query);
       setSearchIdx(0);
-      setTimeout(() => scrollToHighlight(first.occ), 200);
+      setTimeout(() => {
+        if (!scrollToParagraphResult(first)) {
+          scrollToHighlight(first.occ || 0);
+        }
+      }, 200);
     } else {
       setHighlighted(null);
     }
@@ -3248,11 +3346,16 @@ export default function BookReader() {
     if (!searchResults.length) return;
     const r = searchResults[Math.min(searchIdx, searchResults.length - 1)];
     if (r) {
+      const parsedQuery = parseSearchQuery(searchQuery);
       setChapterIdx(r.idx);
-      setHighlighted(searchQuery.trim() || null);
-      setTimeout(() => scrollToHighlight(r.occ), 200);
+      setHighlighted(parsedQuery.isAnd ? null : (parsedQuery.query || null));
+      setTimeout(() => {
+        if (!scrollToParagraphResult(r)) {
+          scrollToHighlight(r.occ || 0);
+        }
+      }, 200);
     }
-  }, [searchIdx, searchResults]);
+  }, [searchIdx, searchResults, searchQuery]);
 
 
 
@@ -3267,9 +3370,14 @@ export default function BookReader() {
     const tryScroll = () => {
       // only attempt when the displayed chapter matches the pending target
       if (chapterIdx !== pendingScroll.idx) return false;
+      if (scrollToParagraphResult(pendingScroll)) {
+        setPendingScroll(null);
+        return true;
+      }
       const marks = el.querySelectorAll('.search-highlight');
-      if (marks.length > pendingScroll.occ) {
-        scrollToHighlight(pendingScroll.occ);
+      const occ = pendingScroll.occ || 0;
+      if (marks.length > occ) {
+        scrollToHighlight(occ);
         setPendingScroll(null);
         return true;
       }
@@ -3282,8 +3390,10 @@ export default function BookReader() {
     const timeout = setTimeout(() => {
       clearInterval(interval);
       // final attempt only if chapter matches
-      if (chapterIdx === (pendingScroll as { idx: number; occ: number }).idx) {
-        scrollToHighlight((pendingScroll as { idx: number; occ: number }).occ);
+      if (chapterIdx === pendingScroll.idx) {
+        if (!scrollToParagraphResult(pendingScroll)) {
+          scrollToHighlight(pendingScroll.occ || 0);
+        }
       }
       setPendingScroll(null);
     }, 1200);
@@ -4095,44 +4205,72 @@ export default function BookReader() {
               {/* Render simple snippets for results */}
               {searchResults.length === 0 && <div className="reader-search-noresults">No results</div>}
               {searchResults.map((r, i) => {
+                const parsed = parseSearchQuery(searchQuery);
+                const displayQ = parsed.query;
                 const text = getChapterText(r.idx);
-                let displayQ = (searchQuery || '').trim();
-                if ((displayQ.startsWith('"') && displayQ.endsWith('"')) || (displayQ.startsWith("'") && displayQ.endsWith("'"))) {
-                  displayQ = displayQ.slice(1, -1).trim();
-                }
-                const idx = (() => {
-                  let found = 0;
-                  const re = new RegExp(escapeRegExp(displayQ), 'gi');
-                  let m: RegExpExecArray | null;
-                  while ((m = re.exec(text)) !== null) {
-                    if (found === r.occ) return m.index;
-                    found++;
-                    if (re.lastIndex === m.index) re.lastIndex++;
-                  }
-                  return -1;
+                const snippet = (() => {
+                  if (r.snippet) return r.snippet;
+                  const idx = (() => {
+                    let found = 0;
+                    const re = new RegExp(escapeRegExp(displayQ), 'gi');
+                    let m: RegExpExecArray | null;
+                    while ((m = re.exec(text)) !== null) {
+                      if (found === r.occ) return m.index;
+                      found++;
+                      if (re.lastIndex === m.index) re.lastIndex++;
+                    }
+                    return -1;
+                  })();
+                  return idx >= 0
+                    ? text.substr(Math.max(0, idx - 40), Math.min(220, text.length - idx + 40))
+                    : text.substr(0, 220);
                 })();
-                const snippet = idx >= 0 ? text.substr(Math.max(0, idx - 40), Math.min(160, text.length - idx + 40)) : text.substr(0, 160);
+
+                const highlightedSnippetHtml = (() => {
+                  const safe = escapeHtml(snippet);
+                  const terms = parsed.isAnd ? parsed.terms : (displayQ ? [displayQ] : []);
+                  if (!terms.length) return safe;
+                  let html = safe;
+                  terms
+                    .slice()
+                    .sort((a, b) => b.length - a.length)
+                    .forEach((term) => {
+                      if (!term) return;
+                      html = html.replace(new RegExp(escapeRegExp(term), 'gi'), (m) => `<mark class=\"search-highlight\">${m}</mark>`);
+                    });
+                  return html;
+                })();
+
                 return (
                   <button
-                    key={`${r.idx}-${r.occ}-${i}`}
+                    key={`${r.idx}-${r.occ}-${r.paragraphIdx ?? 'x'}-${i}`}
                     className="reader-search-result"
                     onClick={() => {
                         // close search modal so the book content is visible,
-                        // then navigate to the chapter and request a scroll to the exact occurrence
+                        // then navigate to the chapter and request a scroll to the matched paragraph/occurrence
                         setShowSearch(false);
                         setChapterIdx(r.idx);
                         setSearchIdx(i);
-                        // ensure highlights are enabled for the target chapter
-                        setHighlighted(displayQ || null);
-                        // defer actual scrolling until the rendered HTML contains the highlights
-                        setPendingScroll({ idx: r.idx, occ: r.occ });
+                        if (parsed.isAnd) {
+                          setHighlighted(null);
+                        } else {
+                          // ensure highlights are enabled for phrase/single-term searches
+                          setHighlighted(displayQ || null);
+                        }
+                        // defer actual scrolling until the rendered HTML contains the target
+                        setPendingScroll({
+                          idx: r.idx,
+                          occ: r.occ,
+                          paragraphIdx: r.paragraphIdx,
+                          paragraphId: r.paragraphId,
+                        });
                       }}
                   >
                     {/* Chapter label: show the TOC title when available, fallback to Chapter N */}
                     <div className="reader-search-chapter">
                       {toc && toc[r.idx] && toc[r.idx].title ? toc[r.idx].title : `Chapter ${r.idx + 1}`}
                     </div>
-                    <div style={{ fontSize: '0.95rem', color: 'inherit' }} dangerouslySetInnerHTML={{ __html: snippet.replace(new RegExp(escapeRegExp(displayQ), 'gi'), (m) => `<mark class=\"search-highlight\">${m}</mark>`) }} />
+                    <div style={{ fontSize: '0.95rem', color: 'inherit' }} dangerouslySetInnerHTML={{ __html: highlightedSnippetHtml }} />
                   </button>
                 );
               })}
