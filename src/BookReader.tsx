@@ -3907,7 +3907,12 @@ export default function BookReader() {
   const continueLabel = LANGUAGE_CONTINUE_LABELS[lang] || 'Continue';
   const languageCode = (LANGUAGE_ABBREV[lang] || 'en').toLowerCase();
   const heroCopy = HERO_COPY[languageCode] || HERO_COPY.en;
-  const heroAvailability = (heroCopy.availability || '').split('•')[0].trim();
+  const heroMainLines = [
+    'Empires have fallen.',
+    'Truth has been suppressed.',
+    'Prophecy has been fulfilled.',
+    'What comes next?',
+  ];
   const isRtl = (lang || '').toLowerCase().includes('alsra') || lang === FARSI_FOLDER || lang === URDU_FOLDER;
 
   const scrollToOpeningContent = React.useCallback(() => {
@@ -4418,10 +4423,14 @@ export default function BookReader() {
                   <section className="reader-opening-hero" aria-label={displayTitle}>
                     <div className="reader-opening-hero-content">
                       <div className="reader-opening-hero-visual" aria-hidden="true">
-                        <img src="/graphics/The-Great-Controversy-Spash.svg" alt="" className="reader-opening-hero-image" />
+                        <img src="/graphics/The-Great-Controversy-Spash-white.svg" alt="" className="reader-opening-hero-image" />
                       </div>
-                      <h1 className="reader-opening-hero-booktitle">{displayTitle}</h1>
-                      <p className="reader-opening-hero-meta">{heroAvailability}</p>
+                      <h1 className="reader-opening-hero-booktitle">The Great Controversy</h1>
+                      <div className="reader-opening-hero-lines" aria-label="Hero intro lines">
+                        {heroMainLines.map((line) => (
+                          <p key={line}>{line}</p>
+                        ))}
+                      </div>
                       <div className="reader-opening-hero-actions">
                         <button
                           className="reader-opening-start"
