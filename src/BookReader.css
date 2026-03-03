@@ -387,7 +387,7 @@ html[data-theme='dark'] .reader-timeline-range{
 .reader-toc-list{list-style:none;margin:8px 0 0;padding:0}
 .reader-toc-list li{margin:0}
 /* Subtle divider under each chapter for improved visual separation */
-.reader-toc-list button{width:100%;text-align:left;padding:10px 8px;border:none;background:none;border-radius:6px;cursor:pointer;font-size:1.05rem;line-height:1.18;display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:start;border-bottom:1px solid var(--reader-border)}
+.reader-toc-list button{width:100%;text-align:left;padding:10px 8px;border:none;background:none;border-radius:6px;cursor:pointer;font-size:1.05rem;line-height:1.18;display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:start;border-bottom:1px solid var(--reader-border);color:inherit}
 .reader-toc-list li:last-child .reader-toc-num + .reader-toc-title, .reader-toc-list li:last-child button{border-bottom:0}
 .reader-toc-list button .reader-toc-num{opacity:0.85;white-space:nowrap;font-weight:600;color:var(--reader-modal-fg);grid-column:1}
 .reader-toc-list button .reader-toc-title{display:block;grid-column:2;word-wrap:break-word;overflow-wrap:anywhere}
@@ -399,6 +399,16 @@ html[data-theme='dark'] .reader-timeline-range{
 .reader-toc-list button{white-space:normal;overflow-wrap:anywhere;word-break:break-word}
 .reader-toc-list button .full-title{grid-column:1/-1}
 .reader-toc-list button.active{background:rgba(100,110,255,0.08);font-weight:700}
+
+/* Force white text for all book/TOC text in dark mode (handles language/source-specific inline styles) */
+html[data-theme='dark'] .reader-book-html,
+html[data-theme='dark'] .reader-book-html *,
+html[data-theme='dark'] .reader-chapters-panel,
+html[data-theme='dark'] .reader-chapters-panel *,
+html[data-theme='dark'] .reader-opening-toc-inline,
+html[data-theme='dark'] .reader-opening-toc-inline * {
+  color: #fff !important;
+}
 
 .reader-lang-panel ul{list-style:none;margin:0;padding:0}
 .reader-lang-panel li{margin:0}
