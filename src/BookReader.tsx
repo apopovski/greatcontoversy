@@ -123,6 +123,8 @@ const BENGALI_FOLDER = 'Bengali - Ellen G. White';
 const BENGALI_SOURCE_PATH = '/book-content/txt/GC-Bengali.txt';
 const INDONESIAN_FOLDER = 'Indonesian - Ellen G. White';
 const INDONESIAN_SOURCE_PATH = '/book-content/txt/GC-Indonesian.txt';
+const URDU_FOLDER = 'Urdu - Ellen G. White';
+const URDU_SOURCE_PATH = '/book-content/txt/GC-Urdu.txt';
 const FRENCH_FOLDER = 'French - Ellen G. White';
 const CONTACT_WHATSAPP_NUMBER = '19562447002';
 const CONTACT_WHATSAPP_PREFILL = 'The Great Controversy — ';
@@ -155,6 +157,7 @@ const CONTACT_WHATSAPP_LABELS: Record<string, string> = {
   [HINDI_FOLDER]: 'WhatsApp पर संपर्क करें',
   [BENGALI_FOLDER]: 'WhatsApp-এ যোগাযোগ করুন',
   [INDONESIAN_FOLDER]: 'Hubungi lewat WhatsApp',
+  [URDU_FOLDER]: 'واٹس ایپ پر رابطہ کریں',
   [FRENCH_FOLDER]: 'Contact sur WhatsApp',
 };
 
@@ -226,6 +229,7 @@ const LANGUAGE_FOLDERS = [
   HINDI_FOLDER,
   BENGALI_FOLDER,
   INDONESIAN_FOLDER,
+  URDU_FOLDER,
   FRENCH_FOLDER,
 ];
 
@@ -258,6 +262,7 @@ const LANGUAGE_ABBREV: Record<string, string> = {
   [HINDI_FOLDER]: 'hi',
   [BENGALI_FOLDER]: 'bn',
   [INDONESIAN_FOLDER]: 'id',
+  [URDU_FOLDER]: 'ur',
   [FRENCH_FOLDER]: 'fr',
 };
 
@@ -290,6 +295,7 @@ const BOOK_TITLE_OVERRIDES: Record<string, string> = {
   [HINDI_FOLDER]: 'महान संघर्ष',
   [BENGALI_FOLDER]: 'মহা বিবাদ',
   [INDONESIAN_FOLDER]: 'Kemenangan Akhir',
+  [URDU_FOLDER]: 'عظیم کشمکش',
   [FRENCH_FOLDER]: 'La Tragédie des Siècles',
 };
 
@@ -322,6 +328,7 @@ const META_TAGLINES: Record<string, string> = {
   hi: 'अच्छाई और बुराई के बीच ब्रह्मांडीय संघर्ष',
   bn: 'ভাল ও মন্দের মধ্যে মহাজাগতিক সংঘর্ষ',
   id: 'Konflik kosmik antara yang baik dan yang jahat',
+  ur: 'نیکی اور بدی کے درمیان کائناتی کشمکش',
   fr: 'Conflit cosmique entre le bien et le mal',
 };
 
@@ -357,6 +364,7 @@ const LANGUAGE_URL_NAMES: Record<string, string> = {
   [HINDI_FOLDER]: 'हिन्दी',
   [BENGALI_FOLDER]: 'বাংলা',
   [INDONESIAN_FOLDER]: 'Bahasa Indonesia',
+  [URDU_FOLDER]: 'اردو',
   [FRENCH_FOLDER]: 'Français',
 };
 
@@ -389,6 +397,7 @@ const LANGUAGE_CHAPTER_LABELS: Record<string, string> = {
   [HINDI_FOLDER]: 'पाठ',
   [BENGALI_FOLDER]: 'অধ্যায়',
   [INDONESIAN_FOLDER]: 'Bab',
+  [URDU_FOLDER]: 'باب',
   [FRENCH_FOLDER]: 'Chapitre',
 };
 
@@ -421,6 +430,7 @@ const LANGUAGE_CONTENTS_LABELS: Record<string, string> = {
   [HINDI_FOLDER]: 'विषय सूची',
   [BENGALI_FOLDER]: 'সূচিপত্র',
   [INDONESIAN_FOLDER]: 'Daftar Isi',
+  [URDU_FOLDER]: 'فہرست',
   [FRENCH_FOLDER]: 'Sommaire',
 };
 
@@ -453,6 +463,7 @@ const LANGUAGE_CONTINUE_LABELS: Record<string, string> = {
   [HINDI_FOLDER]: 'जारी रखें',
   [BENGALI_FOLDER]: 'চালিয়ে যান',
   [INDONESIAN_FOLDER]: 'Lanjutkan',
+  [URDU_FOLDER]: 'جاری رکھیں',
   [FRENCH_FOLDER]: 'Continuer',
 };
 
@@ -485,6 +496,7 @@ const COPY_TOAST_LABELS: Record<string, string> = {
   hi: 'कॉपी किया गया',
   bn: 'কপি হয়েছে',
   id: 'Disalin',
+  ur: 'کاپی ہو گیا',
   fr: 'Copié',
 };
 
@@ -561,6 +573,7 @@ const ROUTE_CHAPTER_PREFIX_OVERRIDES: Record<string, string> = {
   ja: 'sho',
   hi: 'paath',
   bn: 'oddhay',
+  ur: 'bab',
 };
 
 function getChapterRoutePrefix(langKey: string) {
@@ -777,7 +790,7 @@ function applyDropcap(html: string, langKey: string, chapterIndex: number, toc: 
     const name = LANGUAGE_NAMES[langKey] || '';
     // Do not apply dropcap for Arabic/Chinese languages
     // (RTL and CJK layouts often need custom typography handling)
-    if (name.toLowerCase() === 'arabic' || name.toLowerCase() === 'farsi' || name.toLowerCase() === 'persian' || langKey === CHINESE_FOLDER || langKey === JAPANESE_FOLDER || langKey === FARSI_FOLDER || langKey === HINDI_FOLDER || langKey === BENGALI_FOLDER) return html;
+    if (name.toLowerCase() === 'arabic' || name.toLowerCase() === 'farsi' || name.toLowerCase() === 'persian' || name.toLowerCase() === 'urdu' || langKey === CHINESE_FOLDER || langKey === JAPANESE_FOLDER || langKey === FARSI_FOLDER || langKey === HINDI_FOLDER || langKey === BENGALI_FOLDER || langKey === URDU_FOLDER) return html;
     if (typeof chapterIndex !== 'number' || chapterIndex < 0) return html;
     const doc = new DOMParser().parseFromString(html || '', 'text/html');
     // Strip any styles or stylesheet links from the parsed chapter to avoid
@@ -1718,6 +1731,76 @@ function parseIndonesianBook(raw: string): { toc: TocEntry[]; chapterIds: string
   return { toc, chapterIds, chapterHtml };
 }
 
+function parseUrduBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; chapterHtml: string[] } {
+  const lines = (raw || '').replace(/\r\n?/g, '\n').split('\n');
+  const chapterMarker = /^\s*@@CHAPTER@@\s*(.+?)\s*$/;
+  const normalizeUrduTitle = (s: string) =>
+    (s || '')
+      .replace(/^\s*[-:]+\s*/, '')
+      .replace(/\s*[-:]+\s*$/g, '')
+      .replace(/\s*[—–-]\s*/g, ' - ')
+      .replace(/[*]+.*$/u, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+  type Section = { id: string; title: string; lines: string[] };
+  const sections: Section[] = [];
+  let current: Section | null = null;
+  let sectionCount = 0;
+
+  const pushCurrent = () => {
+    if (!current) return;
+    sections.push(current);
+    current = null;
+  };
+
+  for (const line of lines) {
+    const trimmed = (line || '').trim();
+    const match = trimmed.match(chapterMarker);
+    if (match) {
+      pushCurrent();
+      sectionCount += 1;
+      current = {
+        id: `ur-ch-${sectionCount}`,
+        title: normalizeUrduTitle(match[1] || ''),
+        lines: [],
+      };
+      continue;
+    }
+
+    if (current) current.lines.push(line);
+  }
+  pushCurrent();
+
+  const toParagraphs = (sectionLines: string[]) => {
+    const paras: string[] = [];
+    let buf: string[] = [];
+    const flush = () => {
+      const t = buf.join(' ').replace(/\s+/g, ' ').trim();
+      if (t) paras.push(`<p>${escapeHtml(t)}</p>`);
+      buf = [];
+    };
+
+    sectionLines.forEach((ln) => {
+      const t = (ln || '').trim();
+      if (!t) flush();
+      else buf.push(t);
+    });
+    flush();
+    return paras.join('\n');
+  };
+
+  const toc: TocEntry[] = sections.map((s) => ({ title: s.title, href: `#${s.id}` }));
+  const chapterIds = sections.map((s) => s.id);
+  const chapterHtml = sections.map((s) => {
+    const heading = `<h2 class="chapterhead">${escapeHtml(s.title)}</h2>`;
+    const body = toParagraphs(s.lines);
+    return `<div id="${s.id}">\n${heading}\n${body}\n</div>`;
+  });
+
+  return { toc, chapterIds, chapterHtml };
+}
+
 export default function BookReader() {
   type ReaderBookmark = { lang: string; chapterIdx: number; ts: number };
   // --- SEARCH & SHARE POPUP STATE ---
@@ -2208,7 +2291,8 @@ export default function BookReader() {
   useEffect(() => {
     const isArabic = lang && lang.toLowerCase().includes('alsra');
     const isFarsi = lang === FARSI_FOLDER;
-    const isRTL = isArabic || isFarsi;
+    const isUrdu = lang === URDU_FOLDER;
+    const isRTL = isArabic || isFarsi || isUrdu;
     document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
   }, [lang]);
 
@@ -2626,7 +2710,7 @@ export default function BookReader() {
       throw new Error('Not found');
     };
 
-    if (lang === AMHARIC_FOLDER || lang === CHINESE_FOLDER || lang === KOREAN_FOLDER || lang === JAPANESE_FOLDER || lang === SERBIAN_FOLDER || lang === FARSI_FOLDER || lang === AFRIKAANS_FOLDER || lang === HINDI_FOLDER || lang === BENGALI_FOLDER || lang === INDONESIAN_FOLDER) {
+    if (lang === AMHARIC_FOLDER || lang === CHINESE_FOLDER || lang === KOREAN_FOLDER || lang === JAPANESE_FOLDER || lang === SERBIAN_FOLDER || lang === FARSI_FOLDER || lang === AFRIKAANS_FOLDER || lang === HINDI_FOLDER || lang === BENGALI_FOLDER || lang === INDONESIAN_FOLDER || lang === URDU_FOLDER) {
       const sourcePath =
         lang === AMHARIC_FOLDER
           ? AMHARIC_SOURCE_PATH
@@ -2646,7 +2730,9 @@ export default function BookReader() {
                     ? HINDI_SOURCE_PATH
                     : lang === BENGALI_FOLDER
                       ? BENGALI_SOURCE_PATH
-                      : INDONESIAN_SOURCE_PATH;
+                      : lang === INDONESIAN_FOLDER
+                        ? INDONESIAN_SOURCE_PATH
+                        : URDU_SOURCE_PATH;
       fetch(sourcePath)
         .then((r) => {
           if (!r.ok) throw new Error('Source file missing');
@@ -2672,7 +2758,9 @@ export default function BookReader() {
                         ? parseHindiBook(raw)
                         : lang === BENGALI_FOLDER
                           ? parseBengaliBook(raw)
-                          : parseIndonesianBook(raw);
+                          : lang === INDONESIAN_FOLDER
+                            ? parseIndonesianBook(raw)
+                            : parseUrduBook(raw);
           setToc(parsed.toc);
           setChapterIds(parsed.chapterIds);
           setBookDoc(null);
@@ -3423,7 +3511,7 @@ export default function BookReader() {
   const noContentsAvailableLabel = lang === CHINESE_FOLDER ? '暂无目录' : 'No contents available';
   const contactWhatsAppLabel = CONTACT_WHATSAPP_LABELS[lang] || 'Contact on WhatsApp';
   const continueLabel = LANGUAGE_CONTINUE_LABELS[lang] || 'Continue';
-  const isRtl = (lang || '').toLowerCase().includes('alsra') || lang === FARSI_FOLDER;
+  const isRtl = (lang || '').toLowerCase().includes('alsra') || lang === FARSI_FOLDER || lang === URDU_FOLDER;
 
   const languageMenuFolders = useMemo(() => {
     const englishFolder = 'The Great Controversy - Ellen G. White 2';
