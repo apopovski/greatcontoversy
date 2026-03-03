@@ -107,6 +107,8 @@ const AMHARIC_FOLDER = 'Amharic - Ellen G. White';
 const AMHARIC_SOURCE_PATH = '/book-content/txt/Amharic.rtf';
 const CHINESE_FOLDER = 'Chinese - Ellen G. White';
 const CHINESE_SOURCE_PATH = '/book-content/txt/GC-Chinese.txt';
+const KOREAN_FOLDER = 'Korean - Ellen G. White';
+const KOREAN_SOURCE_PATH = '/book-content/html/GC Koren.txt';
 const SERBIAN_FOLDER = 'Serbian - Ellen G. White';
 const SERBIAN_SOURCE_PATH = '/book-content/txt/GC-Serbian.txt';
 const FARSI_FOLDER = 'Farsi - Ellen G. White';
@@ -143,6 +145,7 @@ const CONTACT_WHATSAPP_LABELS: Record<string, string> = {
   "alSra` al`Zym - Ellen G. White": 'تواصل عبر واتساب',
   [AMHARIC_FOLDER]: 'በWhatsApp ያግኙን',
   [CHINESE_FOLDER]: '通过 WhatsApp 联系',
+  [KOREAN_FOLDER]: 'WhatsApp으로 문의',
   [SERBIAN_FOLDER]: 'Kontaktirajte preko WhatsApp-а',
   [FARSI_FOLDER]: 'ارتباط از طریق واتساپ',
   [AFRIKAANS_FOLDER]: 'Kontak op WhatsApp',
@@ -212,6 +215,7 @@ const LANGUAGE_FOLDERS = [
   "alSra` al`Zym - Ellen G. White",
   AMHARIC_FOLDER,
   CHINESE_FOLDER,
+  KOREAN_FOLDER,
   SERBIAN_FOLDER,
   FARSI_FOLDER,
   AFRIKAANS_FOLDER,
@@ -242,6 +246,7 @@ const LANGUAGE_ABBREV: Record<string, string> = {
   "alSra` al`Zym - Ellen G. White": 'ar',
   [AMHARIC_FOLDER]: 'am',
   [CHINESE_FOLDER]: 'zh',
+  [KOREAN_FOLDER]: 'ko',
   [SERBIAN_FOLDER]: 'sr',
   [FARSI_FOLDER]: 'fa',
   [AFRIKAANS_FOLDER]: 'af',
@@ -272,6 +277,7 @@ const BOOK_TITLE_OVERRIDES: Record<string, string> = {
   "alSra` al`Zym - Ellen G. White": 'الصراع العظيم',
   [AMHARIC_FOLDER]: 'ታላቁ ተጋድሎ',
   [CHINESE_FOLDER]: '善恶之争',
+  [KOREAN_FOLDER]: '각 시대의 대쟁투',
   [SERBIAN_FOLDER]: 'Велика борба између Христа и Сотоне',
   [FARSI_FOLDER]: 'نبرد عظیم',
   [AFRIKAANS_FOLDER]: 'Die Groot Stryd',
@@ -302,6 +308,7 @@ const META_TAGLINES: Record<string, string> = {
   ar: 'صراع كوني بين الخير والشر',
   am: 'በመልካምና በክፉ መካከል ያለ ኮስሚክ ግጭት',
   zh: '善与恶之间的宇宙冲突',
+  ko: '선과 악 사이의 우주적 대쟁투',
   sr: 'Космички сукоб између добра и зла',
   fa: 'نبرد کیهانی میان خیر و شر',
   af: 'Kosmiese konflik tussen goed en kwaad',
@@ -335,6 +342,7 @@ const LANGUAGE_URL_NAMES: Record<string, string> = {
   "alSra` al`Zym - Ellen G. White": 'العربية',
   [AMHARIC_FOLDER]: 'አማርኛ',
   [CHINESE_FOLDER]: '中文',
+  [KOREAN_FOLDER]: '한국어',
   [SERBIAN_FOLDER]: 'Српски',
   [FARSI_FOLDER]: 'فارسی',
   [AFRIKAANS_FOLDER]: 'Afrikaans',
@@ -365,6 +373,7 @@ const LANGUAGE_CHAPTER_LABELS: Record<string, string> = {
   "alSra` al`Zym - Ellen G. White": 'الفصل',
   [AMHARIC_FOLDER]: 'ምዕራፍ',
   [CHINESE_FOLDER]: '章',
+  [KOREAN_FOLDER]: '장',
   [SERBIAN_FOLDER]: 'Поглавље',
   [FARSI_FOLDER]: 'فصل',
   [AFRIKAANS_FOLDER]: 'Hoofstuk',
@@ -395,6 +404,7 @@ const LANGUAGE_CONTENTS_LABELS: Record<string, string> = {
   "alSra` al`Zym - Ellen G. White": 'المحتويات',
   [AMHARIC_FOLDER]: 'ይዘት',
   [CHINESE_FOLDER]: '目录',
+  [KOREAN_FOLDER]: '목차',
   [SERBIAN_FOLDER]: 'Садржај',
   [FARSI_FOLDER]: 'فهرست',
   [AFRIKAANS_FOLDER]: 'Inhoud',
@@ -425,6 +435,7 @@ const LANGUAGE_CONTINUE_LABELS: Record<string, string> = {
   "alSra` al`Zym - Ellen G. White": 'متابعة',
   [AMHARIC_FOLDER]: 'ቀጥል',
   [CHINESE_FOLDER]: '继续',
+  [KOREAN_FOLDER]: '계속',
   [SERBIAN_FOLDER]: 'Настави',
   [FARSI_FOLDER]: 'ادامه',
   [AFRIKAANS_FOLDER]: 'Gaan voort',
@@ -455,6 +466,7 @@ const COPY_TOAST_LABELS: Record<string, string> = {
   ar: 'تم النسخ',
   am: 'ተቀድቷል',
   zh: '已复制',
+  ko: '복사됨',
   sr: 'Копирано',
   fa: 'کپی شد',
   af: 'Gekopieer',
@@ -533,6 +545,7 @@ const ROUTE_CHAPTER_PREFIX_OVERRIDES: Record<string, string> = {
   fa: 'fasl',
   am: 'meiraf',
   zh: 'zhang',
+  ko: 'jang',
   hi: 'paath',
   bn: 'oddhay',
 };
@@ -1074,6 +1087,98 @@ function parseChineseBook(raw: string): { toc: TocEntry[]; chapterIds: string[];
       } else {
         buf.push(t);
       }
+    });
+    flush();
+    return paras.join('\n');
+  };
+
+  const toc: TocEntry[] = sections.map((s) => ({ title: s.title, href: `#${s.id}` }));
+  const chapterIds = sections.map((s) => s.id);
+  const chapterHtml = sections.map((s) => {
+    const heading = `<h2 class="chapterhead">${escapeHtml(s.title)}</h2>`;
+    const body = toParagraphs(s.lines);
+    return `<div id="${s.id}">\n${heading}\n${body}\n</div>`;
+  });
+
+  return { toc, chapterIds, chapterHtml };
+}
+
+function parseKoreanBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; chapterHtml: string[] } {
+  const lines = (raw || '').replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n').split('\n');
+  const chapterHeading = /^\s*(\d{1,3})\s*장\s*[—–\-:]\s*(.+?)\s*$/u;
+
+  type Section = { id: string; title: string; lines: string[] };
+  const sections: Section[] = [];
+  let introLines: string[] = [];
+  let current: Section | null = null;
+  let chapterCount = 0;
+
+  const normalizeKoreanTitle = (chapterNo: string, chapterTail: string) => {
+    const tail = (chapterTail || '')
+      .replace(/^\s*[-—–:]+\s*/u, '')
+      .replace(/\s+/gu, ' ')
+      .trim();
+    return tail ? `${chapterNo} 장 — ${tail}` : `${chapterNo} 장`;
+  };
+
+  const pushCurrent = () => {
+    if (!current) return;
+    sections.push(current);
+    current = null;
+  };
+
+  for (const line of lines) {
+    const trimmed = (line || '').trim();
+    const m = trimmed.match(chapterHeading);
+    if (m) {
+      pushCurrent();
+      chapterCount += 1;
+      current = {
+        id: `ko-ch-${chapterCount}`,
+        title: normalizeKoreanTitle((m[1] || '').trim(), (m[2] || '').trim()),
+        lines: [],
+      };
+      continue;
+    }
+
+    if (current) current.lines.push(line);
+    else introLines.push(line);
+  }
+  pushCurrent();
+
+  // Trim leading empty lines and remove duplicate book title line from intro.
+  while (introLines.length && !introLines[0].trim()) introLines.shift();
+  if (introLines[0]?.trim() === '각 시대의 대쟁투') introLines.shift();
+
+  const prefaceIdx = introLines.findIndex((ln) => /^\s*저자의\s*서문\s*$/u.test((ln || '').trim()));
+  let introTitle = '서문';
+  if (prefaceIdx >= 0) {
+    introTitle = '저자의 서문';
+    introLines.splice(prefaceIdx, 1);
+  }
+
+  const introClean = introLines.join('\n').trim();
+  if (introClean) {
+    sections.unshift({
+      id: 'ko-intro',
+      title: introTitle,
+      lines: introLines,
+    });
+  }
+
+  const toParagraphs = (sectionLines: string[]) => {
+    const paras: string[] = [];
+    let buf: string[] = [];
+    const flush = () => {
+      const t = buf.join(' ').replace(/\s+/g, ' ').trim();
+      if (t) paras.push(`<p>${escapeHtml(t)}</p>`);
+      buf = [];
+    };
+
+    sectionLines.forEach((ln) => {
+      const t = (ln || '').trim();
+      if (!t) flush();
+      else buf.push(t);
     });
     flush();
     return paras.join('\n');
@@ -2417,12 +2522,14 @@ export default function BookReader() {
       throw new Error('Not found');
     };
 
-    if (lang === AMHARIC_FOLDER || lang === CHINESE_FOLDER || lang === SERBIAN_FOLDER || lang === FARSI_FOLDER || lang === AFRIKAANS_FOLDER || lang === HINDI_FOLDER || lang === BENGALI_FOLDER || lang === INDONESIAN_FOLDER) {
+    if (lang === AMHARIC_FOLDER || lang === CHINESE_FOLDER || lang === KOREAN_FOLDER || lang === SERBIAN_FOLDER || lang === FARSI_FOLDER || lang === AFRIKAANS_FOLDER || lang === HINDI_FOLDER || lang === BENGALI_FOLDER || lang === INDONESIAN_FOLDER) {
       const sourcePath =
         lang === AMHARIC_FOLDER
           ? AMHARIC_SOURCE_PATH
           : lang === CHINESE_FOLDER
             ? CHINESE_SOURCE_PATH
+            : lang === KOREAN_FOLDER
+              ? KOREAN_SOURCE_PATH
             : lang === SERBIAN_FOLDER
               ? SERBIAN_SOURCE_PATH
               : lang === FARSI_FOLDER
@@ -2445,6 +2552,8 @@ export default function BookReader() {
               ? parseAmharicBook(raw)
               : lang === CHINESE_FOLDER
                 ? parseChineseBook(raw)
+                : lang === KOREAN_FOLDER
+                  ? parseKoreanBook(raw)
                 : lang === SERBIAN_FOLDER
                   ? parseSerbianBook(raw)
                   : lang === FARSI_FOLDER
