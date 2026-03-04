@@ -45,38 +45,43 @@ const ENGLISH_MANIFEST_PATH = '/book-content/audio-manifests/gc-english.json';
 
 const EWA_BASE = 'https://ellenwhiteaudio.org/audio';
 
-const AUDIO_LANGUAGE_CODES: Record<string, string> = {
-  'The Great Controversy - Ellen G. White 2': 'en',
-  'El Conflicto de los Siglos - Ellen G. White': 'sp',
-  'Der grosse Kampf - Ellen G. White': 'de',
-  'Il gran conflitto - Ellen G. White': 'it',
-  'MOD EN BEDRE FREMTID - Ellen G. White': 'da',
-  'Mot historiens klimaks - Ellen G. White': 'no',
-  'O Grande Conflito - Ellen G. White': 'pt',
-  'O Le Finauga Tele - Ellen G. White': 'sm',
-  'Suur Voitlus - Ellen G. White': 'et',
-  'Tragedia veacurilor - Ellen G. White': 'ro',
-  'VELIKA BORBA IZMEDU KRISTA I SOTONE - Ellen G. White': 'hr',
-  'VIeLIKATA BORBA MIeZhDU KhRISTA i SATANA - Ellen G. White': 'bg',
-  'Velke drama veku - Ellen G. White': 'sk',
-  'Velky spor vekov - Ellen G. White': 'cs',
-  "Vielika borot'ba - Ellen G. White": 'uk',
-  "Vielikaia bor'ba - Ellen G. White": 'ru',
-  'Wielki boj - Ellen G. White': 'pl',
-  "alSra` al`Zym - Ellen G. White": 'ar',
-  'Amharic - Ellen G. White': 'am',
-  'Chinese - Ellen G. White': 'cn',
-  'Japanese - Ellen G. White': 'ja',
-  'Korean - Ellen G. White': 'kr',
-  'Serbian - Ellen G. White': 'sr',
-  'Farsi - Ellen G. White': 'fa',
-  'Afrikaans - Ellen G. White': 'af',
-  'Hindi - Ellen G. White': 'hi',
-  'Bengali - Ellen G. White': 'bn',
-  'Indonesian - Ellen G. White': 'id',
-  'Urdu - Ellen G. White': 'ur',
-  'French - Ellen G. White': 'fr',
-  'Beteja e Madhe - Ellen G. White': 'sq',
+type AudioSourceCandidate = {
+  languageCodes: string[];
+  bookCodes: string[];
+};
+
+const AUDIO_SOURCE_CANDIDATES: Record<string, AudioSourceCandidate> = {
+  'The Great Controversy - Ellen G. White 2': { languageCodes: ['en'], bookCodes: ['gc'] },
+  'El Conflicto de los Siglos - Ellen G. White': { languageCodes: ['sp', 'es'], bookCodes: ['gc', 'cs'] },
+  'Der grosse Kampf - Ellen G. White': { languageCodes: ['de'], bookCodes: ['gc', 'gk'] },
+  'Il gran conflitto - Ellen G. White': { languageCodes: ['it'], bookCodes: ['gc'] },
+  'MOD EN BEDRE FREMTID - Ellen G. White': { languageCodes: ['da'], bookCodes: ['gc', 'mbf'] },
+  'Mot historiens klimaks - Ellen G. White': { languageCodes: ['no', 'nb'], bookCodes: ['gc', 'mhk'] },
+  'O Grande Conflito - Ellen G. White': { languageCodes: ['pt'], bookCodes: ['gc'] },
+  'O Le Finauga Tele - Ellen G. White': { languageCodes: ['sm'], bookCodes: ['gc', 'ft'] },
+  'Suur Voitlus - Ellen G. White': { languageCodes: ['et'], bookCodes: ['gc', 'sv'] },
+  'Tragedia veacurilor - Ellen G. White': { languageCodes: ['ro'], bookCodes: ['gc', 'tv'] },
+  'VELIKA BORBA IZMEDU KRISTA I SOTONE - Ellen G. White': { languageCodes: ['hr'], bookCodes: ['gc', 'vb'] },
+  'VIeLIKATA BORBA MIeZhDU KhRISTA i SATANA - Ellen G. White': { languageCodes: ['bg'], bookCodes: ['gc', 'bc'] },
+  'Velke drama veku - Ellen G. White': { languageCodes: ['sk'], bookCodes: ['gc', 'vdv', 'vsv'] },
+  'Velky spor vekov - Ellen G. White': { languageCodes: ['cs'], bookCodes: ['gc', 'vsv', 'vdv'] },
+  "Vielika borot'ba - Ellen G. White": { languageCodes: ['uk'], bookCodes: ['gc', 'vb', 'вб'] },
+  "Vielikaia bor'ba - Ellen G. White": { languageCodes: ['ru'], bookCodes: ['gc', 'vb', 'вб'] },
+  'Wielki boj - Ellen G. White': { languageCodes: ['pl'], bookCodes: ['gc', 'wb'] },
+  "alSra` al`Zym - Ellen G. White": { languageCodes: ['ar'], bookCodes: ['gc'] },
+  'Amharic - Ellen G. White': { languageCodes: ['am'], bookCodes: ['gc'] },
+  'Chinese - Ellen G. White': { languageCodes: ['cn', 'zh'], bookCodes: ['gc'] },
+  'Japanese - Ellen G. White': { languageCodes: ['ja'], bookCodes: ['gc'] },
+  'Korean - Ellen G. White': { languageCodes: ['kr', 'ko'], bookCodes: ['gc'] },
+  'Serbian - Ellen G. White': { languageCodes: ['sr', 'rs'], bookCodes: ['gc', 'vb'] },
+  'Farsi - Ellen G. White': { languageCodes: ['fa'], bookCodes: ['gc'] },
+  'Afrikaans - Ellen G. White': { languageCodes: ['af'], bookCodes: ['gc'] },
+  'Hindi - Ellen G. White': { languageCodes: ['hi'], bookCodes: ['gc'] },
+  'Bengali - Ellen G. White': { languageCodes: ['bn'], bookCodes: ['gc'] },
+  'Indonesian - Ellen G. White': { languageCodes: ['id'], bookCodes: ['gc'] },
+  'Urdu - Ellen G. White': { languageCodes: ['ur'], bookCodes: ['gc'] },
+  'French - Ellen G. White': { languageCodes: ['fr'], bookCodes: ['gc'] },
+  'Beteja e Madhe - Ellen G. White': { languageCodes: ['sq'], bookCodes: ['gc', 'bz'] },
 };
 
 type DirectoryTrack = {
@@ -171,8 +176,8 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
       }
     };
 
-    const fetchDirectoryTracks = async (audioCode: string) => {
-      const dirUrl = `${EWA_BASE}/${encodeURIComponent(audioCode)}/gc/`;
+    const fetchDirectoryTracks = async (audioCode: string, bookCode: string) => {
+      const dirUrl = `${EWA_BASE}/${encodeURIComponent(audioCode)}/${encodeURIComponent(bookCode)}/`;
       try {
         const r = await fetch(dirUrl);
         if (!r.ok) return null;
@@ -246,21 +251,28 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
         }
       }
 
-      // 2) Try dynamic EllenWhiteAudio multilingual directory
-      const audioCode = AUDIO_LANGUAGE_CODES[lang];
-      if (audioCode) {
-        const tracks = await fetchDirectoryTracks(audioCode);
-        const chosen = pickDirectoryTrackForChapter(tracks || [], chapterIdx);
-        if (mounted && chosen) {
-          setSrc(chosen.url);
-          setAudioLang(preferredLang);
-          setAttribution({
-            name: 'EllenWhiteAudio.org',
-            url: `https://ellenwhiteaudio.org/${audioCode === 'en' ? '' : audioCode}`,
-            licenseSummary: 'Used with attribution for non-commercial educational and ministry use.',
-          });
-          setLoadingAudio(false);
-          return;
+      // 2) Try dynamic EllenWhiteAudio multilingual directories
+      const sourceCandidates = AUDIO_SOURCE_CANDIDATES[lang];
+      if (sourceCandidates) {
+        const languageCodes = [...new Set(sourceCandidates.languageCodes.map((v) => v.trim().toLowerCase()).filter(Boolean))];
+        const bookCodes = [...new Set(sourceCandidates.bookCodes.map((v) => v.trim().toLowerCase()).filter(Boolean))];
+
+        for (const languageCode of languageCodes) {
+          for (const bookCode of bookCodes) {
+            const tracks = await fetchDirectoryTracks(languageCode, bookCode);
+            const chosen = pickDirectoryTrackForChapter(tracks || [], chapterIdx);
+            if (mounted && chosen) {
+              setSrc(chosen.url);
+              setAudioLang(preferredLang);
+              setAttribution({
+                name: 'EllenWhiteAudio.org',
+                url: `https://ellenwhiteaudio.org/${languageCode === 'en' ? '' : languageCode}`,
+                licenseSummary: 'Used with attribution for non-commercial educational and ministry use.',
+              });
+              setLoadingAudio(false);
+              return;
+            }
+          }
         }
       }
 
@@ -403,15 +415,7 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
     );
   }
 
-  if (!src) {
-    return (
-      <div className="audio-player modern-audio-player audio-unavailable">
-        <div className="audio-unavailable-text">
-          {audioLang ? 'Audio is not available for this chapter.' : 'Audio is not available for this language yet.'}
-        </div>
-      </div>
-    );
-  }
+  if (!src) return null;
 
   if (minimized) {
     return (
