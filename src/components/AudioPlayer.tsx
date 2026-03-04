@@ -43,6 +43,88 @@ type Attribution = {
 const ENGLISH_FOLDER = 'The Great Controversy - Ellen G. White 2';
 const ENGLISH_MANIFEST_PATH = '/book-content/audio-manifests/gc-english.json';
 
+const EWA_BASE = 'https://ellenwhiteaudio.org/audio';
+
+const AUDIO_LANGUAGE_CODES: Record<string, string> = {
+  'The Great Controversy - Ellen G. White 2': 'en',
+  'El Conflicto de los Siglos - Ellen G. White': 'sp',
+  'Der grosse Kampf - Ellen G. White': 'de',
+  'Il gran conflitto - Ellen G. White': 'it',
+  'MOD EN BEDRE FREMTID - Ellen G. White': 'da',
+  'Mot historiens klimaks - Ellen G. White': 'no',
+  'O Grande Conflito - Ellen G. White': 'pt',
+  'O Le Finauga Tele - Ellen G. White': 'sm',
+  'Suur Voitlus - Ellen G. White': 'et',
+  'Tragedia veacurilor - Ellen G. White': 'ro',
+  'VELIKA BORBA IZMEDU KRISTA I SOTONE - Ellen G. White': 'hr',
+  'VIeLIKATA BORBA MIeZhDU KhRISTA i SATANA - Ellen G. White': 'bg',
+  'Velke drama veku - Ellen G. White': 'sk',
+  'Velky spor vekov - Ellen G. White': 'cs',
+  "Vielika borot'ba - Ellen G. White": 'uk',
+  "Vielikaia bor'ba - Ellen G. White": 'ru',
+  'Wielki boj - Ellen G. White': 'pl',
+  "alSra` al`Zym - Ellen G. White": 'ar',
+  'Amharic - Ellen G. White': 'am',
+  'Chinese - Ellen G. White': 'cn',
+  'Japanese - Ellen G. White': 'ja',
+  'Korean - Ellen G. White': 'kr',
+  'Serbian - Ellen G. White': 'sr',
+  'Farsi - Ellen G. White': 'fa',
+  'Afrikaans - Ellen G. White': 'af',
+  'Hindi - Ellen G. White': 'hi',
+  'Bengali - Ellen G. White': 'bn',
+  'Indonesian - Ellen G. White': 'id',
+  'Urdu - Ellen G. White': 'ur',
+  'French - Ellen G. White': 'fr',
+  'Beteja e Madhe - Ellen G. White': 'sq',
+};
+
+type DirectoryTrack = {
+  order: number;
+  name: string;
+  url: string;
+};
+
+function decodeLoose(v: string) {
+  try {
+    return decodeURIComponent(v);
+  } catch {
+    return v;
+  }
+}
+
+function inferTrackOrder(fileName: string) {
+  const normalized = decodeLoose(fileName).replace(/[_]+/g, ' ').trim();
+  const leading = normalized.match(/^[^\d]{0,8}(\d{1,3})(?:\D|$)/);
+  if (leading) return Number(leading[1]);
+
+  const generic = normalized.match(/(?:^|\D)(\d{1,3})(?:\D|$)/);
+  if (generic) return Number(generic[1]);
+
+  return Number.MAX_SAFE_INTEGER;
+}
+
+function pickDirectoryTrackForChapter(tracks: DirectoryTrack[], chapterIndex: number) {
+  if (!tracks.length) return null;
+
+  const byExact = tracks.find((t) => t.order === chapterIndex);
+  if (byExact) return byExact;
+
+  const byPlusOne = tracks.find((t) => t.order === chapterIndex + 1);
+  if (byPlusOne) return byPlusOne;
+
+  const sorted = [...tracks].sort((a, b) => {
+    if (a.order === b.order) return a.name.localeCompare(b.name);
+    return a.order - b.order;
+  });
+
+  if (chapterIndex >= 0 && chapterIndex < sorted.length) {
+    return sorted[chapterIndex];
+  }
+
+  return null;
+}
+
 function fmtTime(s: number) {
   if (!isFinite(s) || s <= 0) return '0:00';
   const m = Math.floor(s / 60);
@@ -84,6 +166,39 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
         const r = await fetch(manifestPath);
         if (!r.ok) return null;
         return (await r.json()) as AudioManifest;
+      } catch {
+        return null;
+      }
+    };
+
+    const fetchDirectoryTracks = async (audioCode: string) => {
+      const dirUrl = `${EWA_BASE}/${encodeURIComponent(audioCode)}/gc/`;
+      try {
+        const r = await fetch(dirUrl);
+        if (!r.ok) return null;
+        const html = await r.text();
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        const anchors = Array.from(doc.querySelectorAll('a[href]')) as HTMLAnchorElement[];
+
+        const tracks: DirectoryTrack[] = anchors
+          .map((a) => (a.getAttribute('href') || '').trim())
+          .filter((href) => /\.mp3(?:$|\?)/i.test(href))
+          .map((href) => {
+            const absolute = new URL(href, dirUrl).toString();
+            const fileName = decodeLoose(absolute.split('/').pop() || href);
+            return {
+              order: inferTrackOrder(fileName),
+              name: fileName,
+              url: absolute,
+            };
+          })
+          .filter((t, idx, arr) => arr.findIndex((x) => x.url === t.url) === idx)
+          .sort((a, b) => {
+            if (a.order === b.order) return a.name.localeCompare(b.name);
+            return a.order - b.order;
+          });
+
+        return tracks.length ? tracks : null;
       } catch {
         return null;
       }
@@ -142,6 +257,24 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
             name: manifest?.source?.name || 'EllenWhiteAudio.org',
             url: manifest?.source?.url || 'https://ellenwhiteaudio.org/great-controversy/',
             licenseSummary: manifest?.source?.licenseSummary,
+          });
+          setLoadingAudio(false);
+          return;
+        }
+      }
+
+      // 1b) Try dynamic EllenWhiteAudio multilingual directory
+      const audioCode = AUDIO_LANGUAGE_CODES[lang];
+      if (audioCode) {
+        const tracks = await fetchDirectoryTracks(audioCode);
+        const chosen = pickDirectoryTrackForChapter(tracks || [], chapterIdx);
+        if (mounted && chosen) {
+          setSrc(chosen.url);
+          setAudioLang(preferredLang);
+          setAttribution({
+            name: 'EllenWhiteAudio.org',
+            url: `https://ellenwhiteaudio.org/${audioCode === 'en' ? '' : audioCode}`,
+            licenseSummary: 'Used with attribution for non-commercial educational and ministry use.',
           });
           setLoadingAudio(false);
           return;
