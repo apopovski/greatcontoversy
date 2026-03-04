@@ -3205,8 +3205,17 @@ export default function BookReader() {
         let tocRoot: Element | null = doc.querySelector('nav[type="toc"]') || doc.querySelector('nav.toc') || doc.querySelector('.toc') || doc.querySelector('#toc') || doc.querySelector('ol');
         const entries: TocEntry[] = [];
         const isInfoPage = (t: string) => /^\s*information\s+about.*book/i.test(t.trim());
+        const sanitizeTocTitle = (t: string) => {
+          const s = (t || '').replace(/\s+/g, ' ').trim();
+          if (!s) return '';
+          // Drop entries that are only punctuation/symbols (e.g. "*", "**", "•").
+          if (/^[\p{P}\p{S}\s]+$/u.test(s)) return '';
+          // Keep entries that contain at least one letter or number from any script.
+          if (!/[\p{L}\p{N}]/u.test(s)) return '';
+          return s;
+        };
         const shouldSkipToc = (t: string) => {
-          const s = (t || '').trim();
+          const s = sanitizeTocTitle(t);
           if (!s) return true;
           if (isInfoPage(s)) return true;
           if (/^\s*(?:preface|foreword)\b/i.test(s)) return true;
@@ -3224,7 +3233,7 @@ export default function BookReader() {
         if (tocRoot) {
           tocRoot.querySelectorAll('a').forEach((a) => {
             const href = a.getAttribute('href') || '';
-            const title = (a.textContent || '').trim();
+            const title = sanitizeTocTitle(a.textContent || '');
             if (href && title && !shouldSkipToc(title)) entries.push({ title, href });
           });
         }
@@ -3238,7 +3247,7 @@ export default function BookReader() {
             const id = href.replace(/^#/, '');
             if (!id) return;
             if (!doc.getElementById(id)) return;
-            const title = (a.textContent || '').trim();
+            const title = sanitizeTocTitle(a.textContent || '');
             if (!title) return;
             if (shouldSkipToc(title)) return;
             if (seen.has(href)) return;
@@ -3251,7 +3260,7 @@ export default function BookReader() {
           const headings = Array.from(doc.querySelectorAll('h2.chapterhead, h2[class*="chapter"]'));
           const fallbackEntries: TocEntry[] = [];
           headings.forEach((h) => {
-            const title = (h.textContent || '').trim();
+            const title = sanitizeTocTitle(h.textContent || '');
             if (!title || shouldSkipToc(title)) return;
             // Find the parent element with an id
             let el: Element | null = h;
@@ -3411,6 +3420,11 @@ export default function BookReader() {
           });
         }
         
+        filteredEntries = filteredEntries.filter((e) => {
+          const title = sanitizeTocTitle(e.title || '');
+          return Boolean(title && !shouldSkipToc(title));
+        }).map((e) => ({ ...e, title: sanitizeTocTitle(e.title || '') }));
+
         setToc(filteredEntries);
         
         // Choose a sensible default chapter to show first.
