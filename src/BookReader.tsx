@@ -4,6 +4,7 @@ import './BookReader.css';
 import { MdMenu, MdTranslate, MdSearch, MdDarkMode, MdLightMode, MdContentCopy, MdShare, MdClose, MdMoreVert, MdBookmarkBorder, MdBookmark, MdDownload, MdCheckCircle, MdPrivacyTip } from 'react-icons/md';
 import { FaFacebookF, FaXTwitter, FaWhatsapp } from 'react-icons/fa6';
 import { IoMdMail } from 'react-icons/io';
+import AudioPlayer from './components/AudioPlayer';
 import { LANGUAGE_NAMES } from './utils/language';
 import { trackEvent, trackPageView, getAnalyticsConsentStatus, setAnalyticsConsent } from './utils/analytics';
 
@@ -74,6 +75,17 @@ const BookContent = React.memo(function BookContent({
             <div ref={contentRef} className="reader-book-html" dangerouslySetInnerHTML={{ __html: displayedHtml }} />
           </div>
         </div>
+        <section className="reader-audio-section" aria-label="Chapter audio player">
+          <AudioPlayer
+            lang={lang}
+            chapterIdx={chapterIdx}
+            chapterTitle={chapterTitle}
+            onNextChapter={onNextChapter}
+            onPrevChapter={onPrevChapter}
+            minimized={audioMinimized}
+            onExpand={() => setAudioMinimized(false)}
+          />
+        </section>
         <footer className="reader-footer">
           <div className="reader-footer-inner">
             {copyrightText}

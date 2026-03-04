@@ -979,6 +979,11 @@ span.dropcap {
 .reader-book-html .chapterhead .chapter-sep-inline { font-weight: 400; opacity: 0.95; }
 .reader-book-html .chapterhead .chapter-title-inline { font-weight: 700; }
 
+.reader-audio-section{
+  margin-top: 14px;
+  width: 100%;
+}
+
 /* Footer */
 .reader-footer{margin-top:1.25rem;padding-top:12px;border-top:1px solid var(--reader-border);width:100%}
 .reader-footer-inner{max-width:1200px;margin:0 auto;padding:6px 12px;text-align:center;color:var(--reader-modal-fg);font-size:0.92rem;opacity:0.9}

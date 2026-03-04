@@ -13,6 +13,34 @@ type Props = {
   onExpand?: () => void;
 };
 
+type AudioManifestTrack = {
+  chapterIdx: number;
+  code?: string;
+  title?: string;
+  url: string;
+};
+
+type AudioManifest = {
+  bookLanguageFolder?: string;
+  bookLanguageName?: string;
+  source?: {
+    name?: string;
+    url?: string;
+    licenseSummary?: string;
+    termsUrl?: string;
+  };
+  tracks?: AudioManifestTrack[];
+};
+
+type Attribution = {
+  name: string;
+  url: string;
+  licenseSummary?: string;
+};
+
+const ENGLISH_FOLDER = 'The Great Controversy - Ellen G. White 2';
+const ENGLISH_MANIFEST_PATH = '/book-content/audio-manifests/gc-english.json';
+
 function fmtTime(s: number) {
   if (!isFinite(s) || s <= 0) return '0:00';
   const m = Math.floor(s / 60);
@@ -21,7 +49,6 @@ function fmtTime(s: number) {
 }
 
 export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChapter, onPrevChapter, minimized, onExpand }: Props) {
-  console.log('[AudioPlayer] Render', { lang, chapterIdx, minimized });
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [src, setSrc] = useState<string | null>(null);
   const [playing, setPlaying] = useState(false);
@@ -31,97 +58,130 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
   const [volume, setVolume] = useState<number>(() => Number(localStorage.getItem('audio-volume') || '1'));
   const [audioLang, setAudioLang] = useState<string | null>(null);
   const [loadingAudio, setLoadingAudio] = useState(true);
+  const [attribution, setAttribution] = useState<Attribution | null>(null);
 
-  // Load index.json to find available files for the selected language
+  // Load audio from manifest first, then fallback to local index.json if available
   useEffect(() => {
     let mounted = true;
-    console.log('[AudioPlayer] useEffect[lang, chapterIdx] triggered', { lang, chapterIdx });
 
     const fetchIndex = async (languageName: string) => {
       const base = `/book-content/audio/${encodeURIComponent(languageName)}`;
-      console.log(`[AudioPlayer] Fetching index: ${base}/index.json`);
       try {
         const r = await fetch(`${base}/index.json`);
-        if (!r.ok) {
-          console.warn(`[AudioPlayer] Fetch failed for ${languageName}: ${r.status}`);
-          return null;
-        }
+        if (!r.ok) return null;
         const list = await r.json() as string[];
-        console.log(`[AudioPlayer] Fetch success for ${languageName}`, { count: list.length });
         return { list, base };
       } catch (err) {
-        console.error(`[AudioPlayer] Fetch error for ${languageName}`, err);
+        console.error('[AudioPlayer] Local audio index fetch failed', err);
         return null;
       }
     };
 
+    const fetchManifest = async (manifestPath: string) => {
+      try {
+        const r = await fetch(manifestPath);
+        if (!r.ok) return null;
+        return (await r.json()) as AudioManifest;
+      } catch {
+        return null;
+      }
+    };
+
+    const resolveManifestPath = (langFolder: string, languageName: string) => {
+      if (langFolder === ENGLISH_FOLDER) return ENGLISH_MANIFEST_PATH;
+      if ((languageName || '').toLowerCase() === 'english') return ENGLISH_MANIFEST_PATH;
+      return null;
+    };
+
+    const findTrackFromManifest = (manifest: AudioManifest | null, currentChapterIdx: number) => {
+      if (!manifest?.tracks?.length) return null;
+      return manifest.tracks.find((t) => t.chapterIdx === currentChapterIdx) || null;
+    };
+
     const load = async () => {
-      console.log('[AudioPlayer] load() started');
       setLoadingAudio(true);
       setSrc(null);
       setAudioLang(null);
+      setAttribution(null);
 
       // Try to get the language name from LANGUAGE_NAMES mapping
       const mappedLang = LANGUAGE_NAMES[lang];
-      console.log('[AudioPlayer] Mapped language:', { input: lang, mapped: mappedLang });
-      
+
       // Use mapped name if available, otherwise use input directly
       const preferredLang = mappedLang || lang;
-      console.log('[AudioPlayer] Preferred language:', preferredLang);
-      
+
+      // 1) Try external manifest source (currently English GC)
+      const preferredManifestPath = resolveManifestPath(lang, preferredLang);
+      const fallbackManifestPath = preferredManifestPath ? null : ENGLISH_MANIFEST_PATH;
+
+      if (preferredManifestPath) {
+        const manifest = await fetchManifest(preferredManifestPath);
+        const track = findTrackFromManifest(manifest, chapterIdx);
+        if (mounted && track?.url) {
+          setSrc(track.url);
+          setAudioLang(manifest?.bookLanguageName || preferredLang);
+          setAttribution({
+            name: manifest?.source?.name || 'EllenWhiteAudio.org',
+            url: manifest?.source?.url || 'https://ellenwhiteaudio.org/great-controversy/',
+            licenseSummary: manifest?.source?.licenseSummary,
+          });
+          setLoadingAudio(false);
+          return;
+        }
+      }
+
+      if (fallbackManifestPath) {
+        const manifest = await fetchManifest(fallbackManifestPath);
+        const track = findTrackFromManifest(manifest, chapterIdx);
+        if (mounted && track?.url) {
+          setSrc(track.url);
+          setAudioLang(manifest?.bookLanguageName || 'English');
+          setAttribution({
+            name: manifest?.source?.name || 'EllenWhiteAudio.org',
+            url: manifest?.source?.url || 'https://ellenwhiteaudio.org/great-controversy/',
+            licenseSummary: manifest?.source?.licenseSummary,
+          });
+          setLoadingAudio(false);
+          return;
+        }
+      }
+
+      // 2) Fallback to local audio index support
       let result = await fetchIndex(preferredLang);
       let usedLang = preferredLang;
 
       // If not found and not English, try English
       if (!result && preferredLang.toLowerCase() !== 'english') {
-        console.log('[AudioPlayer] No audio for preferred lang, falling back to English');
         result = await fetchIndex('English');
-        if (result) {
-          usedLang = 'English';
-          console.log('[AudioPlayer] Fallback to English successful');
-        } else {
-          console.log('[AudioPlayer] Fallback to English also failed');
-        }
+        if (result) usedLang = 'English';
       }
 
-      if (!mounted) {
-        console.log('[AudioPlayer] Component unmounted during load');
-        return;
-      }
+      if (!mounted) return;
 
       if (result) {
         const pad = String(chapterIdx + 1).padStart(2, '0');
         const match = result.list.find((f) => f.startsWith(`GC-${pad}-`) || f.startsWith(`GC-${pad}`));
-        console.log(`[AudioPlayer] Searching for chapter ${pad}`, { pattern: `GC-${pad}`, found: !!match, match });
         setAudioLang(usedLang);
         const newSrc = match ? `${result.base}/${encodeURIComponent(match)}` : null;
-        console.log('[AudioPlayer] Setting new src:', newSrc);
         setSrc(newSrc);
       } else {
-        console.log('[AudioPlayer] No result from fetch, audio unavailable');
         setAudioLang(null);
         setSrc(null);
       }
 
-      console.log('[AudioPlayer] load() finished');
       setLoadingAudio(false);
     };
 
     load();
-    return () => { 
-      mounted = false; 
-      console.log('[AudioPlayer] useEffect[lang, chapterIdx] cleanup');
-    };
+    return () => { mounted = false; };
   }, [lang, chapterIdx]);
 
   // persist speed and volume
   useEffect(() => {
-    console.log('[AudioPlayer] Setting speed:', speed);
     try { localStorage.setItem('audio-speed', String(speed)); } catch {}
     if (audioRef.current) audioRef.current.playbackRate = speed;
   }, [speed]);
   useEffect(() => { 
-    console.log('[AudioPlayer] Setting volume:', volume);
     try { localStorage.setItem('audio-volume', String(volume)); } catch {} 
     if (audioRef.current) audioRef.current.volume = volume; 
   }, [volume]);
@@ -129,14 +189,12 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
   // attach events
   useEffect(() => {
     const a = audioRef.current;
-    console.log('[AudioPlayer] useEffect[src] triggered. Attaching events to audio element.', { src, element: a });
     if (!a) return;
-    const onPlay = () => { console.log('[AudioPlayer] Event: play'); setPlaying(true); };
-    const onPause = () => { console.log('[AudioPlayer] Event: pause'); setPlaying(false); };
+    const onPlay = () => setPlaying(true);
+    const onPause = () => setPlaying(false);
     const onTime = () => setTime(a.currentTime || 0);
-    const onMeta = () => { console.log('[AudioPlayer] Event: loadedmetadata', { duration: a.duration }); setDuration(a.duration || 0); };
+    const onMeta = () => setDuration(a.duration || 0);
     const onEnd = () => {
-      console.log('[AudioPlayer] Event: ended');
       setPlaying(false);
       // Auto-play next chapter if available
       if (onNextChapter) onNextChapter();
@@ -150,7 +208,6 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
     a.addEventListener('ended', onEnd);
     a.addEventListener('error', onError);
     return () => {
-      console.log('[AudioPlayer] useEffect[src] cleanup. Removing events.');
       a.removeEventListener('play', onPlay);
       a.removeEventListener('pause', onPause);
       a.removeEventListener('timeupdate', onTime);
@@ -166,15 +223,11 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
     const languageName = LANGUAGE_NAMES[lang] || lang;
     const key = `audio-pos:${languageName}:${chapterIdx}`;
     const a = audioRef.current;
-    console.log(`[AudioPlayer] Attempting to restore position for key: ${key}`);
     const tryRestore = () => {
       try {
         const v = Number(localStorage.getItem(key) || '0');
         if (a && isFinite(v) && v > 2 && v < (a.duration || Infinity)) {
-          console.log(`[AudioPlayer] Restoring position to ${v}s`);
           a.currentTime = v;
-        } else {
-          console.log(`[AudioPlayer] Not restoring position.`, { storedValue: v, duration: a?.duration });
         }
       } catch(e) {
         console.error('[AudioPlayer] Error restoring position', e);
@@ -182,7 +235,6 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
     };
     // wait for metadata
     const onMeta = () => {
-      console.log('[AudioPlayer] loadedmetadata for restore');
       tryRestore();
     }
     a?.addEventListener('loadedmetadata', onMeta);
@@ -212,7 +264,6 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
   // toggle play/pause
   const toggle = async () => {
     const a = audioRef.current;
-    console.log('[AudioPlayer] toggle() called.', { paused: a?.paused, src: a?.src });
     if (!a) return;
     try {
       if (a.paused) {
@@ -227,7 +278,6 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
 
   const seekTo = (p: number) => {
     const a = audioRef.current; 
-    console.log(`[AudioPlayer] seekTo() called: ${p}s`);
     if (!a) return; 
     a.currentTime = p;
   };
@@ -235,7 +285,6 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
   const displayAudioLang = audioLang || (LANGUAGE_NAMES[lang] || lang);
 
   if (loadingAudio) {
-    console.log('[AudioPlayer] Rendering: Loading state');
     return (
       <div className="audio-player modern-audio-player audio-unavailable">
         <div className="audio-unavailable-text">Loading audio…</div>
@@ -244,7 +293,6 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
   }
 
   if (!src) {
-    console.log('[AudioPlayer] Rendering: Not available state');
     return (
       <div className="audio-player modern-audio-player audio-unavailable">
         <div className="audio-unavailable-text">
@@ -255,7 +303,6 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
   }
 
   if (minimized) {
-    console.log('[AudioPlayer] Rendering: Minimized bar');
     return (
       <MinimizedAudioBar
         playing={playing}
@@ -267,8 +314,7 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
       />
     );
   }
-  
-  console.log('[AudioPlayer] Rendering: Full player UI');
+
   return (
     <div className="audio-player modern-audio-player">
       <audio ref={audioRef} src={src} preload="metadata" crossOrigin="anonymous" />
@@ -318,6 +364,12 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         </a>}
       </div>
+      {attribution && (
+        <div className="audio-attribution">
+          Audio by <a href={attribution.url} target="_blank" rel="noreferrer">{attribution.name}</a>
+          {attribution.licenseSummary ? <span> · {attribution.licenseSummary}</span> : null}
+        </div>
+      )}
     </div>
   );
 }
