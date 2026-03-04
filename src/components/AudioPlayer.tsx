@@ -317,7 +317,7 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
 
   return (
     <div className="audio-player modern-audio-player">
-      <audio ref={audioRef} src={src} preload="metadata" crossOrigin="anonymous" />
+      <audio ref={audioRef} src={src} preload="metadata" />
       <div className="audio-info">
         <div className="audio-chapter">
           <span className="audio-chapter-title">{chapterTitle || 'Untitled Chapter'}</span>
