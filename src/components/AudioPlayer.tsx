@@ -48,16 +48,25 @@ const EWA_BASE = 'https://ellenwhiteaudio.org/audio';
 type AudioSourceCandidate = {
   languageCodes: string[];
   bookCodes: string[];
+  sourcePageUrl?: string;
 };
 
 const AUDIO_SOURCE_CANDIDATES: Record<string, AudioSourceCandidate> = {
   'The Great Controversy - Ellen G. White 2': { languageCodes: ['en'], bookCodes: ['gc'] },
-  'El Conflicto de los Siglos - Ellen G. White': { languageCodes: ['sp', 'es'], bookCodes: ['gc', 'cs'] },
+  'El Conflicto de los Siglos - Ellen G. White': {
+    languageCodes: ['sp', 'es'],
+    bookCodes: ['gc', 'cs'],
+    sourcePageUrl: 'https://ellenwhiteaudio.org/sp/el-conflicto-de-los-siglos-nueva-narracion/',
+  },
   'Der grosse Kampf - Ellen G. White': { languageCodes: ['de'], bookCodes: ['gc', 'gk'] },
   'Il gran conflitto - Ellen G. White': { languageCodes: ['it'], bookCodes: ['gc'] },
   'MOD EN BEDRE FREMTID - Ellen G. White': { languageCodes: ['da'], bookCodes: ['gc', 'mbf'] },
   'Mot historiens klimaks - Ellen G. White': { languageCodes: ['no', 'nb'], bookCodes: ['gc', 'mhk'] },
-  'O Grande Conflito - Ellen G. White': { languageCodes: ['pt'], bookCodes: ['gc'] },
+  'O Grande Conflito - Ellen G. White': {
+    languageCodes: ['pt'],
+    bookCodes: ['gc'],
+    sourcePageUrl: 'https://ellenwhiteaudio.org/pt/grande-conflito/',
+  },
   'O Le Finauga Tele - Ellen G. White': { languageCodes: ['sm'], bookCodes: ['gc', 'ft'] },
   'Suur Voitlus - Ellen G. White': { languageCodes: ['et'], bookCodes: ['gc', 'sv'] },
   'Tragedia veacurilor - Ellen G. White': { languageCodes: ['ro'], bookCodes: ['gc', 'tv'] },
@@ -68,19 +77,35 @@ const AUDIO_SOURCE_CANDIDATES: Record<string, AudioSourceCandidate> = {
   "Vielika borot'ba - Ellen G. White": { languageCodes: ['uk'], bookCodes: ['gc', 'vb', 'вб'] },
   "Vielikaia bor'ba - Ellen G. White": { languageCodes: ['ru'], bookCodes: ['gc', 'vb', 'вб'] },
   'Wielki boj - Ellen G. White': { languageCodes: ['pl'], bookCodes: ['gc', 'wb'] },
-  "alSra` al`Zym - Ellen G. White": { languageCodes: ['ar'], bookCodes: ['gc'] },
+  "alSra` al`Zym - Ellen G. White": {
+    languageCodes: ['ar'],
+    bookCodes: ['gc'],
+    sourcePageUrl: 'https://ellenwhiteaudio.org/ar/ai-%d8%a7%d9%84%d8%b5%d8%b1%d8%a7%d8%b9-%d8%a7%d9%84%d8%b9%d8%b8%d9%8a%d9%85/',
+  },
   'Amharic - Ellen G. White': { languageCodes: ['am'], bookCodes: ['gc'] },
-  'Chinese - Ellen G. White': { languageCodes: ['cn', 'zh'], bookCodes: ['gc'] },
+  'Chinese - Ellen G. White': {
+    languageCodes: ['cn', 'zh'],
+    bookCodes: ['gc'],
+    sourcePageUrl: 'https://ellenwhiteaudio.org/cn/%e5%96%84%e6%81%b6%e4%b9%8b%e4%ba%89/',
+  },
   'Japanese - Ellen G. White': { languageCodes: ['ja'], bookCodes: ['gc'] },
   'Korean - Ellen G. White': { languageCodes: ['kr', 'ko'], bookCodes: ['gc'] },
-  'Serbian - Ellen G. White': { languageCodes: ['sr', 'rs'], bookCodes: ['gc', 'vb'] },
+  'Serbian - Ellen G. White': {
+    languageCodes: ['sr', 'rs'],
+    bookCodes: ['gc', 'vb'],
+    sourcePageUrl: 'https://ellenwhiteaudio.org/sr/velika-borba/',
+  },
   'Farsi - Ellen G. White': { languageCodes: ['fa'], bookCodes: ['gc'] },
   'Afrikaans - Ellen G. White': { languageCodes: ['af'], bookCodes: ['gc'] },
   'Hindi - Ellen G. White': { languageCodes: ['hi'], bookCodes: ['gc'] },
   'Bengali - Ellen G. White': { languageCodes: ['bn'], bookCodes: ['gc'] },
   'Indonesian - Ellen G. White': { languageCodes: ['id'], bookCodes: ['gc'] },
   'Urdu - Ellen G. White': { languageCodes: ['ur'], bookCodes: ['gc'] },
-  'French - Ellen G. White': { languageCodes: ['fr'], bookCodes: ['gc'] },
+  'French - Ellen G. White': {
+    languageCodes: ['fr'],
+    bookCodes: ['gc'],
+    sourcePageUrl: 'https://ellenwhiteaudio.org/fr/la-tragedie-des-siecles/',
+  },
   'Beteja e Madhe - Ellen G. White': { languageCodes: ['sq'], bookCodes: ['gc', 'bz'] },
 };
 
@@ -266,7 +291,7 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
               setAudioLang(preferredLang);
               setAttribution({
                 name: 'EllenWhiteAudio.org',
-                url: `https://ellenwhiteaudio.org/${languageCode === 'en' ? '' : languageCode}`,
+                url: sourceCandidates.sourcePageUrl || `https://ellenwhiteaudio.org/${languageCode === 'en' ? '' : languageCode}`,
                 licenseSummary: 'Used with attribution for non-commercial educational and ministry use.',
               });
               setLoadingAudio(false);
