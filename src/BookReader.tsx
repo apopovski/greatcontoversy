@@ -141,6 +141,9 @@ const FRENCH_FOLDER = 'French - Ellen G. White';
 const ALBANIAN_FOLDER = 'Beteja e Madhe - Ellen G. White';
 const CONTACT_WHATSAPP_NUMBER = '19562447002';
 const CONTACT_WHATSAPP_PREFILL = 'The Great Controversy — ';
+const AUDIO_SOURCE_URL = 'https://ellenwhiteaudio.org/great-controversy/';
+const AUDIO_TERMS_URL = 'https://ellenwhiteaudio.org/terms-and-conditions/';
+const AUDIO_SOURCE_NOTE = 'Audio by EllenWhiteAudio.org, shared with permission for non-commercial educational and ministry use with attribution.';
 const CONTACT_WHATSAPP_LABELS: Record<string, string> = {
   'The Great Controversy - Ellen G. White 2': 'Contact on WhatsApp',
   'El Conflicto de los Siglos - Ellen G. White': 'Contactar por WhatsApp',
@@ -2221,6 +2224,7 @@ export default function BookReader() {
   const [showSearch, setShowSearch] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const [showAudioSourceInfo, setShowAudioSourceInfo] = useState(false);
   const [chapterReadPercent, setChapterReadPercent] = useState(0);
   const [showCopyToast, setShowCopyToast] = useState(false);
   const [copyToastPos, setCopyToastPos] = useState({ top: 0, left: 0 });
@@ -2273,7 +2277,9 @@ export default function BookReader() {
   const burgerBtnRef = useRef<HTMLButtonElement | null>(null);
   const searchBtnRef = useRef<HTMLButtonElement | null>(null);
   const shareBtnRef = useRef<HTMLButtonElement | null>(null);
+  const audioInfoBtnRef = useRef<HTMLButtonElement | null>(null);
   const shareMenuRef = useRef<HTMLDivElement | null>(null);
+  const audioInfoRef = useRef<HTMLDivElement | null>(null);
   const chaptersMenuRef = useRef<HTMLDivElement | null>(null);
   const langMenuRef = useRef<HTMLDivElement | null>(null);
   const moreBtnRef = useRef<HTMLButtonElement | null>(null);
@@ -2387,6 +2393,7 @@ export default function BookReader() {
   const [searchPanelStyle, setSearchPanelStyle] = useState<React.CSSProperties | null>(null);
   const [sharePanelStyle, setSharePanelStyle] = useState<React.CSSProperties | null>(null);
   const [morePanelStyle, setMorePanelStyle] = useState<React.CSSProperties | null>(null);
+  const [audioInfoPanelStyle, setAudioInfoPanelStyle] = useState<React.CSSProperties | null>(null);
 
   const desktopWidthPresets = useMemo(
     () => getDesktopWidthPresets(window.innerWidth || 1280, desktopWidthLimit),
@@ -2588,6 +2595,22 @@ export default function BookReader() {
       document.removeEventListener('touchstart', onDown);
     };
   }, [showMoreMenu]);
+
+  useEffect(() => {
+    if (!showAudioSourceInfo) return;
+    const onDown = (ev: MouseEvent | TouchEvent) => {
+      const target = ev.target as Node | null;
+      if (target && audioInfoRef.current?.contains(target)) return;
+      if (target && audioInfoBtnRef.current?.contains(target)) return;
+      setShowAudioSourceInfo(false);
+    };
+    document.addEventListener('mousedown', onDown);
+    document.addEventListener('touchstart', onDown);
+    return () => {
+      document.removeEventListener('mousedown', onDown);
+      document.removeEventListener('touchstart', onDown);
+    };
+  }, [showAudioSourceInfo]);
 
   // Parse path-based routes like /lang/en/chapter/23 on initial load
   useEffect(() => {
@@ -4259,6 +4282,20 @@ export default function BookReader() {
                 <MdShare size={22} />
               </button>
 
+              <button
+                className="reader-audio-info-btn"
+                ref={audioInfoBtnRef}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setAudioInfoPanelStyle(getAnchoredPanelStyle(audioInfoBtnRef.current, 320));
+                  setShowAudioSourceInfo((v) => !v);
+                }}
+                aria-label="Audio source and permissions"
+                title="Audio source and permissions"
+              >
+                <MdPrivacyTip size={20} />
+              </button>
+
               {/* Mobile expand (More) menu */}
               <button
                 className="reader-more-icon"
@@ -4368,6 +4405,22 @@ export default function BookReader() {
             <IoMdMail size={18} />
             <span>Email</span>
           </button>
+        </div>
+      )}
+
+      {showAudioSourceInfo && (
+        <div
+          ref={audioInfoRef}
+          className="reader-audio-info-popover"
+          style={audioInfoPanelStyle || undefined}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="reader-audio-info-title">Audio Source</div>
+          <div className="reader-audio-info-text">{AUDIO_SOURCE_NOTE}</div>
+          <div className="reader-audio-info-links">
+            <a href={AUDIO_SOURCE_URL} target="_blank" rel="noreferrer">Source page</a>
+            <a href={AUDIO_TERMS_URL} target="_blank" rel="noreferrer">Terms</a>
+          </div>
         </div>
       )}
 
