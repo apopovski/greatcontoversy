@@ -42,4 +42,5 @@ export const LANGUAGE_NAMES: Record<string, string> = {
   'Indonesian - Ellen G. White': 'Indonesian',
   'Urdu - Ellen G. White': 'Urdu',
   'French - Ellen G. White': 'French',
+  'Beteja e Madhe - Ellen G. White': 'Albanian',
 };

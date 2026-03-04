@@ -126,6 +126,7 @@ const INDONESIAN_SOURCE_PATH = '/book-content/txt/GC-Indonesian.txt';
 const URDU_FOLDER = 'Urdu - Ellen G. White';
 const URDU_SOURCE_PATH = '/book-content/txt/GC-Urdu.txt';
 const FRENCH_FOLDER = 'French - Ellen G. White';
+const ALBANIAN_FOLDER = 'Beteja e Madhe - Ellen G. White';
 const CONTACT_WHATSAPP_NUMBER = '19562447002';
 const CONTACT_WHATSAPP_PREFILL = 'The Great Controversy — ';
 const CONTACT_WHATSAPP_LABELS: Record<string, string> = {
@@ -159,6 +160,7 @@ const CONTACT_WHATSAPP_LABELS: Record<string, string> = {
   [INDONESIAN_FOLDER]: 'Hubungi lewat WhatsApp',
   [URDU_FOLDER]: 'واٹس ایپ پر رابطہ کریں',
   [FRENCH_FOLDER]: 'Contact sur WhatsApp',
+  [ALBANIAN_FOLDER]: 'Kontakto në WhatsApp',
 };
 
 const DESKTOP_WIDTH_MIN = 640;
@@ -231,6 +233,7 @@ const LANGUAGE_FOLDERS = [
   INDONESIAN_FOLDER,
   URDU_FOLDER,
   FRENCH_FOLDER,
+  ALBANIAN_FOLDER,
 ];
 
 const LANGUAGE_ABBREV: Record<string, string> = {
@@ -264,6 +267,7 @@ const LANGUAGE_ABBREV: Record<string, string> = {
   [INDONESIAN_FOLDER]: 'id',
   [URDU_FOLDER]: 'ur',
   [FRENCH_FOLDER]: 'fr',
+  [ALBANIAN_FOLDER]: 'sq',
 };
 
 const BOOK_TITLE_OVERRIDES: Record<string, string> = {
@@ -297,6 +301,7 @@ const BOOK_TITLE_OVERRIDES: Record<string, string> = {
   [INDONESIAN_FOLDER]: 'Kemenangan Akhir',
   [URDU_FOLDER]: 'عظیم کشمکش',
   [FRENCH_FOLDER]: 'La Tragédie des Siècles',
+  [ALBANIAN_FOLDER]: 'Beteja e Madhe',
 };
 
 const META_TAGLINES: Record<string, string> = {
@@ -330,6 +335,7 @@ const META_TAGLINES: Record<string, string> = {
   id: 'Konflik kosmik antara yang baik dan yang jahat',
   ur: 'نیکی اور بدی کے درمیان کائناتی کشمکش',
   fr: 'Conflit cosmique entre le bien et le mal',
+  sq: 'Konflikt kozmik ndërmjet së mirës dhe së keqes',
 };
 
 const getBookTitleFromFolder = (folder: string) =>
@@ -366,6 +372,7 @@ const LANGUAGE_URL_NAMES: Record<string, string> = {
   [INDONESIAN_FOLDER]: 'Bahasa Indonesia',
   [URDU_FOLDER]: 'اردو',
   [FRENCH_FOLDER]: 'Français',
+  [ALBANIAN_FOLDER]: 'Shqip',
 };
 
 const LANGUAGE_CHAPTER_LABELS: Record<string, string> = {
@@ -399,6 +406,7 @@ const LANGUAGE_CHAPTER_LABELS: Record<string, string> = {
   [INDONESIAN_FOLDER]: 'Bab',
   [URDU_FOLDER]: 'باب',
   [FRENCH_FOLDER]: 'Chapitre',
+  [ALBANIAN_FOLDER]: 'Kapitulli',
 };
 
 const LANGUAGE_CONTENTS_LABELS: Record<string, string> = {
@@ -432,6 +440,7 @@ const LANGUAGE_CONTENTS_LABELS: Record<string, string> = {
   [INDONESIAN_FOLDER]: 'Daftar Isi',
   [URDU_FOLDER]: 'فہرست',
   [FRENCH_FOLDER]: 'Sommaire',
+  [ALBANIAN_FOLDER]: 'Përmbajtja',
 };
 
 const LANGUAGE_CONTINUE_LABELS: Record<string, string> = {
@@ -465,6 +474,7 @@ const LANGUAGE_CONTINUE_LABELS: Record<string, string> = {
   [INDONESIAN_FOLDER]: 'Lanjutkan',
   [URDU_FOLDER]: 'جاری رکھیں',
   [FRENCH_FOLDER]: 'Continuer',
+  [ALBANIAN_FOLDER]: 'Vazhdo',
 };
 
 const HERO_COPY: Record<string, {
@@ -746,6 +756,15 @@ const HERO_COPY: Record<string, {
     chooseLanguage: 'Choisir la langue',
     availability: 'Disponible en 30 langues • Lu dans le monde entier',
   },
+  sq: {
+    line1: 'Perandori janë ngritur.',
+    line2: 'E vërteta është shtypur.',
+    line3: 'Profecia është përmbushur.',
+    line4: 'Çfarë vjen më pas?',
+    startReading: 'Fillo leximin',
+    chooseLanguage: 'Zgjidh gjuhën',
+    availability: 'Në dispozicion në 31 gjuhë • Lexohet në mbarë botën',
+  },
 };
 
 const COPY_TOAST_LABELS: Record<string, string> = {
@@ -779,6 +798,7 @@ const COPY_TOAST_LABELS: Record<string, string> = {
   id: 'Disalin',
   ur: 'کاپی ہو گیا',
   fr: 'Copié',
+  sq: 'U kopjua',
 };
 
 const COPYRIGHTS: Record<string, string> = {
