@@ -11,6 +11,8 @@ type Props = {
   onPrevChapter?: () => void;
   minimized?: boolean;
   onExpand?: () => void;
+  onMinimize?: () => void;
+  containerWidth?: number | null;
 };
 
 type AudioManifestTrack = {
@@ -48,7 +50,7 @@ function fmtTime(s: number) {
   return `${m}:${sec}`;
 }
 
-export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChapter, onPrevChapter, minimized, onExpand }: Props) {
+export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChapter, onPrevChapter, minimized, onExpand, onMinimize, containerWidth }: Props) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [src, setSrc] = useState<string | null>(null);
   const [playing, setPlaying] = useState(false);
@@ -311,6 +313,7 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
         onToggle={toggle}
         onExpand={onExpand || (() => {})}
         chapterTitle={chapterTitle || ''}
+        containerWidth={containerWidth}
       />
     );
   }
@@ -323,9 +326,19 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
           <span className="audio-chapter-title">{chapterTitle || 'Untitled Chapter'}</span>
           <span className="audio-chapter-lang">{displayAudioLang}</span>
         </div>
-        <div className="audio-times">{fmtTime(time)} / {fmtTime(duration)}</div>
+        <div className="audio-top-actions">
+          <div className="audio-times">{fmtTime(time)} / {fmtTime(duration)}</div>
+          {onMinimize && (
+            <button className="audio-minimize-btn" onClick={onMinimize} aria-label="Minimize player" title="Minimize player">
+              ─
+            </button>
+          )}
+        </div>
       </div>
       <div className="audio-controls">
+        <button className="audio-btn audio-btn-secondary" onClick={() => onPrevChapter?.()} aria-label="Previous chapter" title="Previous chapter" disabled={!onPrevChapter}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 20L9 12l10-8v16z"/><path d="M5 19V5"/></svg>
+        </button>
         <button className="audio-btn audio-rewind" onClick={() => seekTo(Math.max(0, (audioRef.current?.currentTime || 0) - 15))} aria-label="Rewind 15">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 19l-9-7 9-7v14zM22 19l-9-7 9-7v14z"/></svg>
         </button>
@@ -338,6 +351,9 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
         </button>
         <button className="audio-btn audio-forward" onClick={() => seekTo(Math.min(audioRef.current?.duration || 0, (audioRef.current?.currentTime || 0) + 15))} aria-label="Forward 15">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 5l9 7-9 7V5zM2 5l9 7-9 7V5z"/></svg>
+        </button>
+        <button className="audio-btn audio-btn-secondary" onClick={() => onNextChapter?.()} aria-label="Next chapter" title="Next chapter" disabled={!onNextChapter}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 4l10 8-10 8V4z"/><path d="M19 5v14"/></svg>
         </button>
       </div>
       <div className="audio-timeline" onClick={(e) => {

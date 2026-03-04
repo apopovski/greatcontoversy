@@ -44,12 +44,14 @@ const BookContent = React.memo(function BookContent({
   chapterTitle,
   audioMinimized,
   setAudioMinimized,
+  setAudioUserExpanded,
   onNextChapter,
   onPrevChapter,
 }: BookContentProps & {
   chapterTitle: string;
   audioMinimized: boolean;
   setAudioMinimized: (v: boolean) => void;
+  setAudioUserExpanded: (v: boolean) => void;
   onNextChapter: () => void;
   onPrevChapter: () => void;
 }) {
@@ -83,7 +85,23 @@ const BookContent = React.memo(function BookContent({
             onNextChapter={onNextChapter}
             onPrevChapter={onPrevChapter}
             minimized={audioMinimized}
-            onExpand={() => setAudioMinimized(false)}
+            onExpand={() => {
+              setAudioUserExpanded(true);
+              setAudioMinimized(false);
+              const section = document.querySelector('.reader-audio-section');
+              if (section) {
+                try {
+                  section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                } catch {
+                  section.scrollIntoView();
+                }
+              }
+            }}
+            onMinimize={() => {
+              setAudioUserExpanded(false);
+              setAudioMinimized(true);
+            }}
+            containerWidth={isDesktop ? pageWidth : null}
           />
         </section>
         <footer className="reader-footer">
@@ -2185,6 +2203,7 @@ export default function BookReader() {
 
   // --- AUDIO STATE ---
   const [audioMinimized, setAudioMinimized] = useState(false);
+  const [audioUserExpanded, setAudioUserExpanded] = useState(false);
 
   // --- MAIN APP STATE ---
   const [lang, setLang] = useState(() => getInitialLanguageFolder());
@@ -2312,15 +2331,17 @@ export default function BookReader() {
   // --- Minimized audio bar and auto-next logic ---
   // Auto-minimize audio bar on scroll (mobile)
   useEffect(() => {
-    let lastY = window.scrollY;
     let ticking = false;
     const onScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
+          if (audioUserExpanded) {
+            ticking = false;
+            return;
+          }
           const y = window.scrollY;
           if (y > 120) setAudioMinimized(true);
           else setAudioMinimized(false);
-          lastY = y;
           ticking = false;
         });
         ticking = true;
@@ -2328,7 +2349,7 @@ export default function BookReader() {
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  }, [audioUserExpanded]);
 
   // --- Minimized audio bar and auto-next logic ---
 
@@ -4633,6 +4654,7 @@ export default function BookReader() {
           chapterTitle={chapterTitle}
           audioMinimized={audioMinimized}
           setAudioMinimized={setAudioMinimized}
+          setAudioUserExpanded={setAudioUserExpanded}
           onNextChapter={handleNextChapter}
           onPrevChapter={handlePrevChapter}
         />

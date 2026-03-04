@@ -8,6 +8,7 @@ type Props = {
   onToggle: () => void;
   onExpand: () => void;
   chapterTitle: string;
+  containerWidth?: number | null;
 };
 
 function fmtTime(s: number) {
@@ -17,9 +18,20 @@ function fmtTime(s: number) {
   return `${m}:${sec}`;
 }
 
-export default function MinimizedAudioBar({ playing, time, duration, onToggle, onExpand, chapterTitle }: Props) {
+export default function MinimizedAudioBar({ playing, time, duration, onToggle, onExpand, chapterTitle, containerWidth }: Props) {
+  const barStyle: React.CSSProperties | undefined = containerWidth
+    ? {
+        left: '50%',
+        right: 'auto',
+        transform: 'translateX(-50%)',
+        width: `min(${containerWidth}px, calc(100vw - 24px))`,
+        borderTopLeftRadius: 14,
+        borderTopRightRadius: 14,
+      }
+    : undefined;
+
   return (
-    <div className="audio-minibar" onClick={onExpand}>
+    <div className="audio-minibar" style={barStyle} onClick={onExpand}>
       <div className="audio-minibar-title">{chapterTitle}</div>
       <div className="audio-minibar-controls" onClick={e => e.stopPropagation()}>
         <button onClick={onToggle} aria-label="Play/Pause">{playing ? 'Pause' : 'Play'}</button>
