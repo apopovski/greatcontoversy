@@ -1,0 +1,272 @@
+{
+  "version": 1,
+  "book": "The Great Controversy",
+  "bookLanguageFolder": "The Great Controversy - Ellen G. White 2",
+  "bookLanguageName": "English",
+  "source": {
+    "name": "EllenWhiteAudio.org",
+    "url": "https://ellenwhiteaudio.org/great-controversy/",
+    "licenseSummary": "Shared with permission for non-commercial educational/ministry use with attribution.",
+    "termsUrl": "https://ellenwhiteaudio.org/terms-and-conditions/"
+  },
+  "tracks": [
+    {
+      "chapterIdx": 0,
+      "code": "00b",
+      "title": "Introduction",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-00b%20-%20Introduction.mp3"
+    },
+    {
+      "chapterIdx": 1,
+      "code": "01",
+      "title": "The Destruction of Jerusalem",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-01%20-%20The%20Destruction%20of%20Jerusalem.mp3"
+    },
+    {
+      "chapterIdx": 2,
+      "code": "02",
+      "title": "Persecution in the First Centuries",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-02%20-%20Persecution%20in%20the%20First%20Centuries.mp3"
+    },
+    {
+      "chapterIdx": 3,
+      "code": "03",
+      "title": "An Era of Spiritual Darkness",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-03%20-%20An%20Era%20of%20Spiritual%20Darkness.mp3"
+    },
+    {
+      "chapterIdx": 4,
+      "code": "04",
+      "title": "The Waldenses",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-04%20-%20The%20Waldenses.mp3"
+    },
+    {
+      "chapterIdx": 5,
+      "code": "05",
+      "title": "John Wycliffe",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-05%20-%20John%20Wycliffe.mp3"
+    },
+    {
+      "chapterIdx": 6,
+      "code": "06",
+      "title": "Huss and Jerome",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-06%20-%20Huss%20and%20Jerome.mp3"
+    },
+    {
+      "chapterIdx": 7,
+      "code": "07",
+      "title": "Luther's Separation From Rome",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-07%20-%20Luther%27s%20Separation%20From%20Rome.mp3"
+    },
+    {
+      "chapterIdx": 8,
+      "code": "08",
+      "title": "Luther Before the Diet",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-08%20-%20Luther%20Before%20the%20Diet.mp3"
+    },
+    {
+      "chapterIdx": 9,
+      "code": "09",
+      "title": "The Swiss Reformer",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-09%20-%20The%20Swiss%20Reformer.mp3"
+    },
+    {
+      "chapterIdx": 10,
+      "code": "10",
+      "title": "Progress of Reform in Germany",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-10%20-%20Progress%20of%20Reform%20in%20Germany.mp3"
+    },
+    {
+      "chapterIdx": 11,
+      "code": "11",
+      "title": "Protest of the Princes",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-11%20-%20Protest%20of%20the%20Princes.mp3"
+    },
+    {
+      "chapterIdx": 12,
+      "code": "12",
+      "title": "The French Reformation",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-12%20-%20The%20French%20Reformation.mp3"
+    },
+    {
+      "chapterIdx": 13,
+      "code": "13",
+      "title": "The Netherlands and Scandinavia",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-13%20-%20The%20Netherlands%20and%20Scandinavia.mp3"
+    },
+    {
+      "chapterIdx": 14,
+      "code": "14",
+      "title": "Later English Reformers",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-14%20-%20Later%20English%20Reformers.mp3"
+    },
+    {
+      "chapterIdx": 15,
+      "code": "15",
+      "title": "The Bible and the French Revolution",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-15%20-%20The%20Bible%20and%20the%20French%20Revolution.mp3"
+    },
+    {
+      "chapterIdx": 16,
+      "code": "16",
+      "title": "The Pilgrim Fathers",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-16%20-%20The%20Pilgrim%20Fathers.mp3"
+    },
+    {
+      "chapterIdx": 17,
+      "code": "17",
+      "title": "Heralds of the Morning",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-17%20-%20Heralds%20of%20the%20Morning.mp3"
+    },
+    {
+      "chapterIdx": 18,
+      "code": "18",
+      "title": "An American Reformer",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-18%20-%20An%20American%20Reformer.mp3"
+    },
+    {
+      "chapterIdx": 19,
+      "code": "19",
+      "title": "Light Through Darkness",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-19%20-%20Light%20Through%20Darkness.mp3"
+    },
+    {
+      "chapterIdx": 20,
+      "code": "20",
+      "title": "A Great Religious Awakening",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-20%20-%20A%20Great%20Religious%20Awakening.mp3"
+    },
+    {
+      "chapterIdx": 21,
+      "code": "21",
+      "title": "A Warning Rejected",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-21%20-%20A%20Warning%20Rejected.mp3"
+    },
+    {
+      "chapterIdx": 22,
+      "code": "22",
+      "title": "Prophecies Fulfilled",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-22%20-%20Prophecies%20Fulfilled.mp3"
+    },
+    {
+      "chapterIdx": 23,
+      "code": "23",
+      "title": "What is the Sanctuary",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-23%20-%20What%20is%20the%20Sanctuary.mp3"
+    },
+    {
+      "chapterIdx": 24,
+      "code": "24",
+      "title": "In the Holy of Holies",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-24%20-%20In%20the%20Holy%20of%20Holies.mp3"
+    },
+    {
+      "chapterIdx": 25,
+      "code": "25",
+      "title": "God's Law Immutable",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-25%20-%20God%27s%20Law%20Immutable.mp3"
+    },
+    {
+      "chapterIdx": 26,
+      "code": "26",
+      "title": "A Work of Reform",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-26%20-%20A%20Work%20of%20Reform.mp3"
+    },
+    {
+      "chapterIdx": 27,
+      "code": "27",
+      "title": "Modern Revivals",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-27%20-%20Modern%20Revivals.mp3"
+    },
+    {
+      "chapterIdx": 28,
+      "code": "28",
+      "title": "Facing Life's Record",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-28%20-%20Facing%20Life%27s%20Record.mp3"
+    },
+    {
+      "chapterIdx": 29,
+      "code": "29",
+      "title": "The Origin of Evil",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-29%20-%20The%20Origin%20of%20Evil.mp3"
+    },
+    {
+      "chapterIdx": 30,
+      "code": "30",
+      "title": "Enmity Between Man and Satan",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-30%20-%20Enmity%20Between%20Man%20and%20Satan.mp3"
+    },
+    {
+      "chapterIdx": 31,
+      "code": "31",
+      "title": "Agency of Evil Spirits",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-31%20-%20Agency%20of%20Evil%20Spirits.mp3"
+    },
+    {
+      "chapterIdx": 32,
+      "code": "32",
+      "title": "Snares of Satan",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-32%20-%20Snares%20of%20Satan.mp3"
+    },
+    {
+      "chapterIdx": 33,
+      "code": "33",
+      "title": "The First Great Deception",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-33%20-%20The%20First%20Great%20Deception.mp3"
+    },
+    {
+      "chapterIdx": 34,
+      "code": "34",
+      "title": "Can Our Dead Speak to Us",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-34%20-%20Can%20Our%20Dead%20Speak%20to%20Us.mp3"
+    },
+    {
+      "chapterIdx": 35,
+      "code": "35",
+      "title": "Liberty of Conscience Threatened",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-35%20-%20Liberty%20of%20Conscience%20Threatened.mp3"
+    },
+    {
+      "chapterIdx": 36,
+      "code": "36",
+      "title": "The Impending Conflict",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-36%20-%20The%20Impending%20Conflict.mp3"
+    },
+    {
+      "chapterIdx": 37,
+      "code": "37",
+      "title": "The Scriptures a Safeguard",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-37%20-%20The%20Scriptures%20a%20Safeguard.mp3"
+    },
+    {
+      "chapterIdx": 38,
+      "code": "38",
+      "title": "The Final Warning",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-38%20-%20The%20Final%20Warning.mp3"
+    },
+    {
+      "chapterIdx": 39,
+      "code": "39",
+      "title": "The Time of Trouble",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-39%20-%20The%20Time%20of%20Trouble.mp3"
+    },
+    {
+      "chapterIdx": 40,
+      "code": "40",
+      "title": "God's People Delivered",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-40%20-%20God%27s%20People%20Delivered.mp3"
+    },
+    {
+      "chapterIdx": 41,
+      "code": "41",
+      "title": "Desolation of the Earth",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-41%20-%20Desolation%20of%20the%20Earth.mp3"
+    },
+    {
+      "chapterIdx": 42,
+      "code": "42",
+      "title": "The Controversy Ended",
+      "url": "https://ellenwhiteaudio.org/audio/en/gc/GC-42%20-%20The%20Controversy%20Ended.mp3"
+    }
+  ]
+}
