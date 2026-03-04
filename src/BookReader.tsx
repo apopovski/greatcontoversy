@@ -1007,6 +1007,52 @@ function addParagraphIds(html: string, chapterNumber: number) {
   }
 }
 
+function extractExternalReadLinkFromChapterHtml(html: string) {
+  try {
+    const doc = new DOMParser().parseFromString(html || '', 'text/html');
+    const anchor = doc.querySelector('a[href*="text.egwwritings.org/read/"]') as HTMLAnchorElement | null;
+    if (!anchor) return null;
+    const href = (anchor.getAttribute('href') || '').trim();
+    if (!href) return null;
+    const title = (doc.querySelector('h1,h2,h3')?.textContent || '').trim();
+    return { href, title };
+  } catch {
+    return null;
+  }
+}
+
+function extractEgwReadableChapterHtml(rawHtml: string, fallbackTitle: string) {
+  try {
+    const doc = new DOMParser().parseFromString(rawHtml || '', 'text/html');
+
+    let title = (doc.querySelector('h1')?.textContent || '').trim();
+    if (!title) {
+      const t = (doc.querySelector('title')?.textContent || '').trim();
+      title = t.split('|')[0]?.trim() || '';
+    }
+    if (!title) title = fallbackTitle || 'Kapitulli';
+
+    const contentRoot = doc.querySelector('#r-pl');
+    if (!contentRoot) return '';
+
+    const blocks = Array.from(contentRoot.querySelectorAll('p.para, blockquote')) as HTMLElement[];
+    const paras = blocks
+      .map((el) => {
+        const clone = el.cloneNode(true) as HTMLElement;
+        clone.querySelectorAll('.refCode, .anchor-link, .page-break').forEach((n) => n.remove());
+        const txt = (clone.textContent || '').replace(/\s+/g, ' ').trim();
+        if (!txt) return '';
+        return `<p>${escapeHtml(txt)}</p>`;
+      })
+      .filter(Boolean);
+
+    if (!paras.length) return '';
+    return `<div><h2 class="chapterhead">${escapeHtml(title)}</h2>${paras.join('')}</div>`;
+  } catch {
+    return '';
+  }
+}
+
 function findAppendixChapterIndex(entries: TocEntry[]) {
   if (!Array.isArray(entries) || !entries.length) return -1;
   const appendixPatterns = [
@@ -2132,8 +2178,10 @@ export default function BookReader() {
   const [chapterIds, setChapterIds] = useState<string[]>([]);
   const chapterCache = useRef<Map<number, string>>(new Map());
   const plainTextCache = useRef<Map<number, string>>(new Map());
+  const albanianInFlight = useRef<Set<number>>(new Set());
   const [chapterIdx, setChapterIdx] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [, setChapterCacheVersion] = useState(0);
   const [pageWidth, setPageWidth] = useState(() => {
     const saved = localStorage.getItem('reader-page-width');
     if (saved) {
@@ -3448,6 +3496,48 @@ export default function BookReader() {
     plainTextCache.current.set(idx, text);
     return text;
   }
+
+  // Hydrate Albanian link-only chapters from EGW pages so users can read full text
+  // directly inside this app instead of being sent off-site.
+  useEffect(() => {
+    if (lang !== ALBANIAN_FOLDER || !bookDoc || !chapterIds.length) return;
+    if (chapterIdx < 0 || chapterIdx >= chapterIds.length) return;
+
+    const id = chapterIds[chapterIdx];
+    if (!id) return;
+
+    const currentCached = chapterCache.current.get(chapterIdx) || extractChapterHtml(bookDoc, id, toc);
+    const external = extractExternalReadLinkFromChapterHtml(currentCached);
+    if (!external) return;
+    if (albanianInFlight.current.has(chapterIdx)) return;
+
+    let cancelled = false;
+    albanianInFlight.current.add(chapterIdx);
+
+    fetch(external.href)
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch Albanian chapter');
+        return res.text();
+      })
+      .then((raw) => {
+        if (cancelled) return;
+        const hydrated = extractEgwReadableChapterHtml(raw, external.title || toc[chapterIdx]?.title || 'Kapitulli');
+        if (!hydrated) return;
+        chapterCache.current.set(chapterIdx, hydrated);
+        plainTextCache.current.set(chapterIdx, hydrated.replace(/<[^>]+>/g, ' '));
+        setChapterCacheVersion((v) => v + 1);
+      })
+      .catch(() => {
+        // Keep the existing link-only fallback if remote fetch fails.
+      })
+      .finally(() => {
+        albanianInFlight.current.delete(chapterIdx);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [lang, chapterIdx, chapterIds, bookDoc, toc]);
 
   function parseSearchQuery(rawInput: string) {
     const raw = (rawInput || '').trim();
