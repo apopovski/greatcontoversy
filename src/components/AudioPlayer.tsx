@@ -234,6 +234,58 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
       }
     };
 
+    const fetchBookPageTracks = async (pageUrl: string) => {
+      try {
+        const r = await fetch(pageUrl);
+        if (!r.ok) return null;
+        const html = await r.text();
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+
+        const tracks: DirectoryTrack[] = [];
+        const seen = new Set<string>();
+
+        const pushUrl = (raw: string | null | undefined) => {
+          const href = (raw || '').trim();
+          if (!href || !/\.mp3(?:$|\?)/i.test(href)) return;
+          let absolute = href;
+          try {
+            absolute = new URL(href, pageUrl).toString();
+          } catch {
+            return;
+          }
+          if (seen.has(absolute)) return;
+          seen.add(absolute);
+
+          const fileName = decodeLoose(absolute.split('/').pop() || href);
+          tracks.push({
+            order: inferTrackOrder(fileName),
+            name: fileName,
+            url: absolute,
+          });
+        };
+
+        const anchors = Array.from(doc.querySelectorAll('a[href]')) as HTMLAnchorElement[];
+        anchors.forEach((a) => pushUrl(a.getAttribute('href')));
+
+        // Some pages may expose audio links through data attributes.
+        const anyNodes = Array.from(doc.querySelectorAll('*')) as HTMLElement[];
+        anyNodes.forEach((el) => {
+          pushUrl(el.getAttribute('data-src'));
+          pushUrl(el.getAttribute('data-audio'));
+          pushUrl(el.getAttribute('data-mp3'));
+        });
+
+        if (!tracks.length) return null;
+
+        return tracks.sort((a, b) => {
+          if (a.order === b.order) return a.name.localeCompare(b.name);
+          return a.order - b.order;
+        });
+      } catch {
+        return null;
+      }
+    };
+
     const resolveManifestPath = (langFolder: string, languageName: string) => {
       if (langFolder === ENGLISH_FOLDER) return ENGLISH_MANIFEST_PATH;
       if ((languageName || '').toLowerCase() === 'english') return ENGLISH_MANIFEST_PATH;
@@ -297,6 +349,23 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
               setLoadingAudio(false);
               return;
             }
+          }
+        }
+
+        // 2b) Fallback: parse direct MP3 links from the canonical language book page.
+        if (sourceCandidates.sourcePageUrl) {
+          const pageTracks = await fetchBookPageTracks(sourceCandidates.sourcePageUrl);
+          const chosen = pickDirectoryTrackForChapter(pageTracks || [], chapterIdx);
+          if (mounted && chosen) {
+            setSrc(chosen.url);
+            setAudioLang(preferredLang);
+            setAttribution({
+              name: 'EllenWhiteAudio.org',
+              url: sourceCandidates.sourcePageUrl,
+              licenseSummary: 'Used with attribution for non-commercial educational and ministry use.',
+            });
+            setLoadingAudio(false);
+            return;
           }
         }
       }
