@@ -2141,8 +2141,6 @@ export default function BookReader() {
   const [showSearch, setShowSearch] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
-  const [heroOpening, setHeroOpening] = useState(false);
-  const [heroOpened, setHeroOpened] = useState(false);
   const [chapterReadPercent, setChapterReadPercent] = useState(0);
   const [showCopyToast, setShowCopyToast] = useState(false);
   const [copyToastPos, setCopyToastPos] = useState({ top: 0, left: 0 });
@@ -2180,7 +2178,6 @@ export default function BookReader() {
     return false;
   });
   const sharePopupRef = useRef<HTMLDivElement | null>(null);
-  const openingContentRef = useRef<HTMLElement | null>(null);
   const selectionRangeRef = useRef<Range | null>(null);
   const isSelectingRef = useRef(false);
   const pendingChapterIdxRef = useRef<number | null>(null);
@@ -3905,51 +3902,7 @@ export default function BookReader() {
   const noContentsAvailableLabel = lang === CHINESE_FOLDER ? '暂无目录' : 'No contents available';
   const contactWhatsAppLabel = CONTACT_WHATSAPP_LABELS[lang] || 'Contact on WhatsApp';
   const continueLabel = LANGUAGE_CONTINUE_LABELS[lang] || 'Continue';
-  const languageCode = (LANGUAGE_ABBREV[lang] || 'en').toLowerCase();
-  const heroCopy = HERO_COPY[languageCode] || HERO_COPY.en;
-  const heroMainLines = [
-    'Empires have fallen.',
-    'Truth has been suppressed.',
-    'Prophecy has been fulfilled.',
-    'What comes next?',
-  ];
   const isRtl = (lang || '').toLowerCase().includes('alsra') || lang === FARSI_FOLDER || lang === URDU_FOLDER;
-
-  const scrollToOpeningContent = React.useCallback(() => {
-    const target = openingContentRef.current;
-    if (!target) return;
-    try {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    } catch {
-      target.scrollIntoView();
-    }
-  }, []);
-
-  const handleStartReading = React.useCallback(() => {
-    if (heroOpening || heroOpened) return;
-    setHeroOpening(true);
-    window.setTimeout(() => {
-      scrollToOpeningContent();
-    }, 160);
-    window.setTimeout(() => {
-      setHeroOpening(false);
-      setHeroOpened(true);
-    }, 620);
-  }, [heroOpening, heroOpened, scrollToOpeningContent]);
-
-  useEffect(() => {
-    if (showOpeningToc) {
-      setHeroOpening(false);
-      setHeroOpened(false);
-    }
-  }, [showOpeningToc, lang]);
-
-  const openLanguageChooser = React.useCallback(() => {
-    const panelW = 260;
-    const left = Math.max(12, Math.floor((window.innerWidth - panelW) / 2));
-    setLangPanelStyle({ position: 'fixed', top: 84, left, minWidth: panelW });
-    setShowLangMenu(true);
-  }, []);
 
   const languageMenuFolders = useMemo(() => {
     const englishFolder = 'The Great Controversy - Ellen G. White 2';
@@ -4419,42 +4372,7 @@ export default function BookReader() {
               <div>Loading…</div>
             ) : (
               <>
-                <div className={`reader-opening-hero-shell${heroOpening ? ' is-opening' : ''}${heroOpened ? ' is-opened' : ''}`}>
-                  <section className="reader-opening-hero" aria-label={displayTitle}>
-                    <div className="reader-opening-hero-content">
-                      <h1 className="reader-opening-hero-booktitle">The Great Controversy</h1>
-                      <div className="reader-opening-hero-visual" aria-hidden="true">
-                        <picture>
-                          <source media="(max-width: 720px)" srcSet="/graphics/The-Great-Controversy-Spash-mobile-2.svg" />
-                          <img src="/graphics/The-Great-Controversy-Spash-white-2.svg" alt="" className="reader-opening-hero-image" />
-                        </picture>
-                      </div>
-                      <div className="reader-opening-hero-lines" aria-label="Hero intro lines">
-                        {heroMainLines.map((line) => (
-                          <p key={line}>{line}</p>
-                        ))}
-                      </div>
-                      <div className="reader-opening-hero-actions">
-                        <button
-                          className="reader-opening-start"
-                          onClick={handleStartReading}
-                          aria-label={heroCopy.startReading}
-                        >
-                          {heroCopy.startReading}
-                        </button>
-                        <button
-                          className="reader-opening-language"
-                          onClick={openLanguageChooser}
-                          aria-label={heroCopy.chooseLanguage}
-                        >
-                          {heroCopy.chooseLanguage}
-                        </button>
-                      </div>
-                    </div>
-                  </section>
-                </div>
-
-                <section ref={openingContentRef} className="reader-opening-toc-inline" aria-label={tableOfContentsLabel}>
+                <section className="reader-opening-toc-inline" aria-label={tableOfContentsLabel}>
                   <div className="reader-opening-toc-inline-header">
                     <div className="reader-opening-toc-inline-titles">
                       <div className="reader-opening-subtitle">{contentsLabel}</div>
