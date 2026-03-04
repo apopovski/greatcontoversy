@@ -227,9 +227,8 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
       // Use mapped name if available, otherwise use input directly
       const preferredLang = mappedLang || lang;
 
-      // 1) Try external manifest source (currently English GC)
+      // 1) Try manifest source for the selected language (currently English GC)
       const preferredManifestPath = resolveManifestPath(lang, preferredLang);
-      const fallbackManifestPath = preferredManifestPath ? null : ENGLISH_MANIFEST_PATH;
 
       if (preferredManifestPath) {
         const manifest = await fetchManifest(preferredManifestPath);
@@ -247,23 +246,7 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
         }
       }
 
-      if (fallbackManifestPath) {
-        const manifest = await fetchManifest(fallbackManifestPath);
-        const track = findTrackFromManifest(manifest, chapterIdx);
-        if (mounted && track?.url) {
-          setSrc(track.url);
-          setAudioLang(manifest?.bookLanguageName || 'English');
-          setAttribution({
-            name: manifest?.source?.name || 'EllenWhiteAudio.org',
-            url: manifest?.source?.url || 'https://ellenwhiteaudio.org/great-controversy/',
-            licenseSummary: manifest?.source?.licenseSummary,
-          });
-          setLoadingAudio(false);
-          return;
-        }
-      }
-
-      // 1b) Try dynamic EllenWhiteAudio multilingual directory
+      // 2) Try dynamic EllenWhiteAudio multilingual directory
       const audioCode = AUDIO_LANGUAGE_CODES[lang];
       if (audioCode) {
         const tracks = await fetchDirectoryTracks(audioCode);
@@ -281,22 +264,15 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
         }
       }
 
-      // 2) Fallback to local audio index support
+      // 3) Fallback to local audio index support for selected language only
       let result = await fetchIndex(preferredLang);
-      let usedLang = preferredLang;
-
-      // If not found and not English, try English
-      if (!result && preferredLang.toLowerCase() !== 'english') {
-        result = await fetchIndex('English');
-        if (result) usedLang = 'English';
-      }
 
       if (!mounted) return;
 
       if (result) {
         const pad = String(chapterIdx + 1).padStart(2, '0');
         const match = result.list.find((f) => f.startsWith(`GC-${pad}-`) || f.startsWith(`GC-${pad}`));
-        setAudioLang(usedLang);
+        setAudioLang(preferredLang);
         const newSrc = match ? `${result.base}/${encodeURIComponent(match)}` : null;
         setSrc(newSrc);
       } else {
