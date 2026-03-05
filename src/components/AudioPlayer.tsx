@@ -50,6 +50,7 @@ type AudioSourceKind =
 const ENGLISH_FOLDER = 'The Great Controversy - Ellen G. White 2';
 const ENGLISH_MANIFEST_PATH = '/book-content/audio-manifests/gc-english.json';
 const MULTILANG_MANIFEST_PATH = '/book-content/audio-manifests/gc-multilang.json';
+const MULTILANG_EXTRA_MANIFEST_PATH = '/book-content/audio-manifests/gc-multilang-extra.json';
 
 const EWA_BASE = 'https://ellenwhiteaudio.org/audio';
 
@@ -67,9 +68,17 @@ const AUDIO_SOURCE_CANDIDATES: Record<string, AudioSourceCandidate> = {
     sourcePageUrl: 'https://ellenwhiteaudio.org/sp/el-conflicto-de-los-siglos-nueva-narracion/',
   },
   'Der grosse Kampf - Ellen G. White': { languageCodes: ['de'], bookCodes: ['gc', 'gk'] },
-  'Il gran conflitto - Ellen G. White': { languageCodes: ['it'], bookCodes: ['gc'] },
+  'Il gran conflitto - Ellen G. White': {
+    languageCodes: ['it'],
+    bookCodes: ['gc'],
+    sourcePageUrl: 'https://ellenwhiteaudio.org/it/il-gran-conflitto/',
+  },
   'MOD EN BEDRE FREMTID - Ellen G. White': { languageCodes: ['da'], bookCodes: ['gc', 'mbf'] },
-  'Mot historiens klimaks - Ellen G. White': { languageCodes: ['no', 'nb'], bookCodes: ['gc', 'mhk'] },
+  'Mot historiens klimaks - Ellen G. White': {
+    languageCodes: ['no', 'nb'],
+    bookCodes: ['gc', 'mhk'],
+    sourcePageUrl: 'https://ellenwhiteaudio.org/no/mot-historiens-klimaks-ai/',
+  },
   'O Grande Conflito - Ellen G. White': {
     languageCodes: ['pt'],
     bookCodes: ['gc'],
@@ -80,10 +89,18 @@ const AUDIO_SOURCE_CANDIDATES: Record<string, AudioSourceCandidate> = {
   'Tragedia veacurilor - Ellen G. White': { languageCodes: ['ro'], bookCodes: ['gc', 'tv'] },
   'VELIKA BORBA IZMEDU KRISTA I SOTONE - Ellen G. White': { languageCodes: ['hr'], bookCodes: ['gc', 'vb'] },
   'VIeLIKATA BORBA MIeZhDU KhRISTA i SATANA - Ellen G. White': { languageCodes: ['bg'], bookCodes: ['gc', 'bc'] },
-  'Velke drama veku - Ellen G. White': { languageCodes: ['sk'], bookCodes: ['gc', 'vdv', 'vsv'] },
+  'Velke drama veku - Ellen G. White': {
+    languageCodes: ['sk'],
+    bookCodes: ['gc', 'vdv', 'vsv'],
+    sourcePageUrl: 'https://ellenwhiteaudio.org/sk/velky-spor-vekov-ai/',
+  },
   'Velky spor vekov - Ellen G. White': { languageCodes: ['cs'], bookCodes: ['gc', 'vsv', 'vdv'] },
   "Vielika borot'ba - Ellen G. White": { languageCodes: ['uk'], bookCodes: ['gc', 'vb', 'вб'] },
-  "Vielikaia bor'ba - Ellen G. White": { languageCodes: ['ru'], bookCodes: ['gc', 'vb', 'вб'] },
+  "Vielikaia bor'ba - Ellen G. White": {
+    languageCodes: ['ru'],
+    bookCodes: ['gc', 'vb', 'вб'],
+    sourcePageUrl: 'https://ellenwhiteaudio.org/ru/%d0%b2%d0%b5%d0%bb%d0%b8%d0%ba%d0%b0%d1%8f-%d0%b1%d0%be%d1%80%d1%8c%d0%b1%d0%b0/',
+  },
   'Wielki boj - Ellen G. White': { languageCodes: ['pl'], bookCodes: ['gc', 'wb'] },
   "alSra` al`Zym - Ellen G. White": {
     languageCodes: ['ar'],
@@ -115,6 +132,11 @@ const AUDIO_SOURCE_CANDIDATES: Record<string, AudioSourceCandidate> = {
     sourcePageUrl: 'https://ellenwhiteaudio.org/fr/la-tragedie-des-siecles/',
   },
   'Beteja e Madhe - Ellen G. White': { languageCodes: ['sq'], bookCodes: ['gc', 'bz'] },
+  'Veliki boj med Kristusom in Satanom - Ellen G. White': {
+    languageCodes: ['sl'],
+    bookCodes: ['gc', 'vb'],
+    sourcePageUrl: 'https://ellenwhiteaudio.org/sl/veliki-boj-med-kristusom-in-satanom/',
+  },
 };
 
 type DirectoryTrack = {
@@ -247,9 +269,9 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
       }
     };
 
-    const fetchMultiLangManifest = async () => {
+    const fetchMultiLangManifest = async (manifestPath: string) => {
       try {
-        const r = await fetch(MULTILANG_MANIFEST_PATH);
+        const r = await fetch(manifestPath);
         if (!r.ok) return null;
         return (await r.json()) as MultiLangManifest;
       } catch {
@@ -393,8 +415,16 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
         const bookCodes = [...new Set(sourceCandidates.bookCodes.map((v) => v.trim().toLowerCase()).filter(Boolean))];
 
         // 2a) Deterministic local multilingual mapping (avoids runtime remote parsing/CORS fragility).
-        const multiLangManifest = await fetchMultiLangManifest();
-        const staticTrack = pickTrackFromMultiLangManifest(multiLangManifest, languageCodes, chapterIdx);
+        const [multiLangManifest, extraMultiLangManifest] = await Promise.all([
+          fetchMultiLangManifest(MULTILANG_MANIFEST_PATH),
+          fetchMultiLangManifest(MULTILANG_EXTRA_MANIFEST_PATH),
+        ]);
+        const mergedManifest = {
+          ...(multiLangManifest || {}),
+          ...(extraMultiLangManifest || {}),
+        } as MultiLangManifest;
+
+        const staticTrack = pickTrackFromMultiLangManifest(mergedManifest, languageCodes, chapterIdx);
         if (mounted && staticTrack?.url) {
           setSrc(staticTrack.url);
           setAudioLang(preferredLang);
