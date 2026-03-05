@@ -221,6 +221,22 @@ html,body,#root,.reader-root{height:100%;margin:0;padding:0;background:var(--rea
   background:rgba(100,110,255,0.08);
 }
 
+.reader-whatsapp-icon{
+  background:none;
+  border:0;
+  padding:6px;
+  border-radius:6px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  color:inherit;
+}
+.reader-whatsapp-icon:hover{
+  color:#25d366;
+  background:rgba(37,211,102,0.12);
+}
+
 
 .reader-more-icon{
   background:none;
@@ -557,10 +573,11 @@ span.dropcap {
   .reader-search-icon { order: 2; }
   .reader-lang-icon { order: 3; }
   .reader-share-icon { order: 4; }
+  .reader-whatsapp-icon { order: 5; }
   /* Appearance controls at the end */
-  .reader-text-size-controls { order: 5; }
-  .reader-darkmode-toggle { order: 6; }
-  .reader-width-control { order: 7; }
+  .reader-text-size-controls { order: 6; }
+  .reader-darkmode-toggle { order: 7; }
+  .reader-width-control { order: 8; }
 }
 
 /* RTL desktop layout */
@@ -575,9 +592,10 @@ span.dropcap {
   html[dir='rtl'] .reader-search-icon { order: 6; }
   html[dir='rtl'] .reader-lang-icon { order: 5; }
   html[dir='rtl'] .reader-share-icon { order: 4; }
-  html[dir='rtl'] .reader-text-size-controls { order: 3; }
-  html[dir='rtl'] .reader-darkmode-toggle { order: 2; }
-  html[dir='rtl'] .reader-width-control { order: 1; }
+  html[dir='rtl'] .reader-whatsapp-icon { order: 3; }
+  html[dir='rtl'] .reader-text-size-controls { order: 2; }
+  html[dir='rtl'] .reader-darkmode-toggle { order: 1; }
+  html[dir='rtl'] .reader-width-control { order: 0; }
 }
 .reader-wrapper,.reader-main{position:relative;z-index:1}
 
@@ -628,6 +646,7 @@ span.dropcap {
   /* On mobile, hide non-essential icons and use More menu */
   .reader-lang-icon { display:none !important; }
   .reader-share-icon { display:none !important; }
+  .reader-whatsapp-icon { display:none !important; }
   .reader-darkmode-toggle { display:none !important; }
   .reader-bookmark-btn { order: 1; }
   .reader-text-size-controls { order: 3; display:flex !important; align-items:center; gap:6px; }
@@ -1026,6 +1045,12 @@ span.dropcap {
   z-index: 10000;
   margin-top: 0;
   max-width: calc(100vw - 16px);
+}
+
+.reader-audio-section.is-hidden{
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .reader-audio-section:empty{

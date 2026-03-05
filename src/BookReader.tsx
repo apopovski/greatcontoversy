@@ -4071,6 +4071,7 @@ export default function BookReader() {
   const tableOfContentsLabel = contentsLabel;
   const noContentsAvailableLabel = lang === CHINESE_FOLDER ? '暂无目录' : 'No contents available';
   const contactWhatsAppLabel = CONTACT_WHATSAPP_LABELS[lang] || 'Contact on WhatsApp';
+  const contactWhatsAppWithNumberLabel = `${contactWhatsAppLabel}: +${CONTACT_WHATSAPP_NUMBER}`;
   const continueLabel = LANGUAGE_CONTINUE_LABELS[lang] || 'Continue';
   const hasLanguageAudio = AUDIO_AVAILABLE_LANGUAGE_FOLDERS.has(lang);
   const playChapterAudioLabel = 'Play chapter audio';
@@ -4305,6 +4306,15 @@ export default function BookReader() {
                 <MdShare size={22} />
               </button>
 
+              <button
+                className="reader-whatsapp-icon"
+                onClick={handleWhatsAppContact}
+                aria-label={contactWhatsAppWithNumberLabel}
+                title={contactWhatsAppWithNumberLabel}
+              >
+                <FaWhatsapp size={22} />
+              </button>
+
               {/* Mobile expand (More) menu */}
               <button
                 className="reader-more-icon"
@@ -4406,9 +4416,9 @@ export default function BookReader() {
             <FaXTwitter size={16} />
             <span>X (Twitter)</span>
           </button>
-          <button onClick={handleWhatsAppContact} aria-label={contactWhatsAppLabel}>
+          <button onClick={handleWhatsAppContact} aria-label={contactWhatsAppWithNumberLabel}>
             <FaWhatsapp size={18} />
-            <span>{contactWhatsAppLabel}</span>
+            <span>{contactWhatsAppWithNumberLabel}</span>
           </button>
           <button onClick={() => handleShareApp('email')} aria-label="Share via Email">
             <IoMdMail size={18} />
@@ -4487,9 +4497,9 @@ export default function BookReader() {
             <FaXTwitter size={16} />
             <span>X (Twitter)</span>
           </button>
-          <button onClick={handleWhatsAppContact} aria-label={contactWhatsAppLabel}>
+          <button onClick={handleWhatsAppContact} aria-label={contactWhatsAppWithNumberLabel}>
             <FaWhatsapp size={18} />
-            <span>{contactWhatsAppLabel}</span>
+            <span>{contactWhatsAppWithNumberLabel}</span>
           </button>
           <button onClick={() => handleShareApp('whatsapp')} aria-label="Share on WhatsApp">
             <FaWhatsapp size={18} />
@@ -4616,41 +4626,42 @@ export default function BookReader() {
         >
           <MdHeadphones size={16} />
         </button>
-      ) : (
-        <section
-          className="reader-audio-section"
-          aria-label="Chapter audio player"
-          style={{ width: isDesktop ? `${pageWidth}px` : 'calc(100vw - 16px)' }}
-        >
-          <AudioPlayer
-            key={`audio-${lang}`}
-            lang={lang}
-            chapterIdx={audioChapterIdx}
-            chapterTitle={audioChapterTitle}
-            onNextChapter={handleNextChapter}
-            onPrevChapter={handlePrevChapter}
-            canNextChapter={audioChapterIdx < toc.length - 1}
-            canPrevChapter={audioChapterIdx > 0}
-            minimized={FORCE_MINIMIZED_PLAYER ? true : audioMinimized}
-            autoPlayRequest={audioAutoPlayRequest}
-            onPlayingChange={setAudioPlaying}
-            continuePlay={audioContinuePlay}
-            onToggleContinuePlay={() => setAudioContinuePlay((v) => !v)}
-            onExpand={() => {
-              if (FORCE_MINIMIZED_PLAYER) return;
-              setAudioUserExpanded(true);
-              setAudioMinimized(false);
-            }}
-            onMinimize={() => {
-              if (FORCE_MINIMIZED_PLAYER) return;
-              setAudioUserExpanded(false);
-              setAudioMinimized(true);
-            }}
-            onHide={() => setAudioHidden(true)}
-            containerWidth={isDesktop ? pageWidth : null}
-          />
-        </section>
-      )}
+      ) : null}
+
+      <section
+        className={`reader-audio-section${audioHidden ? ' is-hidden' : ''}`}
+        aria-label="Chapter audio player"
+        aria-hidden={audioHidden}
+        style={{ width: isDesktop ? `${pageWidth}px` : 'calc(100vw - 16px)' }}
+      >
+        <AudioPlayer
+          key={`audio-${lang}`}
+          lang={lang}
+          chapterIdx={audioChapterIdx}
+          chapterTitle={audioChapterTitle}
+          onNextChapter={handleNextChapter}
+          onPrevChapter={handlePrevChapter}
+          canNextChapter={audioChapterIdx < toc.length - 1}
+          canPrevChapter={audioChapterIdx > 0}
+          minimized={FORCE_MINIMIZED_PLAYER ? true : audioMinimized}
+          autoPlayRequest={audioAutoPlayRequest}
+          onPlayingChange={setAudioPlaying}
+          continuePlay={audioContinuePlay}
+          onToggleContinuePlay={() => setAudioContinuePlay((v) => !v)}
+          onExpand={() => {
+            if (FORCE_MINIMIZED_PLAYER) return;
+            setAudioUserExpanded(true);
+            setAudioMinimized(false);
+          }}
+          onMinimize={() => {
+            if (FORCE_MINIMIZED_PLAYER) return;
+            setAudioUserExpanded(false);
+            setAudioMinimized(true);
+          }}
+          onHide={() => setAudioHidden(true)}
+          containerWidth={isDesktop ? pageWidth : null}
+        />
+      </section>
 
       {showSearch && (
         <div className="reader-search-modal" onClick={() => setShowSearch(false)}>
