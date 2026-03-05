@@ -770,7 +770,6 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
           ) : null}
         </div>
         <div className="audio-top-actions">
-          <div className="audio-times">{fmtTime(time)} / -{fmtTime(remainingTime)} left</div>
           {onMinimize && (
             <button className="audio-minimize-btn" onClick={onMinimize} aria-label="Minimize player" title="Minimize player">
               ─
@@ -799,10 +798,16 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 4l10 8-10 8V4z"/><path d="M19 5v14"/></svg>
         </button>
       </div>
-      <div className="audio-timeline" onClick={(e) => {
-        const el = e.currentTarget as HTMLElement; const rect = el.getBoundingClientRect(); const x = (e as React.MouseEvent).clientX - rect.left; const pct = x / rect.width; seekTo((audioRef.current?.duration || 0) * pct);
-      }}>
-        <div className="audio-progress" style={{ width: `${(duration ? (time / duration) : 0) * 100}%` }} />
+      <div className="audio-timeline-block">
+        <div className="audio-timeline" onClick={(e) => {
+          const el = e.currentTarget as HTMLElement; const rect = el.getBoundingClientRect(); const x = (e as React.MouseEvent).clientX - rect.left; const pct = x / rect.width; seekTo((audioRef.current?.duration || 0) * pct);
+        }}>
+          <div className="audio-progress" style={{ width: `${(duration ? (time / duration) : 0) * 100}%` }} />
+        </div>
+        <div className="audio-times audio-times-by-timeline">
+          <span>{fmtTime(time)}</span>
+          <span>-{fmtTime(remainingTime)} left</span>
+        </div>
       </div>
       <div className="audio-settings">
         <label className="audio-label">

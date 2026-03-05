@@ -182,6 +182,12 @@
 .audio-timeline:hover {
 	height: 8px;
 }
+
+.audio-timeline-block {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
 .audio-progress {
 	position: absolute;
 	left: 0;
@@ -221,6 +227,13 @@
 	font-variant-numeric: tabular-nums;
 	letter-spacing: 0.02em;
 	white-space: nowrap;
+}
+
+.audio-times-by-timeline {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
 }
 .audio-settings {
 	display: flex;

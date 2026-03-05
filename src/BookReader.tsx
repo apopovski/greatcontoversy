@@ -2311,12 +2311,14 @@ export default function BookReader() {
     if (audioChapterIdx < toc.length - 1) {
       const nextIdx = audioChapterIdx + 1;
       setAudioChapterIdx(nextIdx);
+      setAudioAutoPlayRequest((v) => v + 1);
     }
   };
   const handlePrevChapter = () => {
     if (audioChapterIdx > 0) {
       const prevIdx = audioChapterIdx - 1;
       setAudioChapterIdx(prevIdx);
+      setAudioAutoPlayRequest((v) => v + 1);
     }
   };
   const audioChapterTitle = toc[audioChapterIdx]?.title || '';
