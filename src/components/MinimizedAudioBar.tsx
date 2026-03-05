@@ -55,6 +55,8 @@ export default function MinimizedAudioBar({
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  const remaining = Math.max(0, duration - time);
+
   return (
     <div
       className="audio-minibar"
@@ -118,7 +120,7 @@ export default function MinimizedAudioBar({
       </div>
       <div className="audio-minibar-time-row" onClick={e => e.stopPropagation()}>
         <span className="audio-minibar-time">{fmtTime(time)}</span>
-        <span className="audio-minibar-time">{fmtTime(duration)}</span>
+        <span className="audio-minibar-time">-{fmtTime(remaining)} left</span>
       </div>
     </div>
   );

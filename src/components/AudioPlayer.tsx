@@ -708,6 +708,7 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
   }, [copiedSource]);
 
   const displayAudioLang = audioLang || (LANGUAGE_NAMES[lang] || lang);
+  const remainingTime = Math.max(0, duration - time);
   const sourceKindLabel = sourceKind
     ? sourceKind
       .split('-')
@@ -769,7 +770,7 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
           ) : null}
         </div>
         <div className="audio-top-actions">
-          <div className="audio-times">{fmtTime(time)} / {fmtTime(duration)}</div>
+          <div className="audio-times">{fmtTime(time)} / -{fmtTime(remainingTime)} left</div>
           {onMinimize && (
             <button className="audio-minimize-btn" onClick={onMinimize} aria-label="Minimize player" title="Minimize player">
               ─

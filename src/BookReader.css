@@ -1019,8 +1019,13 @@ span.dropcap {
 .reader-book-html .chapterhead .chapter-title-inline { font-weight: 700; }
 
 .reader-audio-section{
-  margin-top: 14px;
-  width: 100%;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  z-index: 10000;
+  margin-top: 0;
+  max-width: calc(100vw - 16px);
 }
 
 .reader-audio-section:empty{

@@ -4589,7 +4589,11 @@ export default function BookReader() {
         />
       )}
 
-      <section className="reader-audio-section" aria-label="Chapter audio player">
+      <section
+        className="reader-audio-section"
+        aria-label="Chapter audio player"
+        style={{ width: isDesktop ? `${pageWidth}px` : 'calc(100vw - 16px)' }}
+      >
         <AudioPlayer
           key={`audio-${lang}`}
           lang={lang}
@@ -4605,17 +4609,6 @@ export default function BookReader() {
           onExpand={() => {
             setAudioUserExpanded(true);
             setAudioMinimized(false);
-            const section = document.querySelector('.reader-audio-section');
-            if (section) {
-              try {
-                const header = document.querySelector('.reader-header-bar') as HTMLElement | null;
-                const headerOffset = (header?.offsetHeight || 56) + 8;
-                const top = window.scrollY + section.getBoundingClientRect().top - headerOffset;
-                window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
-              } catch {
-                section.scrollIntoView();
-              }
-            }
           }}
           onMinimize={() => {
             setAudioUserExpanded(false);
