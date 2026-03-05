@@ -109,7 +109,13 @@ const URDU_FOLDER = 'Urdu - Ellen G. White';
 const URDU_SOURCE_PATH = '/book-content/txt/GC-Urdu.txt';
 const FRENCH_FOLDER = 'French - Ellen G. White';
 const ALBANIAN_FOLDER = 'Beteja e Madhe - Ellen G. White';
-const CONTACT_WHATSAPP_NUMBER = '19562447002';
+const DEFAULT_CONTACT_WHATSAPP_NUMBER = '19562447002';
+const CONTACT_WHATSAPP_NUMBERS: Record<string, string> = {
+  'Der grosse Kampf - Ellen G. White': '4915753992703',
+};
+const CONTACT_WHATSAPP_DISPLAY_NUMBERS: Record<string, string> = {
+  'Der grosse Kampf - Ellen G. White': '+49 157 53992703',
+};
 const CONTACT_WHATSAPP_PREFILL = 'The Great Controversy — ';
 const DEVELOPER_LINK = 'https://github.com/apopovski';
 const DEVELOPER_BY_LABELS: Record<string, string> = {
@@ -861,6 +867,14 @@ function getDeveloperCreditText(folder: string) {
   const code = (LANGUAGE_ABBREV[folder] || 'en').toLowerCase();
   const prefix = DEVELOPER_BY_LABELS[code] || DEVELOPER_BY_LABELS.en;
   return `${prefix} ${DEVELOPER_NAME}`;
+}
+
+function getContactWhatsAppNumber(folder: string) {
+  return CONTACT_WHATSAPP_NUMBERS[folder] || DEFAULT_CONTACT_WHATSAPP_NUMBER;
+}
+
+function getContactWhatsAppDisplayNumber(folder: string) {
+  return CONTACT_WHATSAPP_DISPLAY_NUMBERS[folder] || `+${getContactWhatsAppNumber(folder)}`;
 }
 
 const COPYRIGHTS: Record<string, string> = {
@@ -3110,7 +3124,8 @@ export default function BookReader() {
 
   const handleWhatsAppContact = () => {
     const text = `${CONTACT_WHATSAPP_PREFILL}Hi, I would like to connect.`;
-    const url = `https://wa.me/${CONTACT_WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+    const whatsappNumber = getContactWhatsAppNumber(lang);
+    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(text)}`;
     window.open(url, '_blank', 'noopener,noreferrer');
     setShowMoreMenu(false);
   };
@@ -4112,7 +4127,7 @@ export default function BookReader() {
   const tableOfContentsLabel = contentsLabel;
   const noContentsAvailableLabel = lang === CHINESE_FOLDER ? '暂无目录' : 'No contents available';
   const contactWhatsAppLabel = CONTACT_WHATSAPP_LABELS[lang] || 'Contact on WhatsApp';
-  const contactWhatsAppWithNumberLabel = `${contactWhatsAppLabel}: +${CONTACT_WHATSAPP_NUMBER}`;
+  const contactWhatsAppWithNumberLabel = `${contactWhatsAppLabel}: ${getContactWhatsAppDisplayNumber(lang)}`;
   const continueLabel = LANGUAGE_CONTINUE_LABELS[lang] || 'Continue';
   const hasLanguageAudio = AUDIO_AVAILABLE_LANGUAGE_FOLDERS.has(lang);
   const playChapterAudioLabel = 'Play chapter audio';
