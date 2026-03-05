@@ -139,6 +139,8 @@ const AUDIO_SOURCE_CANDIDATES: Record<string, AudioSourceCandidate> = {
   },
 };
 
+export const AUDIO_AVAILABLE_LANGUAGE_FOLDERS = new Set<string>(Object.keys(AUDIO_SOURCE_CANDIDATES));
+
 type DirectoryTrack = {
   order: number;
   name: string;

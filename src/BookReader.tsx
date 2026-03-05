@@ -1,10 +1,10 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import './BookReader.css';
-import { MdMenu, MdTranslate, MdSearch, MdDarkMode, MdLightMode, MdContentCopy, MdShare, MdClose, MdMoreVert, MdBookmarkBorder, MdBookmark, MdDownload, MdCheckCircle, MdPrivacyTip } from 'react-icons/md';
+import { MdMenu, MdTranslate, MdSearch, MdDarkMode, MdLightMode, MdContentCopy, MdShare, MdClose, MdMoreVert, MdBookmarkBorder, MdBookmark, MdDownload, MdCheckCircle, MdPrivacyTip, MdHeadphones } from 'react-icons/md';
 import { FaFacebookF, FaXTwitter, FaWhatsapp } from 'react-icons/fa6';
 import { IoMdMail } from 'react-icons/io';
-import AudioPlayer from './components/AudioPlayer';
+import AudioPlayer, { AUDIO_AVAILABLE_LANGUAGE_FOLDERS } from './components/AudioPlayer';
 import { LANGUAGE_NAMES } from './utils/language';
 import { trackEvent, trackPageView, getAnalyticsConsentStatus, setAnalyticsConsent } from './utils/analytics';
 
@@ -4741,7 +4741,12 @@ export default function BookReader() {
                     setShowLangMenu(false);
                   }}
                 >
-                  {LANGUAGE_NAMES[f] || f}
+                  <span>{LANGUAGE_NAMES[f] || f}</span>
+                  {AUDIO_AVAILABLE_LANGUAGE_FOLDERS.has(f) ? (
+                    <span className="reader-lang-audio-icon" aria-label="Audio available" title="Audio available">
+                      <MdHeadphones size={16} />
+                    </span>
+                  ) : null}
                 </button>
               </li>
             ))}
