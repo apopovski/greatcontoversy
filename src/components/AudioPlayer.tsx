@@ -40,6 +40,13 @@ type Attribution = {
   licenseSummary?: string;
 };
 
+type AudioSourceKind =
+  | 'english-manifest'
+  | 'multilang-manifest'
+  | 'remote-directory'
+  | 'source-page'
+  | 'local-index';
+
 const ENGLISH_FOLDER = 'The Great Controversy - Ellen G. White 2';
 const ENGLISH_MANIFEST_PATH = '/book-content/audio-manifests/gc-english.json';
 const MULTILANG_MANIFEST_PATH = '/book-content/audio-manifests/gc-multilang.json';
@@ -200,6 +207,7 @@ function fmtTime(s: number) {
 
 export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChapter, onPrevChapter, minimized, onExpand, onMinimize, containerWidth }: Props) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const isDev = import.meta.env.DEV;
   const [src, setSrc] = useState<string | null>(null);
   const [playing, setPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
@@ -209,6 +217,7 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
   const [audioLang, setAudioLang] = useState<string | null>(null);
   const [loadingAudio, setLoadingAudio] = useState(true);
   const [attribution, setAttribution] = useState<Attribution | null>(null);
+  const [sourceKind, setSourceKind] = useState<AudioSourceKind | null>(null);
 
   // Load audio from manifest first, then fallback to local index.json if available
   useEffect(() => {
@@ -348,6 +357,7 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
       setSrc(null);
       setAudioLang(null);
       setAttribution(null);
+      setSourceKind(null);
 
       // Try to get the language name from LANGUAGE_NAMES mapping
       const mappedLang = LANGUAGE_NAMES[lang];
@@ -364,6 +374,7 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
         if (mounted && track?.url) {
           setSrc(track.url);
           setAudioLang(manifest?.bookLanguageName || preferredLang);
+          setSourceKind('english-manifest');
           setAttribution({
             name: manifest?.source?.name || 'EllenWhiteAudio.org',
             url: manifest?.source?.url || 'https://ellenwhiteaudio.org/great-controversy/',
@@ -386,6 +397,7 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
         if (mounted && staticTrack?.url) {
           setSrc(staticTrack.url);
           setAudioLang(preferredLang);
+          setSourceKind('multilang-manifest');
           setAttribution({
             name: 'EllenWhiteAudio.org',
             url: sourceCandidates.sourcePageUrl || `https://ellenwhiteaudio.org/${languageCodes[0] === 'en' ? '' : languageCodes[0]}`,
@@ -403,6 +415,7 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
             if (mounted && chosen) {
               setSrc(chosen.url);
               setAudioLang(preferredLang);
+              setSourceKind('remote-directory');
               setAttribution({
                 name: 'EllenWhiteAudio.org',
                 url: sourceCandidates.sourcePageUrl || `https://ellenwhiteaudio.org/${languageCode === 'en' ? '' : languageCode}`,
@@ -421,6 +434,7 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
           if (mounted && chosen) {
             setSrc(chosen.url);
             setAudioLang(preferredLang);
+            setSourceKind('source-page');
             setAttribution({
               name: 'EllenWhiteAudio.org',
               url: sourceCandidates.sourcePageUrl,
@@ -443,9 +457,11 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
         setAudioLang(preferredLang);
         const newSrc = match ? `${result.base}/${encodeURIComponent(match)}` : null;
         setSrc(newSrc);
+        setSourceKind(newSrc ? 'local-index' : null);
       } else {
         setAudioLang(null);
         setSrc(null);
+        setSourceKind(null);
       }
 
       setLoadingAudio(false);
@@ -562,6 +578,12 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
   };
 
   const displayAudioLang = audioLang || (LANGUAGE_NAMES[lang] || lang);
+  const sourceKindLabel = sourceKind
+    ? sourceKind
+      .split('-')
+      .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+      .join(' · ')
+    : null;
 
   if (loadingAudio) {
     return (
@@ -594,6 +616,11 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
         <div className="audio-chapter">
           <span className="audio-chapter-title">{chapterTitle || 'Untitled Chapter'}</span>
           <span className="audio-chapter-lang">{displayAudioLang}</span>
+          {isDev && sourceKindLabel ? (
+            <span className="audio-source-badge" title={`Audio source resolver: ${sourceKind}`}>
+              Source: {sourceKindLabel}
+            </span>
+          ) : null}
         </div>
         <div className="audio-top-actions">
           <div className="audio-times">{fmtTime(time)} / {fmtTime(duration)}</div>
