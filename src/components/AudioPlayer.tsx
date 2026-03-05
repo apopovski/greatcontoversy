@@ -218,6 +218,7 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
   const [loadingAudio, setLoadingAudio] = useState(true);
   const [attribution, setAttribution] = useState<Attribution | null>(null);
   const [sourceKind, setSourceKind] = useState<AudioSourceKind | null>(null);
+  const [copiedSource, setCopiedSource] = useState(false);
 
   // Load audio from manifest first, then fallback to local index.json if available
   useEffect(() => {
@@ -577,6 +578,23 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
     a.currentTime = p;
   };
 
+  const copyCurrentSourceUrl = async () => {
+    if (!src) return;
+    try {
+      if (!navigator?.clipboard?.writeText) return;
+      await navigator.clipboard.writeText(src);
+      setCopiedSource(true);
+    } catch {
+      setCopiedSource(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!copiedSource) return;
+    const timer = window.setTimeout(() => setCopiedSource(false), 1400);
+    return () => window.clearTimeout(timer);
+  }, [copiedSource]);
+
   const displayAudioLang = audioLang || (LANGUAGE_NAMES[lang] || lang);
   const sourceKindLabel = sourceKind
     ? sourceKind
@@ -617,9 +635,19 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
           <span className="audio-chapter-title">{chapterTitle || 'Untitled Chapter'}</span>
           <span className="audio-chapter-lang">{displayAudioLang}</span>
           {isDev && sourceKindLabel ? (
-            <span className="audio-source-badge" title={`Audio source resolver: ${sourceKind}`}>
-              Source: {sourceKindLabel}
-            </span>
+            <div className="audio-dev-row">
+              <span className="audio-source-badge" title={`Audio source resolver: ${sourceKind}`}>
+                Source: {sourceKindLabel}
+              </span>
+              <button
+                type="button"
+                className="audio-source-copy-btn"
+                onClick={copyCurrentSourceUrl}
+                title="Copy resolved audio URL"
+              >
+                {copiedSource ? 'Copied' : 'Copy URL'}
+              </button>
+            </div>
           ) : null}
         </div>
         <div className="audio-top-actions">
