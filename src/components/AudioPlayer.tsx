@@ -42,6 +42,7 @@ type Attribution = {
 
 const ENGLISH_FOLDER = 'The Great Controversy - Ellen G. White 2';
 const ENGLISH_MANIFEST_PATH = '/book-content/audio-manifests/gc-english.json';
+const MULTILANG_MANIFEST_PATH = '/book-content/audio-manifests/gc-multilang.json';
 
 const EWA_BASE = 'https://ellenwhiteaudio.org/audio';
 
@@ -115,6 +116,8 @@ type DirectoryTrack = {
   url: string;
 };
 
+type MultiLangManifest = Record<string, AudioManifestTrack[]>;
+
 function decodeLoose(v: string) {
   try {
     return decodeURIComponent(v);
@@ -150,6 +153,39 @@ function pickDirectoryTrackForChapter(tracks: DirectoryTrack[], chapterIndex: nu
 
   if (chapterIndex >= 0 && chapterIndex < sorted.length) {
     return sorted[chapterIndex];
+  }
+
+  return null;
+}
+
+function pickTrackFromMultiLangManifest(
+  manifest: MultiLangManifest | null,
+  languageCodes: string[],
+  chapterIndex: number,
+) {
+  if (!manifest) return null;
+
+  for (const code of languageCodes) {
+    const codeTracks = manifest[code];
+    if (!codeTracks?.length) continue;
+
+    const exact = codeTracks.find((t) => t.chapterIdx === chapterIndex);
+    if (exact?.url) return exact;
+
+    const asDirectoryTracks: DirectoryTrack[] = codeTracks.map((t) => ({
+      order: t.chapterIdx,
+      name: t.code || t.title || String(t.chapterIdx),
+      url: t.url,
+    }));
+
+    const picked = pickDirectoryTrackForChapter(asDirectoryTracks, chapterIndex);
+    if (picked?.url) {
+      return {
+        chapterIdx: picked.order,
+        title: picked.name,
+        url: picked.url,
+      } satisfies AudioManifestTrack;
+    }
   }
 
   return null;
@@ -196,6 +232,16 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
         const r = await fetch(manifestPath);
         if (!r.ok) return null;
         return (await r.json()) as AudioManifest;
+      } catch {
+        return null;
+      }
+    };
+
+    const fetchMultiLangManifest = async () => {
+      try {
+        const r = await fetch(MULTILANG_MANIFEST_PATH);
+        if (!r.ok) return null;
+        return (await r.json()) as MultiLangManifest;
       } catch {
         return null;
       }
@@ -334,6 +380,22 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
         const languageCodes = [...new Set(sourceCandidates.languageCodes.map((v) => v.trim().toLowerCase()).filter(Boolean))];
         const bookCodes = [...new Set(sourceCandidates.bookCodes.map((v) => v.trim().toLowerCase()).filter(Boolean))];
 
+        // 2a) Deterministic local multilingual mapping (avoids runtime remote parsing/CORS fragility).
+        const multiLangManifest = await fetchMultiLangManifest();
+        const staticTrack = pickTrackFromMultiLangManifest(multiLangManifest, languageCodes, chapterIdx);
+        if (mounted && staticTrack?.url) {
+          setSrc(staticTrack.url);
+          setAudioLang(preferredLang);
+          setAttribution({
+            name: 'EllenWhiteAudio.org',
+            url: sourceCandidates.sourcePageUrl || `https://ellenwhiteaudio.org/${languageCodes[0] === 'en' ? '' : languageCodes[0]}`,
+            licenseSummary: 'Used with attribution for non-commercial educational and ministry use.',
+          });
+          setLoadingAudio(false);
+          return;
+        }
+
+        // 2b) Runtime directory probing fallback.
         for (const languageCode of languageCodes) {
           for (const bookCode of bookCodes) {
             const tracks = await fetchDirectoryTracks(languageCode, bookCode);
@@ -352,7 +414,7 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
           }
         }
 
-        // 2b) Fallback: parse direct MP3 links from the canonical language book page.
+        // 2c) Fallback: parse direct MP3 links from the canonical language book page.
         if (sourceCandidates.sourcePageUrl) {
           const pageTracks = await fetchBookPageTracks(sourceCandidates.sourcePageUrl);
           const chosen = pickDirectoryTrackForChapter(pageTracks || [], chapterIdx);
