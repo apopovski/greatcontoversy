@@ -1,7 +1,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import './BookReader.css';
-import { MdMenu, MdTranslate, MdSearch, MdDarkMode, MdLightMode, MdContentCopy, MdShare, MdClose, MdMoreVert, MdBookmarkBorder, MdBookmark, MdDownload, MdCheckCircle, MdPrivacyTip, MdHeadphones } from 'react-icons/md';
+import { MdMenu, MdTranslate, MdSearch, MdDarkMode, MdLightMode, MdContentCopy, MdShare, MdClose, MdMoreVert, MdBookmarkBorder, MdBookmark, MdDownload, MdCheckCircle, MdPrivacyTip, MdHeadphones, MdPlayArrow } from 'react-icons/md';
 import { FaFacebookF, FaXTwitter, FaWhatsapp } from 'react-icons/fa6';
 import { IoMdMail } from 'react-icons/io';
 import AudioPlayer, { AUDIO_AVAILABLE_LANGUAGE_FOLDERS } from './components/AudioPlayer';
@@ -4104,6 +4104,8 @@ export default function BookReader() {
   const noContentsAvailableLabel = lang === CHINESE_FOLDER ? '暂无目录' : 'No contents available';
   const contactWhatsAppLabel = CONTACT_WHATSAPP_LABELS[lang] || 'Contact on WhatsApp';
   const continueLabel = LANGUAGE_CONTINUE_LABELS[lang] || 'Continue';
+  const hasLanguageAudio = AUDIO_AVAILABLE_LANGUAGE_FOLDERS.has(lang);
+  const playChapterAudioLabel = 'Play chapter audio';
   const isRtl = (lang || '').toLowerCase().includes('alsra') || lang === FARSI_FOLDER || lang === URDU_FOLDER;
 
   const languageMenuFolders = useMemo(() => {
@@ -4134,6 +4136,30 @@ export default function BookReader() {
     bookmark.lang === lang &&
     bookmark.chapterIdx === chapterIdx;
   const copyToastLabel = COPY_TOAST_LABELS[(LANGUAGE_ABBREV[lang] || 'en').toLowerCase()] || COPY_TOAST_LABELS.en;
+
+  const scrollToAudioSection = () => {
+    const section = document.querySelector('.reader-audio-section');
+    if (!section) return;
+    try {
+      const header = document.querySelector('.reader-header-bar') as HTMLElement | null;
+      const headerOffset = (header?.offsetHeight || 56) + 8;
+      const top = window.scrollY + section.getBoundingClientRect().top - headerOffset;
+      window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+    } catch {
+      section.scrollIntoView();
+    }
+  };
+
+  const openChapterAudioFromToc = (idx: number, closeOpeningToc: boolean) => {
+    setChapterIdx(idx);
+    setAudioUserExpanded(true);
+    setAudioMinimized(false);
+    setShowChaptersMenu(false);
+    if (closeOpeningToc) setShowOpeningToc(false);
+    window.setTimeout(() => {
+      scrollToAudioSection();
+    }, closeOpeningToc ? 120 : 40);
+  };
 
   const handleBookmark = () => {
     if (showOpeningToc && bookmark) {
@@ -4548,18 +4574,32 @@ export default function BookReader() {
             {toc.map((t, i) => {
               const chapterNum = getChapterNumber(t.title);
               const titleOnly = chapterNum ? stripChapterPrefix(t.title) : t.title;
+              const chapterLabel = LANGUAGE_CHAPTER_LABELS[lang] || 'Chapter';
               return (
                 <li key={t.href}>
-                  <button
-                    className={i === chapterIdx ? 'active' : ''}
-                    onClick={() => {
-                      setChapterIdx(i);
-                      setShowChaptersMenu(false);
-                    }}
-                  >
-                    {chapterNum && <span className="reader-toc-num">{(LANGUAGE_CHAPTER_LABELS[lang] || 'Chapter')} {chapterNum}</span>}
-                    <span className={`reader-toc-title${chapterNum ? '' : ' full-title'}`}>{titleOnly}</span>
-                  </button>
+                  <div className="reader-toc-row">
+                    <button
+                      className={`reader-toc-item-btn ${i === chapterIdx ? 'active' : ''}`}
+                      onClick={() => {
+                        setChapterIdx(i);
+                        setShowChaptersMenu(false);
+                      }}
+                    >
+                      {chapterNum && <span className="reader-toc-num">{chapterLabel} {chapterNum}</span>}
+                      <span className={`reader-toc-title${chapterNum ? '' : ' full-title'}`}>{titleOnly}</span>
+                    </button>
+                    {hasLanguageAudio ? (
+                      <button
+                        type="button"
+                        className="reader-toc-audio-btn"
+                        aria-label={playChapterAudioLabel}
+                        title={playChapterAudioLabel}
+                        onClick={() => openChapterAudioFromToc(i, false)}
+                      >
+                        <MdPlayArrow size={16} />
+                      </button>
+                    ) : null}
+                  </div>
                 </li>
               );
             })}
@@ -4605,21 +4645,34 @@ export default function BookReader() {
                       const chapterLabel = LANGUAGE_CHAPTER_LABELS[lang] || 'Chapter';
                       return (
                         <li key={t.href}>
-                          <button
-                            className={i === chapterIdx ? 'active' : ''}
-                            onClick={() => {
-                              setChapterIdx(i);
-                              setShowOpeningToc(false);
-                              try {
-                                window.scrollTo({ top: 0, behavior: 'smooth' });
-                              } catch {
-                                window.scrollTo(0, 0);
-                              }
-                            }}
-                          >
-                            {chapterNum && <span className="reader-toc-num">{chapterLabel} {chapterNum}</span>}
-                            <span className={`reader-toc-title${chapterNum ? '' : ' full-title'}`}>{titleOnly}</span>
-                          </button>
+                          <div className="reader-toc-row">
+                            <button
+                              className={`reader-toc-item-btn ${i === chapterIdx ? 'active' : ''}`}
+                              onClick={() => {
+                                setChapterIdx(i);
+                                setShowOpeningToc(false);
+                                try {
+                                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                                } catch {
+                                  window.scrollTo(0, 0);
+                                }
+                              }}
+                            >
+                              {chapterNum && <span className="reader-toc-num">{chapterLabel} {chapterNum}</span>}
+                              <span className={`reader-toc-title${chapterNum ? '' : ' full-title'}`}>{titleOnly}</span>
+                            </button>
+                            {hasLanguageAudio ? (
+                              <button
+                                type="button"
+                                className="reader-toc-audio-btn"
+                                aria-label={playChapterAudioLabel}
+                                title={playChapterAudioLabel}
+                                onClick={() => openChapterAudioFromToc(i, true)}
+                              >
+                                <MdPlayArrow size={16} />
+                              </button>
+                            ) : null}
+                          </div>
                         </li>
                       );
                     })}

@@ -408,19 +408,23 @@ html[data-theme='dark'] .reader-timeline-range{
 .reader-modal-header{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .reader-toc-list{list-style:none;margin:8px 0 0;padding:0}
 .reader-toc-list li{margin:0}
+.reader-toc-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:stretch;border-bottom:1px solid var(--reader-border)}
 /* Subtle divider under each chapter for improved visual separation */
-.reader-toc-list button{width:100%;text-align:left;padding:10px 8px;border:none;background:none;border-radius:6px;cursor:pointer;font-size:1.05rem;line-height:1.18;display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:start;border-bottom:1px solid var(--reader-border);color:inherit}
-.reader-toc-list li:last-child .reader-toc-num + .reader-toc-title, .reader-toc-list li:last-child button{border-bottom:0}
+.reader-toc-item-btn{width:100%;text-align:left;padding:10px 8px;border:none;background:none;border-radius:6px;cursor:pointer;font-size:1.05rem;line-height:1.18;display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:start;color:inherit}
+.reader-toc-list li:last-child .reader-toc-row{border-bottom:0}
 .reader-toc-list button .reader-toc-num{opacity:0.85;white-space:nowrap;font-weight:600;color:var(--reader-modal-fg);grid-column:1}
 .reader-toc-list button .reader-toc-title{display:block;grid-column:2;word-wrap:break-word;overflow-wrap:anywhere}
+.reader-toc-audio-btn{border:0;background:rgba(100,110,255,0.08);color:var(--reader-accent);border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;align-self:center;margin-right:2px}
+.reader-toc-audio-btn:hover{background:rgba(100,110,255,0.16)}
+.reader-toc-audio-btn:focus-visible{outline:2px solid var(--reader-accent);outline-offset:2px}
 
 /* Prevent horizontal scrolling in the anchored chapters/contents panel and
   ensure long titles wrap cleanly. The opening TOC already has similar
   rules; apply them here too for the burger/chapters panel. */
 .reader-chapters-panel, .reader-chapters-panel .reader-toc-list, .reader-toc-list { overflow-x: hidden; }
-.reader-toc-list button{white-space:normal;overflow-wrap:anywhere;word-break:break-word}
-.reader-toc-list button .full-title{grid-column:1/-1}
-.reader-toc-list button.active{background:rgba(100,110,255,0.08);font-weight:700}
+.reader-toc-item-btn{white-space:normal;overflow-wrap:anywhere;word-break:break-word}
+.reader-toc-item-btn .full-title{grid-column:1/-1}
+.reader-toc-item-btn.active{background:rgba(100,110,255,0.08);font-weight:700}
 
 /* Force white text for all book/TOC text in dark mode (handles language/source-specific inline styles) */
 html[data-theme='dark'] .reader-book-html,
