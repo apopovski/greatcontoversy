@@ -106,10 +106,12 @@ const BENGALI_SOURCE_PATH = '/book-content/txt/GC-Bengali.txt';
 const INDONESIAN_FOLDER = 'Indonesian - Ellen G. White';
 const INDONESIAN_SOURCE_PATH = '/book-content/txt/GC-Indonesian.txt';
 const MALAY_FOLDER = 'Kontroversi Besar - Ellen G. White';
+const MALAY_SOURCE_PATH = '/book-content/txt/GC-Indonesian.txt';
 const URDU_FOLDER = 'Urdu - Ellen G. White';
 const URDU_SOURCE_PATH = '/book-content/txt/GC-Urdu.txt';
 const FRENCH_FOLDER = 'French - Ellen G. White';
 const ALBANIAN_FOLDER = 'Beteja e Madhe - Ellen G. White';
+const ALBANIAN_SOURCE_PATH = '/book-content/txt/GC-Albanian.txt';
 const DEFAULT_CONTACT_WHATSAPP_NUMBER = '19562447002';
 const CONTACT_WHATSAPP_NUMBERS: Record<string, string> = {
   'Der grosse Kampf - Ellen G. White': '4915753992703',
@@ -1416,66 +1418,7 @@ function escapeHtml(input: string) {
     .replace(/'/g, '&#39;');
 }
 
-const MALAY_EGW_CHAPTER_LINKS: TocEntry[] = [
-  { title: 'Kata Pengantar', href: 'https://text.egwwritings.org/read/13855.12' },
-  { title: 'Bab 1 - Jatuhnya Syaitan', href: 'https://text.egwwritings.org/read/13855.30' },
-  { title: 'Bab 2 - Jatuhnya Manusia', href: 'https://text.egwwritings.org/read/13855.39' },
-  { title: 'Bab 3 - Rancangan Penyelamatan', href: 'https://text.egwwritings.org/read/13855.47' },
-  { title: 'Bab 4 - Kedatangan Pertama Kristus', href: 'https://text.egwwritings.org/read/13855.62' },
-  { title: 'Bab 5 - Pelayanan Kristus', href: 'https://text.egwwritings.org/read/13855.83' },
-  { title: 'Bab 6 - Perubahan Wajah', href: 'https://text.egwwritings.org/read/13855.97' },
-  { title: 'Bab 7 - Pengkhianatan Terhadap Kristus', href: 'https://text.egwwritings.org/read/13855.110' },
-  { title: 'Bab 8 - Perbicaraan Terhadap Kristus', href: 'https://text.egwwritings.org/read/13855.122' },
-  { title: 'Bab 9 - Penyaliban Kristus', href: 'https://text.egwwritings.org/read/13855.146' },
-  { title: 'Bab 10 - Kebangkitan Kristus', href: 'https://text.egwwritings.org/read/13855.163' },
-  { title: 'Bab 11 - Kenaikan Kristus', href: 'https://text.egwwritings.org/read/13855.192' },
-  { title: 'Bab 12 - Murid-Murid Kristus', href: 'https://text.egwwritings.org/read/13855.198' },
-  { title: 'Bab 13 - Kematian Stefanus', href: 'https://text.egwwritings.org/read/13855.218' },
-  { title: 'Bab 14 - Saulus Menjadi Kristian', href: 'https://text.egwwritings.org/read/13855.227' },
-  { title: 'Bab 15 - Orang-orang Yahudi Hendak Membunuh Paulus', href: 'https://text.egwwritings.org/read/13855.233' },
-  { title: 'Bab 16 - Paulus Melawat Yerusalem', href: 'https://text.egwwritings.org/read/13855.245' },
-  { title: 'Bab 17 - Kemurtadan Besar', href: 'https://text.egwwritings.org/read/13855.257' },
-  { title: 'Bab 18 - Misteri Ketidakadilan', href: 'https://text.egwwritings.org/read/13855.266' },
-  { title: 'Bab 19 - Kematian, Bukan Hidup Kekal Dalam Kesengsaraan', href: 'https://text.egwwritings.org/read/13855.281' },
-  { title: 'Bab 20 - Reformasi', href: 'https://text.egwwritings.org/read/13855.298' },
-  { title: 'Bab 21 - Gereja dan Dunia Bersatu', href: 'https://text.egwwritings.org/read/13855.309' },
-  { title: 'Bab 22 - William Miller', href: 'https://text.egwwritings.org/read/13855.318' },
-  { title: 'Bab 23 - Perutusan Malaikat Pertama', href: 'https://text.egwwritings.org/read/13855.329' },
-  { title: 'Bab 24 - Perutusan Malaikat Kedua', href: 'https://text.egwwritings.org/read/13855.346' },
-  { title: 'Bab 25 - Pergerakan Advent Diilustrasikan', href: 'https://text.egwwritings.org/read/13855.357' },
-  { title: 'Bab 26 - Satu lagi Ilustrasi', href: 'https://text.egwwritings.org/read/13855.373' },
-  { title: 'Bab 27 - Sanktuari', href: 'https://text.egwwritings.org/read/13855.389' },
-  { title: 'Bab 28 - Perutusan Malaikat Ke Tiga', href: 'https://text.egwwritings.org/read/13855.398' },
-  { title: 'Bab 29 - Pelantar Kukuh', href: 'https://text.egwwritings.org/read/13855.410' },
-  { title: 'Bab 30 - Spiritualisme', href: 'https://text.egwwritings.org/read/13855.420' },
-  { title: 'Bab 31 - Tamak Haloba', href: 'https://text.egwwritings.org/read/13855.438' },
-  { title: 'Bab 32 - Penggoncangan', href: 'https://text.egwwritings.org/read/13855.447' },
-  { title: 'Bab 33 - Dosa-Dosa Babilon', href: 'https://text.egwwritings.org/read/13855.463' },
-  { title: 'Bab 34 - Seruan Lantang', href: 'https://text.egwwritings.org/read/13855.473' },
-  { title: 'Bab 35 - Perutusan Ketiga Ditutup', href: 'https://text.egwwritings.org/read/13855.482' },
-  { title: 'Bab 36 - Masa Kesusahan Yakub', href: 'https://text.egwwritings.org/read/13855.494' },
-  { title: 'Bab 37 - Pembebasan Orang-Orang Salih', href: 'https://text.egwwritings.org/read/13855.503' },
-  { title: 'Bab 38 - Upah Orang-orang Salih', href: 'https://text.egwwritings.org/read/13855.515' },
-  { title: 'Bab 39 - Bumi Dikosongkan', href: 'https://text.egwwritings.org/read/13855.520' },
-  { title: 'Bab 40 - Kebangkitan Kedua', href: 'https://text.egwwritings.org/read/13855.530' },
-  { title: 'Bab 41 - Kematian Kedua', href: 'https://text.egwwritings.org/read/13855.539' },
-];
-
-function buildExternalReadChapterHtml(title: string, href: string, cta: string) {
-  return `<div><h2 class="chapterhead">${escapeHtml(title)}</h2><p><a href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(cta)}</a></p></div>`;
-}
-
-function buildMalayBookFromExternalLinks(): { toc: TocEntry[]; chapterIds: string[]; chapterHtml: string[] } {
-  const chapterIds = MALAY_EGW_CHAPTER_LINKS.map((_, idx) => `ms-ch-${idx + 1}`);
-  const chapterHtml = MALAY_EGW_CHAPTER_LINKS.map((entry, idx) =>
-    `<div id="${chapterIds[idx]}">${buildExternalReadChapterHtml(entry.title, entry.href, 'Baca bab ini di EGW Writings')}</div>`
-  );
-  return {
-    toc: MALAY_EGW_CHAPTER_LINKS,
-    chapterIds,
-    chapterHtml,
-  };
-}
+const EXTERNAL_HYDRATION_LANGS = new Set<string>();
 
 function parseAmharicBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; chapterHtml: string[] } {
   const lines = (raw || '').replace(/\r\n?/g, '\n').split('\n');
@@ -2375,6 +2318,7 @@ export default function BookReader() {
   const [chapterIdx, setChapterIdx] = useState(0);
   const [audioChapterIdx, setAudioChapterIdx] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [externalChapterHydrating, setExternalChapterHydrating] = useState(false);
   const [, setChapterCacheVersion] = useState(0);
   const [pageWidth, setPageWidth] = useState(() => {
     const saved = localStorage.getItem('reader-page-width');
@@ -3278,37 +3222,7 @@ export default function BookReader() {
       throw new Error('Not found');
     };
 
-    if (lang === MALAY_FOLDER) {
-      const parsed = buildMalayBookFromExternalLinks();
-      setToc(parsed.toc);
-      setChapterIds(parsed.chapterIds);
-      setBookDoc(null);
-
-      chapterCache.current.clear();
-      plainTextCache.current.clear();
-      parsed.chapterHtml.forEach((html, i) => {
-        chapterCache.current.set(i, html);
-        plainTextCache.current.set(i, html.replace(/<[^>]+>/g, ' '));
-      });
-
-      const desiredNumber = pendingChapterNumberRef.current;
-      const desiredIdx = pendingChapterIdxRef.current;
-      if (typeof desiredNumber === 'number') {
-        const idxFromNum = Math.max(0, Math.min(parsed.chapterIds.length - 1, desiredNumber - 1));
-        setChapterIdx(idxFromNum);
-      } else if (typeof desiredIdx === 'number' && desiredIdx >= 0 && desiredIdx < parsed.chapterIds.length) {
-        setChapterIdx(desiredIdx);
-      } else {
-        setChapterIdx(0);
-      }
-
-      pendingChapterIdxRef.current = null;
-      pendingChapterNumberRef.current = null;
-      setLoading(false);
-      return;
-    }
-
-    if (lang === AMHARIC_FOLDER || lang === CHINESE_FOLDER || lang === KOREAN_FOLDER || lang === JAPANESE_FOLDER || lang === SERBIAN_FOLDER || lang === FARSI_FOLDER || lang === AFRIKAANS_FOLDER || lang === HINDI_FOLDER || lang === BENGALI_FOLDER || lang === INDONESIAN_FOLDER || lang === URDU_FOLDER) {
+    if (lang === AMHARIC_FOLDER || lang === CHINESE_FOLDER || lang === KOREAN_FOLDER || lang === JAPANESE_FOLDER || lang === SERBIAN_FOLDER || lang === FARSI_FOLDER || lang === AFRIKAANS_FOLDER || lang === HINDI_FOLDER || lang === BENGALI_FOLDER || lang === INDONESIAN_FOLDER || lang === MALAY_FOLDER || lang === URDU_FOLDER || lang === ALBANIAN_FOLDER) {
       const sourcePath =
         lang === AMHARIC_FOLDER
           ? AMHARIC_SOURCE_PATH
@@ -3330,7 +3244,11 @@ export default function BookReader() {
                       ? BENGALI_SOURCE_PATH
                       : lang === INDONESIAN_FOLDER
                         ? INDONESIAN_SOURCE_PATH
-                        : URDU_SOURCE_PATH;
+                        : lang === MALAY_FOLDER
+                          ? MALAY_SOURCE_PATH
+                        : lang === URDU_FOLDER
+                          ? URDU_SOURCE_PATH
+                          : ALBANIAN_SOURCE_PATH;
       fetch(sourcePath)
         .then((r) => {
           if (!r.ok) throw new Error('Source file missing');
@@ -3358,7 +3276,11 @@ export default function BookReader() {
                           ? parseBengaliBook(raw)
                           : lang === INDONESIAN_FOLDER
                             ? parseIndonesianBook(raw)
-                            : parseUrduBook(raw);
+                            : lang === MALAY_FOLDER
+                              ? parseIndonesianBook(raw)
+                            : lang === URDU_FOLDER
+                              ? parseUrduBook(raw)
+                              : parseIndonesianBook(raw);
           setToc(parsed.toc);
           setChapterIds(parsed.chapterIds);
           setBookDoc(null);
@@ -3760,7 +3682,7 @@ export default function BookReader() {
   // Hydrate link-only chapters (Albanian + Malay EGW links) so users can read full text
   // directly inside this app instead of being sent off-site.
   useEffect(() => {
-    const supportsExternalHydration = lang === ALBANIAN_FOLDER || lang === MALAY_FOLDER;
+    const supportsExternalHydration = EXTERNAL_HYDRATION_LANGS.has(lang);
     if (!supportsExternalHydration || !chapterIds.length) return;
     if (chapterIdx < 0 || chapterIdx >= chapterIds.length) return;
 
@@ -3769,11 +3691,18 @@ export default function BookReader() {
 
     const currentCached = chapterCache.current.get(chapterIdx) || (bookDoc ? extractChapterHtml(bookDoc, id, toc) : '');
     const external = extractExternalReadLinkFromChapterHtml(currentCached);
-    if (!external) return;
-    if (albanianInFlight.current.has(chapterIdx)) return;
+    if (!external) {
+      setExternalChapterHydrating(false);
+      return;
+    }
+    if (albanianInFlight.current.has(chapterIdx)) {
+      setExternalChapterHydrating(true);
+      return;
+    }
 
     let cancelled = false;
     albanianInFlight.current.add(chapterIdx);
+    setExternalChapterHydrating(true);
 
     fetch(external.href)
       .then((res) => {
@@ -3794,6 +3723,7 @@ export default function BookReader() {
       })
       .finally(() => {
         albanianInFlight.current.delete(chapterIdx);
+        if (!cancelled) setExternalChapterHydrating(false);
       });
 
     return () => {
@@ -4056,7 +3986,14 @@ export default function BookReader() {
     };
   }, [pendingScroll, chapterIdx, highlighted]);
 
-  const currentHtml = getChapterHtml(chapterIdx);
+  const currentHtmlRaw = getChapterHtml(chapterIdx);
+  const isExternalHydrationLang = EXTERNAL_HYDRATION_LANGS.has(lang);
+  const hasExternalPlaceholder = isExternalHydrationLang
+    ? Boolean(extractExternalReadLinkFromChapterHtml(currentHtmlRaw))
+    : false;
+  const currentHtml = hasExternalPlaceholder
+    ? '<div><p>Loading chapter…</p></div>'
+    : currentHtmlRaw;
   const appendixChapterIdx = useMemo(() => findAppendixChapterIndex(toc), [toc]);
   const appendixPath = useMemo(() => {
     if (appendixChapterIdx < 0 || appendixChapterIdx >= toc.length) return null;
@@ -4801,8 +4738,8 @@ export default function BookReader() {
           </div>
         </main>
       ) : (
-        <BookContent
-          loading={loading}
+            <BookContent
+              loading={loading || externalChapterHydrating}
           isDesktop={isDesktop}
           pageWidth={pageWidth}
           textSize={textSize}
