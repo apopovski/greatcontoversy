@@ -725,11 +725,12 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
 
   if (!src) return null;
 
-  if (minimized) {
-    return (
-      <>
-        <audio ref={audioRef} src={src} preload="metadata" />
+  return (
+    <>
+      <audio ref={audioRef} src={src} preload="metadata" />
+      {minimized ? (
         <MinimizedAudioBar
+          chapterTitle={chapterTitle}
           playing={playing}
           time={time}
           duration={duration}
@@ -745,13 +746,8 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
           onExpand={onExpand || (() => {})}
           containerWidth={containerWidth}
         />
-      </>
-    );
-  }
-
-  return (
+      ) : (
     <div className="audio-player modern-audio-player">
-      <audio ref={audioRef} src={src} preload="metadata" />
       <div className="audio-info">
         <div className="audio-chapter">
           <span className="audio-chapter-title">{chapterTitle || 'Untitled Chapter'}</span>
@@ -833,5 +829,7 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
         </div>
       )}
     </div>
+      )}
+    </>
   );
 }

@@ -2305,21 +2305,18 @@ export default function BookReader() {
     }
   };
 
-  // Handlers for next/prev chapter (for audio auto-next)
+  // Handlers for next/prev chapter in the player.
+  // Audio chapter navigation is intentionally independent from reading chapter navigation.
   const handleNextChapter = () => {
     if (audioChapterIdx < toc.length - 1) {
       const nextIdx = audioChapterIdx + 1;
       setAudioChapterIdx(nextIdx);
-      setChapterIdx(nextIdx);
-      scrollToTop();
     }
   };
   const handlePrevChapter = () => {
     if (audioChapterIdx > 0) {
       const prevIdx = audioChapterIdx - 1;
       setAudioChapterIdx(prevIdx);
-      setChapterIdx(prevIdx);
-      scrollToTop();
     }
   };
   const audioChapterTitle = toc[audioChapterIdx]?.title || '';

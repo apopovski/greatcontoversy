@@ -3,6 +3,7 @@ import { MdExpandLess, MdForward10, MdPause, MdPlayArrow, MdReplay10, MdSkipNext
 import './AudioPlayer.css';
 
 type Props = {
+  chapterTitle?: string;
   playing: boolean;
   time: number;
   duration: number;
@@ -20,6 +21,7 @@ type Props = {
 };
 
 export default function MinimizedAudioBar({
+  chapterTitle,
   playing,
   time,
   duration,
@@ -46,8 +48,31 @@ export default function MinimizedAudioBar({
       }
     : undefined;
 
+  const fmtTime = (s: number) => {
+    if (!Number.isFinite(s) || s < 0) return '0:00';
+    const mins = Math.floor(s / 60);
+    const secs = Math.floor(s % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
   return (
-    <div className="audio-minibar" style={barStyle}>
+    <div
+      className="audio-minibar"
+      style={barStyle}
+      onClick={onExpand}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onExpand();
+        }
+      }}
+      role="button"
+      tabIndex={0}
+      aria-label="Open player"
+    >
+      <div className="audio-minibar-title" title={chapterTitle || 'Untitled Chapter'}>
+        {chapterTitle || 'Untitled Chapter'}
+      </div>
       <div className="audio-minibar-controls" onClick={e => e.stopPropagation()}>
         <button className="audio-minibar-btn" onClick={() => onPrevChapter?.()} aria-label="Previous chapter" title="Previous chapter" disabled={!canPrevChapter}>
           <MdSkipPrevious size={18} />
@@ -90,6 +115,10 @@ export default function MinimizedAudioBar({
         aria-valuenow={Math.max(0, Math.floor(time))}
       >
         <div className="audio-minibar-progress-fill" style={{ width: `${duration ? (time / duration) * 100 : 0}%` }} />
+      </div>
+      <div className="audio-minibar-time-row" onClick={e => e.stopPropagation()}>
+        <span className="audio-minibar-time">{fmtTime(time)}</span>
+        <span className="audio-minibar-time">{fmtTime(duration)}</span>
       </div>
     </div>
   );
