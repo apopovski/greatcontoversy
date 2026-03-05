@@ -2177,6 +2177,7 @@ function parseUrduBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; ch
 }
 
 export default function BookReader() {
+  const FORCE_MINIMIZED_PLAYER = true;
   type ReaderBookmark = { lang: string; chapterIdx: number; ts: number };
   type SearchResult = {
     idx: number;
@@ -2336,6 +2337,10 @@ export default function BookReader() {
   // --- Minimized audio bar and auto-next logic ---
   // Auto-minimize audio bar on scroll (mobile)
   useEffect(() => {
+    if (FORCE_MINIMIZED_PLAYER) {
+      setAudioMinimized(true);
+      return;
+    }
     let ticking = false;
     const onScroll = () => {
       if (!ticking) {
@@ -2354,7 +2359,7 @@ export default function BookReader() {
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, [audioUserExpanded]);
+  }, [audioUserExpanded, FORCE_MINIMIZED_PLAYER]);
 
   // --- Minimized audio bar and auto-next logic ---
 
@@ -4605,14 +4610,16 @@ export default function BookReader() {
           onPrevChapter={handlePrevChapter}
           canNextChapter={audioChapterIdx < toc.length - 1}
           canPrevChapter={audioChapterIdx > 0}
-          minimized={audioMinimized}
+          minimized={FORCE_MINIMIZED_PLAYER ? true : audioMinimized}
           autoPlayRequest={audioAutoPlayRequest}
           onPlayingChange={setAudioPlaying}
           onExpand={() => {
+            if (FORCE_MINIMIZED_PLAYER) return;
             setAudioUserExpanded(true);
             setAudioMinimized(false);
           }}
           onMinimize={() => {
+            if (FORCE_MINIMIZED_PLAYER) return;
             setAudioUserExpanded(false);
             setAudioMinimized(true);
           }}
