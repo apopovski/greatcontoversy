@@ -442,6 +442,19 @@ const LANGUAGE_URL_NAMES: Record<string, string> = {
   [ALBANIAN_FOLDER]: 'Shqip',
 };
 
+function getLanguageMenuLabel(folder: string) {
+  const englishName = (LANGUAGE_NAMES[folder] || '').trim();
+  const localName = (LANGUAGE_URL_NAMES[folder] || '').trim();
+
+  if (!englishName && !localName) return folder;
+  if (!englishName) return localName;
+  if (!localName) return englishName;
+  if (englishName.localeCompare(localName, undefined, { sensitivity: 'base' }) === 0) {
+    return englishName;
+  }
+  return `${englishName} — ${localName}`;
+}
+
 const LANGUAGE_CHAPTER_LABELS: Record<string, string> = {
   'The Great Controversy - Ellen G. White 2': 'Chapter',
   'El Conflicto de los Siglos - Ellen G. White': 'Capítulo',
@@ -4916,7 +4929,7 @@ export default function BookReader() {
                     setShowLangMenu(false);
                   }}
                 >
-                  <span>{LANGUAGE_NAMES[f] || f}</span>
+                  <span>{getLanguageMenuLabel(f)}</span>
                   {AUDIO_AVAILABLE_LANGUAGE_FOLDERS.has(f) ? (
                     <span className="reader-lang-audio-icon" aria-label={getAudioAvailableLabel(f)} title={getAudioAvailableLabel(f)}>
                       <MdHeadphones size={16} />
