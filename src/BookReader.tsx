@@ -105,6 +105,7 @@ const BENGALI_FOLDER = 'Bengali - Ellen G. White';
 const BENGALI_SOURCE_PATH = '/book-content/txt/GC-Bengali.txt';
 const INDONESIAN_FOLDER = 'Indonesian - Ellen G. White';
 const INDONESIAN_SOURCE_PATH = '/book-content/txt/GC-Indonesian.txt';
+const MALAY_FOLDER = 'Kontroversi Besar - Ellen G. White';
 const URDU_FOLDER = 'Urdu - Ellen G. White';
 const URDU_SOURCE_PATH = '/book-content/txt/GC-Urdu.txt';
 const FRENCH_FOLDER = 'French - Ellen G. White';
@@ -116,7 +117,6 @@ const CONTACT_WHATSAPP_NUMBERS: Record<string, string> = {
 const CONTACT_WHATSAPP_DISPLAY_NUMBERS: Record<string, string> = {
   'Der grosse Kampf - Ellen G. White': '+49 157 53992703',
 };
-const CONTACT_WHATSAPP_PREFILL = 'The Great Controversy — ';
 const DEVELOPER_LINK = 'https://github.com/apopovski';
 const DEVELOPER_BY_LABELS: Record<string, string> = {
   en: 'Developed by',
@@ -147,6 +147,7 @@ const DEVELOPER_BY_LABELS: Record<string, string> = {
   hi: 'द्वारा विकसित',
   bn: 'ডেভেলপ করেছেন',
   id: 'Dikembangkan oleh',
+  ms: 'Dibangunkan oleh',
   ur: 'تیار کردہ از',
   fr: 'Développé par',
   sq: 'Zhvilluar nga',
@@ -181,6 +182,7 @@ const CONTACT_WHATSAPP_LABELS: Record<string, string> = {
   [HINDI_FOLDER]: 'WhatsApp पर संपर्क करें',
   [BENGALI_FOLDER]: 'WhatsApp-এ যোগাযোগ করুন',
   [INDONESIAN_FOLDER]: 'Hubungi lewat WhatsApp',
+  [MALAY_FOLDER]: 'Hubungi di WhatsApp',
   [URDU_FOLDER]: 'واٹس ایپ پر رابطہ کریں',
   [FRENCH_FOLDER]: 'Contact sur WhatsApp',
   [ALBANIAN_FOLDER]: 'Kontakto në WhatsApp',
@@ -254,6 +256,7 @@ const LANGUAGE_FOLDERS = [
   HINDI_FOLDER,
   BENGALI_FOLDER,
   INDONESIAN_FOLDER,
+  MALAY_FOLDER,
   URDU_FOLDER,
   FRENCH_FOLDER,
   ALBANIAN_FOLDER,
@@ -288,9 +291,45 @@ const LANGUAGE_ABBREV: Record<string, string> = {
   [HINDI_FOLDER]: 'hi',
   [BENGALI_FOLDER]: 'bn',
   [INDONESIAN_FOLDER]: 'id',
+  [MALAY_FOLDER]: 'ms',
   [URDU_FOLDER]: 'ur',
   [FRENCH_FOLDER]: 'fr',
   [ALBANIAN_FOLDER]: 'sq',
+};
+
+const CONTACT_WHATSAPP_AUTO_MESSAGES: Record<string, string> = {
+  en: 'Hi, I would like to connect.',
+  es: 'Hola, me gustaría conectar.',
+  de: 'Hallo, ich möchte gerne Kontakt aufnehmen.',
+  it: 'Ciao, vorrei mettermi in contatto.',
+  da: 'Hej, jeg vil gerne komme i kontakt.',
+  no: 'Hei, jeg vil gjerne ta kontakt.',
+  pt: 'Olá, gostaria de entrar em contato.',
+  sm: 'Talofa, ou te fia fesootaʻi.',
+  et: 'Tere, sooviksin ühendust võtta.',
+  ro: 'Bună, aș dori să iau legătura.',
+  hr: 'Bok, želio bih stupiti u kontakt.',
+  bg: 'Здравейте, бих искал да се свържа.',
+  sk: 'Ahoj, rád by som sa spojil.',
+  cs: 'Ahoj, rád bych se spojil.',
+  uk: 'Привіт, я хотів(ла) б звʼязатися.',
+  ru: 'Здравствуйте, я хотел(а) бы связаться.',
+  pl: 'Cześć, chciałbym/chciałabym się skontaktować.',
+  ar: 'مرحبًا، أود التواصل.',
+  am: 'ሰላም፣ መገናኘት እፈልጋለሁ።',
+  zh: '你好，我想联系你。',
+  ko: '안녕하세요, 연락하고 싶습니다.',
+  ja: 'こんにちは、連絡を取りたいです。',
+  sr: 'Здраво, желео/желела бих да ступим у контакт.',
+  fa: 'سلام، مایلم ارتباط برقرار کنم.',
+  af: 'Hallo, ek wil graag kontak maak.',
+  hi: 'नमस्ते, मैं संपर्क करना चाहता/चाहती हूँ।',
+  bn: 'হ্যালো, আমি যোগাযোগ করতে চাই।',
+  id: 'Halo, saya ingin terhubung.',
+  ms: 'Hai, saya ingin berhubung.',
+  ur: 'ہیلو، میں رابطہ کرنا چاہتا/چاہتی ہوں۔',
+  fr: 'Bonjour, je souhaite entrer en contact.',
+  sq: 'Përshëndetje, do të doja të lidhesha.',
 };
 
 const BOOK_TITLE_OVERRIDES: Record<string, string> = {
@@ -322,6 +361,7 @@ const BOOK_TITLE_OVERRIDES: Record<string, string> = {
   [HINDI_FOLDER]: 'महान संघर्ष',
   [BENGALI_FOLDER]: 'মহা বিবাদ',
   [INDONESIAN_FOLDER]: 'Kemenangan Akhir',
+  [MALAY_FOLDER]: 'Kontroversi Besar',
   [URDU_FOLDER]: 'عظیم کشمکش',
   [FRENCH_FOLDER]: 'La Tragédie des Siècles',
   [ALBANIAN_FOLDER]: 'Beteja e Madhe',
@@ -356,6 +396,7 @@ const META_TAGLINES: Record<string, string> = {
   hi: 'अच्छाई और बुराई के बीच ब्रह्मांडीय संघर्ष',
   bn: 'ভাল ও মন্দের মধ্যে মহাজাগতিক সংঘর্ষ',
   id: 'Konflik kosmik antara yang baik dan yang jahat',
+  ms: 'Konflik kosmik antara yang baik dan yang jahat',
   ur: 'نیکی اور بدی کے درمیان کائناتی کشمکش',
   fr: 'Conflit cosmique entre le bien et le mal',
   sq: 'Konflikt kozmik ndërmjet së mirës dhe së keqes',
@@ -393,6 +434,7 @@ const LANGUAGE_URL_NAMES: Record<string, string> = {
   [HINDI_FOLDER]: 'हिन्दी',
   [BENGALI_FOLDER]: 'বাংলা',
   [INDONESIAN_FOLDER]: 'Bahasa Indonesia',
+  [MALAY_FOLDER]: 'Bahasa Melayu',
   [URDU_FOLDER]: 'اردو',
   [FRENCH_FOLDER]: 'Français',
   [ALBANIAN_FOLDER]: 'Shqip',
@@ -427,6 +469,7 @@ const LANGUAGE_CHAPTER_LABELS: Record<string, string> = {
   [HINDI_FOLDER]: 'पाठ',
   [BENGALI_FOLDER]: 'অধ্যায়',
   [INDONESIAN_FOLDER]: 'Bab',
+  [MALAY_FOLDER]: 'Bab',
   [URDU_FOLDER]: 'باب',
   [FRENCH_FOLDER]: 'Chapitre',
   [ALBANIAN_FOLDER]: 'Kapitulli',
@@ -461,6 +504,7 @@ const LANGUAGE_CONTENTS_LABELS: Record<string, string> = {
   [HINDI_FOLDER]: 'विषय सूची',
   [BENGALI_FOLDER]: 'সূচিপত্র',
   [INDONESIAN_FOLDER]: 'Daftar Isi',
+  [MALAY_FOLDER]: 'Kandungan',
   [URDU_FOLDER]: 'فہرست',
   [FRENCH_FOLDER]: 'Sommaire',
   [ALBANIAN_FOLDER]: 'Përmbajtja',
@@ -495,6 +539,7 @@ const LANGUAGE_CONTINUE_LABELS: Record<string, string> = {
   [HINDI_FOLDER]: 'जारी रखें',
   [BENGALI_FOLDER]: 'চালিয়ে যান',
   [INDONESIAN_FOLDER]: 'Lanjutkan',
+  [MALAY_FOLDER]: 'Teruskan',
   [URDU_FOLDER]: 'جاری رکھیں',
   [FRENCH_FOLDER]: 'Continuer',
   [ALBANIAN_FOLDER]: 'Vazhdo',
@@ -875,6 +920,11 @@ function getContactWhatsAppNumber(folder: string) {
 
 function getContactWhatsAppDisplayNumber(folder: string) {
   return CONTACT_WHATSAPP_DISPLAY_NUMBERS[folder] || `+${getContactWhatsAppNumber(folder)}`;
+}
+
+function getContactWhatsAppAutoMessage(folder: string) {
+  const code = (LANGUAGE_ABBREV[folder] || 'en').toLowerCase();
+  return CONTACT_WHATSAPP_AUTO_MESSAGES[code] || CONTACT_WHATSAPP_AUTO_MESSAGES.en;
 }
 
 const COPYRIGHTS: Record<string, string> = {
@@ -1364,6 +1414,67 @@ function escapeHtml(input: string) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
+}
+
+const MALAY_EGW_CHAPTER_LINKS: TocEntry[] = [
+  { title: 'Kata Pengantar', href: 'https://text.egwwritings.org/read/13855.12' },
+  { title: 'Bab 1 - Jatuhnya Syaitan', href: 'https://text.egwwritings.org/read/13855.30' },
+  { title: 'Bab 2 - Jatuhnya Manusia', href: 'https://text.egwwritings.org/read/13855.39' },
+  { title: 'Bab 3 - Rancangan Penyelamatan', href: 'https://text.egwwritings.org/read/13855.47' },
+  { title: 'Bab 4 - Kedatangan Pertama Kristus', href: 'https://text.egwwritings.org/read/13855.62' },
+  { title: 'Bab 5 - Pelayanan Kristus', href: 'https://text.egwwritings.org/read/13855.83' },
+  { title: 'Bab 6 - Perubahan Wajah', href: 'https://text.egwwritings.org/read/13855.97' },
+  { title: 'Bab 7 - Pengkhianatan Terhadap Kristus', href: 'https://text.egwwritings.org/read/13855.110' },
+  { title: 'Bab 8 - Perbicaraan Terhadap Kristus', href: 'https://text.egwwritings.org/read/13855.122' },
+  { title: 'Bab 9 - Penyaliban Kristus', href: 'https://text.egwwritings.org/read/13855.146' },
+  { title: 'Bab 10 - Kebangkitan Kristus', href: 'https://text.egwwritings.org/read/13855.163' },
+  { title: 'Bab 11 - Kenaikan Kristus', href: 'https://text.egwwritings.org/read/13855.192' },
+  { title: 'Bab 12 - Murid-Murid Kristus', href: 'https://text.egwwritings.org/read/13855.198' },
+  { title: 'Bab 13 - Kematian Stefanus', href: 'https://text.egwwritings.org/read/13855.218' },
+  { title: 'Bab 14 - Saulus Menjadi Kristian', href: 'https://text.egwwritings.org/read/13855.227' },
+  { title: 'Bab 15 - Orang-orang Yahudi Hendak Membunuh Paulus', href: 'https://text.egwwritings.org/read/13855.233' },
+  { title: 'Bab 16 - Paulus Melawat Yerusalem', href: 'https://text.egwwritings.org/read/13855.245' },
+  { title: 'Bab 17 - Kemurtadan Besar', href: 'https://text.egwwritings.org/read/13855.257' },
+  { title: 'Bab 18 - Misteri Ketidakadilan', href: 'https://text.egwwritings.org/read/13855.266' },
+  { title: 'Bab 19 - Kematian, Bukan Hidup Kekal Dalam Kesengsaraan', href: 'https://text.egwwritings.org/read/13855.281' },
+  { title: 'Bab 20 - Reformasi', href: 'https://text.egwwritings.org/read/13855.298' },
+  { title: 'Bab 21 - Gereja dan Dunia Bersatu', href: 'https://text.egwwritings.org/read/13855.309' },
+  { title: 'Bab 22 - William Miller', href: 'https://text.egwwritings.org/read/13855.318' },
+  { title: 'Bab 23 - Perutusan Malaikat Pertama', href: 'https://text.egwwritings.org/read/13855.329' },
+  { title: 'Bab 24 - Perutusan Malaikat Kedua', href: 'https://text.egwwritings.org/read/13855.346' },
+  { title: 'Bab 25 - Pergerakan Advent Diilustrasikan', href: 'https://text.egwwritings.org/read/13855.357' },
+  { title: 'Bab 26 - Satu lagi Ilustrasi', href: 'https://text.egwwritings.org/read/13855.373' },
+  { title: 'Bab 27 - Sanktuari', href: 'https://text.egwwritings.org/read/13855.389' },
+  { title: 'Bab 28 - Perutusan Malaikat Ke Tiga', href: 'https://text.egwwritings.org/read/13855.398' },
+  { title: 'Bab 29 - Pelantar Kukuh', href: 'https://text.egwwritings.org/read/13855.410' },
+  { title: 'Bab 30 - Spiritualisme', href: 'https://text.egwwritings.org/read/13855.420' },
+  { title: 'Bab 31 - Tamak Haloba', href: 'https://text.egwwritings.org/read/13855.438' },
+  { title: 'Bab 32 - Penggoncangan', href: 'https://text.egwwritings.org/read/13855.447' },
+  { title: 'Bab 33 - Dosa-Dosa Babilon', href: 'https://text.egwwritings.org/read/13855.463' },
+  { title: 'Bab 34 - Seruan Lantang', href: 'https://text.egwwritings.org/read/13855.473' },
+  { title: 'Bab 35 - Perutusan Ketiga Ditutup', href: 'https://text.egwwritings.org/read/13855.482' },
+  { title: 'Bab 36 - Masa Kesusahan Yakub', href: 'https://text.egwwritings.org/read/13855.494' },
+  { title: 'Bab 37 - Pembebasan Orang-Orang Salih', href: 'https://text.egwwritings.org/read/13855.503' },
+  { title: 'Bab 38 - Upah Orang-orang Salih', href: 'https://text.egwwritings.org/read/13855.515' },
+  { title: 'Bab 39 - Bumi Dikosongkan', href: 'https://text.egwwritings.org/read/13855.520' },
+  { title: 'Bab 40 - Kebangkitan Kedua', href: 'https://text.egwwritings.org/read/13855.530' },
+  { title: 'Bab 41 - Kematian Kedua', href: 'https://text.egwwritings.org/read/13855.539' },
+];
+
+function buildExternalReadChapterHtml(title: string, href: string, cta: string) {
+  return `<div><h2 class="chapterhead">${escapeHtml(title)}</h2><p><a href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(cta)}</a></p></div>`;
+}
+
+function buildMalayBookFromExternalLinks(): { toc: TocEntry[]; chapterIds: string[]; chapterHtml: string[] } {
+  const chapterIds = MALAY_EGW_CHAPTER_LINKS.map((_, idx) => `ms-ch-${idx + 1}`);
+  const chapterHtml = MALAY_EGW_CHAPTER_LINKS.map((entry, idx) =>
+    `<div id="${chapterIds[idx]}">${buildExternalReadChapterHtml(entry.title, entry.href, 'Baca bab ini di EGW Writings')}</div>`
+  );
+  return {
+    toc: MALAY_EGW_CHAPTER_LINKS,
+    chapterIds,
+    chapterHtml,
+  };
 }
 
 function parseAmharicBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; chapterHtml: string[] } {
@@ -3123,7 +3234,9 @@ export default function BookReader() {
   };
 
   const handleWhatsAppContact = () => {
-    const text = `${CONTACT_WHATSAPP_PREFILL}Hi, I would like to connect.`;
+    const localizedTitle = getBookTitleFromFolder(lang) || 'The Great Controversy';
+    const localizedMessage = getContactWhatsAppAutoMessage(lang);
+    const text = `${localizedTitle} — "${localizedMessage}"`;
     const whatsappNumber = getContactWhatsAppNumber(lang);
     const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(text)}`;
     window.open(url, '_blank', 'noopener,noreferrer');
@@ -3164,6 +3277,36 @@ export default function BookReader() {
       }
       throw new Error('Not found');
     };
+
+    if (lang === MALAY_FOLDER) {
+      const parsed = buildMalayBookFromExternalLinks();
+      setToc(parsed.toc);
+      setChapterIds(parsed.chapterIds);
+      setBookDoc(null);
+
+      chapterCache.current.clear();
+      plainTextCache.current.clear();
+      parsed.chapterHtml.forEach((html, i) => {
+        chapterCache.current.set(i, html);
+        plainTextCache.current.set(i, html.replace(/<[^>]+>/g, ' '));
+      });
+
+      const desiredNumber = pendingChapterNumberRef.current;
+      const desiredIdx = pendingChapterIdxRef.current;
+      if (typeof desiredNumber === 'number') {
+        const idxFromNum = Math.max(0, Math.min(parsed.chapterIds.length - 1, desiredNumber - 1));
+        setChapterIdx(idxFromNum);
+      } else if (typeof desiredIdx === 'number' && desiredIdx >= 0 && desiredIdx < parsed.chapterIds.length) {
+        setChapterIdx(desiredIdx);
+      } else {
+        setChapterIdx(0);
+      }
+
+      pendingChapterIdxRef.current = null;
+      pendingChapterNumberRef.current = null;
+      setLoading(false);
+      return;
+    }
 
     if (lang === AMHARIC_FOLDER || lang === CHINESE_FOLDER || lang === KOREAN_FOLDER || lang === JAPANESE_FOLDER || lang === SERBIAN_FOLDER || lang === FARSI_FOLDER || lang === AFRIKAANS_FOLDER || lang === HINDI_FOLDER || lang === BENGALI_FOLDER || lang === INDONESIAN_FOLDER || lang === URDU_FOLDER) {
       const sourcePath =
@@ -3614,16 +3757,17 @@ export default function BookReader() {
     return text;
   }
 
-  // Hydrate Albanian link-only chapters from EGW pages so users can read full text
+  // Hydrate link-only chapters (Albanian + Malay EGW links) so users can read full text
   // directly inside this app instead of being sent off-site.
   useEffect(() => {
-    if (lang !== ALBANIAN_FOLDER || !bookDoc || !chapterIds.length) return;
+    const supportsExternalHydration = lang === ALBANIAN_FOLDER || lang === MALAY_FOLDER;
+    if (!supportsExternalHydration || !chapterIds.length) return;
     if (chapterIdx < 0 || chapterIdx >= chapterIds.length) return;
 
     const id = chapterIds[chapterIdx];
     if (!id) return;
 
-    const currentCached = chapterCache.current.get(chapterIdx) || extractChapterHtml(bookDoc, id, toc);
+    const currentCached = chapterCache.current.get(chapterIdx) || (bookDoc ? extractChapterHtml(bookDoc, id, toc) : '');
     const external = extractExternalReadLinkFromChapterHtml(currentCached);
     if (!external) return;
     if (albanianInFlight.current.has(chapterIdx)) return;
@@ -3633,12 +3777,13 @@ export default function BookReader() {
 
     fetch(external.href)
       .then((res) => {
-        if (!res.ok) throw new Error('Failed to fetch Albanian chapter');
+        if (!res.ok) throw new Error('Failed to fetch external chapter');
         return res.text();
       })
       .then((raw) => {
         if (cancelled) return;
-        const hydrated = extractEgwReadableChapterHtml(raw, external.title || toc[chapterIdx]?.title || 'Kapitulli');
+        const fallbackTitle = external.title || toc[chapterIdx]?.title || `${LANGUAGE_CHAPTER_LABELS[lang] || 'Chapter'} ${chapterIdx + 1}`;
+        const hydrated = extractEgwReadableChapterHtml(raw, fallbackTitle);
         if (!hydrated) return;
         chapterCache.current.set(chapterIdx, hydrated);
         plainTextCache.current.set(chapterIdx, hydrated.replace(/<[^>]+>/g, ' '));

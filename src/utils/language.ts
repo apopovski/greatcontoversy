@@ -40,6 +40,7 @@ export const LANGUAGE_NAMES: Record<string, string> = {
   'Hindi - Ellen G. White': 'Hindi',
   'Bengali - Ellen G. White': 'Bengali',
   'Indonesian - Ellen G. White': 'Indonesian',
+  'Kontroversi Besar - Ellen G. White': 'Malay',
   'Urdu - Ellen G. White': 'Urdu',
   'French - Ellen G. White': 'French',
   'Beteja e Madhe - Ellen G. White': 'Albanian',
