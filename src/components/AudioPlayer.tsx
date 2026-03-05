@@ -3,6 +3,75 @@ import MinimizedAudioBar from './MinimizedAudioBar';
 import './AudioPlayer.css';
 import { LANGUAGE_NAMES } from '../utils/language';
 
+type PlayerLabels = {
+  loadingAudio: string;
+  untitledChapter: string;
+  source: string;
+  copied: string;
+  copyUrl: string;
+  minimizePlayer: string;
+  previousChapter: string;
+  rewind15: string;
+  playPause: string;
+  forward15: string;
+  nextChapter: string;
+  left: string;
+  audioBy: string;
+  openPlayer: string;
+  back15Seconds: string;
+  forward15Seconds: string;
+  changeSpeed: string;
+  audioProgress: string;
+  play: string;
+  pause: string;
+  hidePlayer: string;
+};
+
+const DEFAULT_PLAYER_LABELS: PlayerLabels = {
+  loadingAudio: 'Loading audio…',
+  untitledChapter: 'Untitled Chapter',
+  source: 'Source',
+  copied: 'Copied',
+  copyUrl: 'Copy URL',
+  minimizePlayer: 'Minimize player',
+  previousChapter: 'Previous chapter',
+  rewind15: 'Rewind 15',
+  playPause: 'Play/Pause',
+  forward15: 'Forward 15',
+  nextChapter: 'Next chapter',
+  left: 'left',
+  audioBy: 'Audio by',
+  openPlayer: 'Open player',
+  back15Seconds: 'Back 15 seconds',
+  forward15Seconds: 'Forward 15 seconds',
+  changeSpeed: 'Change speed',
+  audioProgress: 'Audio progress',
+  play: 'Play',
+  pause: 'Pause',
+  hidePlayer: 'Hide player',
+};
+
+const PLAYER_LABELS_BY_CODE: Record<string, Partial<PlayerLabels>> = {
+  es: { loadingAudio: 'Cargando audio…', untitledChapter: 'Capítulo sin título', source: 'Fuente', copied: 'Copiado', copyUrl: 'Copiar URL', minimizePlayer: 'Minimizar reproductor', previousChapter: 'Capítulo anterior', rewind15: 'Retroceder 15', playPause: 'Reproducir/Pausar', forward15: 'Adelantar 15', nextChapter: 'Capítulo siguiente', left: 'restante', audioBy: 'Audio por', openPlayer: 'Abrir reproductor', back15Seconds: 'Retroceder 15 segundos', forward15Seconds: 'Adelantar 15 segundos', changeSpeed: 'Cambiar velocidad', audioProgress: 'Progreso de audio', play: 'Reproducir', pause: 'Pausar' },
+  de: { loadingAudio: 'Audio wird geladen…', untitledChapter: 'Kapitel ohne Titel', source: 'Quelle', copied: 'Kopiert', copyUrl: 'URL kopieren', minimizePlayer: 'Player minimieren', previousChapter: 'Vorheriges Kapitel', rewind15: '15 zurück', playPause: 'Wiedergabe/Pause', forward15: '15 vor', nextChapter: 'Nächstes Kapitel', left: 'übrig', audioBy: 'Audio von', openPlayer: 'Player öffnen', back15Seconds: '15 Sekunden zurück', forward15Seconds: '15 Sekunden vor', changeSpeed: 'Geschwindigkeit ändern', audioProgress: 'Audio-Fortschritt', play: 'Wiedergabe', pause: 'Pause' },
+  it: { loadingAudio: 'Caricamento audio…', untitledChapter: 'Capitolo senza titolo', source: 'Fonte', copied: 'Copiato', copyUrl: 'Copia URL', minimizePlayer: 'Riduci lettore', previousChapter: 'Capitolo precedente', rewind15: 'Indietro 15', playPause: 'Riproduci/Pausa', forward15: 'Avanti 15', nextChapter: 'Capitolo successivo', left: 'rimanenti', audioBy: 'Audio di', openPlayer: 'Apri lettore', back15Seconds: 'Indietro di 15 secondi', forward15Seconds: 'Avanti di 15 secondi', changeSpeed: 'Cambia velocità', audioProgress: 'Progresso audio', play: 'Riproduci', pause: 'Pausa' },
+  pt: { loadingAudio: 'Carregando áudio…', untitledChapter: 'Capítulo sem título', source: 'Fonte', copied: 'Copiado', copyUrl: 'Copiar URL', minimizePlayer: 'Minimizar player', previousChapter: 'Capítulo anterior', rewind15: 'Voltar 15', playPause: 'Reproduzir/Pausar', forward15: 'Avançar 15', nextChapter: 'Próximo capítulo', left: 'restantes', audioBy: 'Áudio por', openPlayer: 'Abrir player', back15Seconds: 'Voltar 15 segundos', forward15Seconds: 'Avançar 15 segundos', changeSpeed: 'Alterar velocidade', audioProgress: 'Progresso do áudio', play: 'Reproduzir', pause: 'Pausar' },
+  fr: { loadingAudio: 'Chargement audio…', untitledChapter: 'Chapitre sans titre', source: 'Source', copied: 'Copié', copyUrl: 'Copier l’URL', minimizePlayer: 'Réduire le lecteur', previousChapter: 'Chapitre précédent', rewind15: 'Reculer 15', playPause: 'Lecture/Pause', forward15: 'Avancer 15', nextChapter: 'Chapitre suivant', left: 'restantes', audioBy: 'Audio par', openPlayer: 'Ouvrir le lecteur', back15Seconds: 'Reculer de 15 secondes', forward15Seconds: 'Avancer de 15 secondes', changeSpeed: 'Changer la vitesse', audioProgress: 'Progression audio', play: 'Lecture', pause: 'Pause' },
+  ar: { loadingAudio: 'جارٍ تحميل الصوت…', untitledChapter: 'فصل بدون عنوان', source: 'المصدر', copied: 'تم النسخ', copyUrl: 'نسخ الرابط', minimizePlayer: 'تصغير المشغل', previousChapter: 'الفصل السابق', rewind15: 'رجوع 15', playPause: 'تشغيل/إيقاف', forward15: 'تقديم 15', nextChapter: 'الفصل التالي', left: 'متبقي', audioBy: 'الصوت بواسطة', openPlayer: 'فتح المشغل', back15Seconds: 'رجوع 15 ثانية', forward15Seconds: 'تقديم 15 ثانية', changeSpeed: 'تغيير السرعة', audioProgress: 'تقدم الصوت', play: 'تشغيل', pause: 'إيقاف' },
+  zh: { loadingAudio: '正在加载音频…', untitledChapter: '未命名章节', source: '来源', copied: '已复制', copyUrl: '复制链接', minimizePlayer: '最小化播放器', previousChapter: '上一章', rewind15: '后退15秒', playPause: '播放/暂停', forward15: '前进15秒', nextChapter: '下一章', left: '剩余', audioBy: '音频来源', openPlayer: '打开播放器', back15Seconds: '后退15秒', forward15Seconds: '前进15秒', changeSpeed: '调整速度', audioProgress: '音频进度', play: '播放', pause: '暂停' },
+  ko: { loadingAudio: '오디오 로딩 중…', untitledChapter: '제목 없는 장', source: '출처', copied: '복사됨', copyUrl: 'URL 복사', minimizePlayer: '플레이어 최소화', previousChapter: '이전 장', rewind15: '15초 뒤로', playPause: '재생/일시정지', forward15: '15초 앞으로', nextChapter: '다음 장', left: '남음', audioBy: '오디오 제공', openPlayer: '플레이어 열기', back15Seconds: '15초 뒤로', forward15Seconds: '15초 앞으로', changeSpeed: '속도 변경', audioProgress: '오디오 진행', play: '재생', pause: '일시정지' },
+  ja: { loadingAudio: '音声を読み込み中…', untitledChapter: '無題の章', source: 'ソース', copied: 'コピーしました', copyUrl: 'URLをコピー', minimizePlayer: 'プレーヤーを最小化', previousChapter: '前の章', rewind15: '15秒戻す', playPause: '再生/一時停止', forward15: '15秒進む', nextChapter: '次の章', left: '残り', audioBy: '音声提供', openPlayer: 'プレーヤーを開く', back15Seconds: '15秒戻す', forward15Seconds: '15秒進む', changeSpeed: '速度変更', audioProgress: '音声の進行', play: '再生', pause: '一時停止' },
+  ru: { loadingAudio: 'Загрузка аудио…', untitledChapter: 'Глава без названия', source: 'Источник', copied: 'Скопировано', copyUrl: 'Копировать URL', minimizePlayer: 'Свернуть плеер', previousChapter: 'Предыдущая глава', rewind15: 'Назад 15', playPause: 'Воспроизвести/Пауза', forward15: 'Вперёд 15', nextChapter: 'Следующая глава', left: 'осталось', audioBy: 'Аудио от', openPlayer: 'Открыть плеер', back15Seconds: 'Назад на 15 секунд', forward15Seconds: 'Вперёд на 15 секунд', changeSpeed: 'Изменить скорость', audioProgress: 'Прогресс аудио', play: 'Воспроизвести', pause: 'Пауза' },
+  uk: { loadingAudio: 'Завантаження аудіо…', untitledChapter: 'Розділ без назви', source: 'Джерело', copied: 'Скопійовано', copyUrl: 'Копіювати URL', minimizePlayer: 'Згорнути плеєр', previousChapter: 'Попередній розділ', rewind15: 'Назад 15', playPause: 'Відтворити/Пауза', forward15: 'Вперед 15', nextChapter: 'Наступний розділ', left: 'залишилось', audioBy: 'Аудіо від', openPlayer: 'Відкрити плеєр', back15Seconds: 'Назад на 15 секунд', forward15Seconds: 'Вперед на 15 секунд', changeSpeed: 'Змінити швидкість', audioProgress: 'Прогрес аудіо', play: 'Відтворити', pause: 'Пауза' },
+  pl: { loadingAudio: 'Ładowanie audio…', untitledChapter: 'Rozdział bez tytułu', source: 'Źródło', copied: 'Skopiowano', copyUrl: 'Kopiuj URL', minimizePlayer: 'Zminimalizuj odtwarzacz', previousChapter: 'Poprzedni rozdział', rewind15: 'Cofnij 15', playPause: 'Odtwórz/Pauza', forward15: 'Przewiń 15', nextChapter: 'Następny rozdział', left: 'pozostało', audioBy: 'Audio od', openPlayer: 'Otwórz odtwarzacz', back15Seconds: 'Cofnij 15 sekund', forward15Seconds: 'Przewiń 15 sekund', changeSpeed: 'Zmień prędkość', audioProgress: 'Postęp audio', play: 'Odtwórz', pause: 'Pauza' },
+  tr: {},
+  hi: { loadingAudio: 'ऑडियो लोड हो रहा है…', untitledChapter: 'बिना शीर्षक अध्याय', source: 'स्रोत', copied: 'कॉपी किया गया', copyUrl: 'URL कॉपी करें', minimizePlayer: 'प्लेयर छोटा करें', previousChapter: 'पिछला अध्याय', rewind15: '15 सेकंड पीछे', playPause: 'चलाएँ/रोकें', forward15: '15 सेकंड आगे', nextChapter: 'अगला अध्याय', left: 'शेष', audioBy: 'ऑडियो द्वारा', openPlayer: 'प्लेयर खोलें', back15Seconds: '15 सेकंड पीछे', forward15Seconds: '15 सेकंड आगे', changeSpeed: 'गति बदलें', audioProgress: 'ऑडियो प्रगति', play: 'चलाएँ', pause: 'रोकें' },
+  bn: { loadingAudio: 'অডিও লোড হচ্ছে…', untitledChapter: 'শিরোনামহীন অধ্যায়', source: 'উৎস', copied: 'কপি হয়েছে', copyUrl: 'URL কপি করুন', minimizePlayer: 'প্লেয়ার মিনিমাইজ করুন', previousChapter: 'পূর্ববর্তী অধ্যায়', rewind15: '১৫ সেকেন্ড পিছনে', playPause: 'চালান/থামান', forward15: '১৫ সেকেন্ড সামনে', nextChapter: 'পরবর্তী অধ্যায়', left: 'বাকি', audioBy: 'অডিও', openPlayer: 'প্লেয়ার খুলুন', back15Seconds: '১৫ সেকেন্ড পিছনে', forward15Seconds: '১৫ সেকেন্ড সামনে', changeSpeed: 'গতি পরিবর্তন', audioProgress: 'অডিও অগ্রগতি', play: 'চালান', pause: 'থামান' },
+  id: { loadingAudio: 'Memuat audio…', untitledChapter: 'Bab tanpa judul', source: 'Sumber', copied: 'Disalin', copyUrl: 'Salin URL', minimizePlayer: 'Minimalkan pemutar', previousChapter: 'Bab sebelumnya', rewind15: 'Mundur 15', playPause: 'Putar/Jeda', forward15: 'Maju 15', nextChapter: 'Bab berikutnya', left: 'tersisa', audioBy: 'Audio oleh', openPlayer: 'Buka pemutar', back15Seconds: 'Mundur 15 detik', forward15Seconds: 'Maju 15 detik', changeSpeed: 'Ubah kecepatan', audioProgress: 'Progres audio', play: 'Putar', pause: 'Jeda' },
+  ur: { loadingAudio: 'آڈیو لوڈ ہو رہا ہے…', untitledChapter: 'بلا عنوان باب', source: 'ذریعہ', copied: 'کاپی ہو گیا', copyUrl: 'URL کاپی کریں', minimizePlayer: 'پلیئر منیمائز کریں', previousChapter: 'پچھلا باب', rewind15: '15 پیچھے', playPause: 'چلائیں/روکیں', forward15: '15 آگے', nextChapter: 'اگلا باب', left: 'باقی', audioBy: 'آڈیو از', openPlayer: 'پلیئر کھولیں', back15Seconds: '15 سیکنڈ پیچھے', forward15Seconds: '15 سیکنڈ آگے', changeSpeed: 'رفتار بدلیں', audioProgress: 'آڈیو پیش رفت', play: 'چلائیں', pause: 'روکیں' },
+  sq: { loadingAudio: 'Duke ngarkuar audion…', untitledChapter: 'Kapitull pa titull', source: 'Burimi', copied: 'U kopjua', copyUrl: 'Kopjo URL', minimizePlayer: 'Minimizo player-in', previousChapter: 'Kapitulli i mëparshëm', rewind15: 'Mbrapa 15', playPause: 'Luaj/Pusho', forward15: 'Përpara 15', nextChapter: 'Kapitulli tjetër', left: 'mbetur', audioBy: 'Audio nga', openPlayer: 'Hap player-in', back15Seconds: 'Mbrapa 15 sekonda', forward15Seconds: 'Përpara 15 sekonda', changeSpeed: 'Ndrysho shpejtësinë', audioProgress: 'Progresi i audios', play: 'Luaj', pause: 'Pusho' },
+};
+
 type Props = {
   lang: string;
   chapterIdx: number;
@@ -16,6 +85,7 @@ type Props = {
   onPlayingChange?: (playing: boolean) => void;
   onExpand?: () => void;
   onMinimize?: () => void;
+  onHide?: () => void;
   containerWidth?: number | null;
 };
 
@@ -258,7 +328,7 @@ function fmtTime(s: number) {
 
 const SPEED_STEPS = [0.75, 1, 1.25, 1.5, 2];
 
-export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChapter, onPrevChapter, canNextChapter = true, canPrevChapter = true, minimized, autoPlayRequest = 0, onPlayingChange, onExpand, onMinimize, containerWidth }: Props) {
+export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChapter, onPrevChapter, canNextChapter = true, canPrevChapter = true, minimized, autoPlayRequest = 0, onPlayingChange, onExpand, onMinimize, onHide, containerWidth }: Props) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const isDev = import.meta.env.DEV;
   const [src, setSrc] = useState<string | null>(null);
@@ -272,6 +342,12 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
   const [attribution, setAttribution] = useState<Attribution | null>(null);
   const [sourceKind, setSourceKind] = useState<AudioSourceKind | null>(null);
   const [copiedSource, setCopiedSource] = useState(false);
+  const rawLanguageCode = (AUDIO_SOURCE_CANDIDATES[lang]?.languageCodes?.[0] || '').trim().toLowerCase();
+  const normalizedLanguageCode = rawLanguageCode === 'sp' ? 'es' : rawLanguageCode === 'cn' ? 'zh' : rawLanguageCode === 'kr' ? 'ko' : rawLanguageCode === 'nb' ? 'no' : rawLanguageCode;
+  const labels: PlayerLabels = {
+    ...DEFAULT_PLAYER_LABELS,
+    ...(PLAYER_LABELS_BY_CODE[normalizedLanguageCode] || {}),
+  };
 
   // Load audio from manifest first, then fallback to local index.json if available
   useEffect(() => {
@@ -719,7 +795,7 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
   if (loadingAudio) {
     return (
       <div className="audio-player modern-audio-player audio-unavailable">
-        <div className="audio-unavailable-text">Loading audio…</div>
+        <div className="audio-unavailable-text">{labels.loadingAudio}</div>
       </div>
     );
   }
@@ -731,6 +807,7 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
       <audio ref={audioRef} src={src} preload="metadata" />
       {minimized ? (
         <MinimizedAudioBar
+          labels={labels}
           chapterTitle={chapterTitle}
           playing={playing}
           time={time}
@@ -745,18 +822,19 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
           canPrevChapter={canPrevChapter}
           canNextChapter={canNextChapter}
           onExpand={onExpand || (() => {})}
+          onHide={onHide}
           containerWidth={containerWidth}
         />
       ) : (
     <div className="audio-player modern-audio-player">
       <div className="audio-info">
         <div className="audio-chapter">
-          <span className="audio-chapter-title">{chapterTitle || 'Untitled Chapter'}</span>
+          <span className="audio-chapter-title">{chapterTitle || labels.untitledChapter}</span>
           <span className="audio-chapter-lang">{displayAudioLang}</span>
           {isDev && sourceKindLabel ? (
             <div className="audio-dev-row">
               <span className="audio-source-badge" title={`Audio source resolver: ${sourceKind}`}>
-                Source: {sourceKindLabel}
+                {labels.source}: {sourceKindLabel}
               </span>
               <button
                 type="button"
@@ -764,37 +842,37 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
                 onClick={copyCurrentSourceUrl}
                 title="Copy resolved audio URL"
               >
-                {copiedSource ? 'Copied' : 'Copy URL'}
+                {copiedSource ? labels.copied : labels.copyUrl}
               </button>
             </div>
           ) : null}
         </div>
         <div className="audio-top-actions">
           {onMinimize && (
-            <button className="audio-minimize-btn" onClick={onMinimize} aria-label="Minimize player" title="Minimize player">
+            <button className="audio-minimize-btn" onClick={onMinimize} aria-label={labels.minimizePlayer} title={labels.minimizePlayer}>
               ─
             </button>
           )}
         </div>
       </div>
       <div className="audio-controls">
-        <button className="audio-btn audio-btn-secondary" onClick={() => onPrevChapter?.()} aria-label="Previous chapter" title="Previous chapter" disabled={!onPrevChapter}>
+        <button className="audio-btn audio-btn-secondary" onClick={() => onPrevChapter?.()} aria-label={labels.previousChapter} title={labels.previousChapter} disabled={!onPrevChapter}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 20L9 12l10-8v16z"/><path d="M5 19V5"/></svg>
         </button>
-        <button className="audio-btn audio-rewind" onClick={() => seekTo(Math.max(0, (audioRef.current?.currentTime || 0) - 15))} aria-label="Rewind 15">
+        <button className="audio-btn audio-rewind" onClick={() => seekTo(Math.max(0, (audioRef.current?.currentTime || 0) - 15))} aria-label={labels.rewind15} title={labels.rewind15}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 19l-9-7 9-7v14zM22 19l-9-7 9-7v14z"/></svg>
         </button>
-        <button className="audio-btn audio-play" onClick={toggle} aria-label="Play/Pause">
+        <button className="audio-btn audio-play" onClick={toggle} aria-label={labels.playPause} title={playing ? labels.pause : labels.play}>
           {playing ? (
             <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
           ) : (
             <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
           )}
         </button>
-        <button className="audio-btn audio-forward" onClick={() => seekTo(Math.min(audioRef.current?.duration || 0, (audioRef.current?.currentTime || 0) + 15))} aria-label="Forward 15">
+        <button className="audio-btn audio-forward" onClick={() => seekTo(Math.min(audioRef.current?.duration || 0, (audioRef.current?.currentTime || 0) + 15))} aria-label={labels.forward15} title={labels.forward15}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 5l9 7-9 7V5zM2 5l9 7-9 7V5z"/></svg>
         </button>
-        <button className="audio-btn audio-btn-secondary" onClick={() => onNextChapter?.()} aria-label="Next chapter" title="Next chapter" disabled={!onNextChapter}>
+        <button className="audio-btn audio-btn-secondary" onClick={() => onNextChapter?.()} aria-label={labels.nextChapter} title={labels.nextChapter} disabled={!onNextChapter}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 4l10 8-10 8V4z"/><path d="M19 5v14"/></svg>
         </button>
       </div>
@@ -806,7 +884,7 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
         </div>
         <div className="audio-times audio-times-by-timeline">
           <span>{fmtTime(time)}</span>
-          <span>-{fmtTime(remainingTime)} left</span>
+          <span>-{fmtTime(remainingTime)} {labels.left}</span>
         </div>
       </div>
       <div className="audio-settings">
@@ -830,7 +908,7 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
       </div>
       {attribution && (
         <div className="audio-attribution">
-          Audio by <a href={attribution.url} target="_blank" rel="noreferrer">{attribution.name}</a>
+          {labels.audioBy} <a href={attribution.url} target="_blank" rel="noreferrer">{attribution.name}</a>
           {attribution.licenseSummary ? <span> · {attribution.licenseSummary}</span> : null}
         </div>
       )}

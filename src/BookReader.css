@@ -1033,6 +1033,30 @@ span.dropcap {
   margin-top: 0;
 }
 
+.reader-audio-restore-btn{
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 8px;
+  z-index: 10020;
+  width: 38px;
+  height: 24px;
+  border: 1px solid rgba(100,108,255,0.24);
+  border-radius: 999px;
+  background: var(--reader-modal-bg);
+  color: var(--reader-modal-fg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.16);
+}
+
+.reader-audio-restore-btn.is-playing{
+  border-color: rgba(100,108,255,0.42);
+  box-shadow: 0 4px 14px rgba(83,91,242,0.32);
+}
+
 /* Footer */
 .reader-footer{margin-top:1.25rem;padding-top:12px;border-top:1px solid var(--reader-border);width:100%}
 .reader-footer-inner{max-width:1200px;margin:0 auto;padding:6px 12px;text-align:center;color:var(--reader-modal-fg);font-size:0.92rem;opacity:0.9}

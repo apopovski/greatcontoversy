@@ -2202,6 +2202,7 @@ export default function BookReader() {
   const [audioUserExpanded, setAudioUserExpanded] = useState(false);
   const [audioAutoPlayRequest, setAudioAutoPlayRequest] = useState(0);
   const [audioPlaying, setAudioPlaying] = useState(false);
+  const [audioHidden, setAudioHidden] = useState(false);
 
   // --- MAIN APP STATE ---
   const [lang, setLang] = useState(() => getInitialLanguageFolder());
@@ -2306,18 +2307,35 @@ export default function BookReader() {
     }
   };
 
+  const getPlayableAudioChapterIndex = (targetIdx: number) => {
+    if (!toc.length) return 0;
+    const clamped = Math.max(0, Math.min(toc.length - 1, targetIdx));
+    const hasChapterNumber = (idx: number) => {
+      const title = (toc[idx]?.title || '').trim();
+      return getChapterNumber(title) !== null;
+    };
+
+    if (hasChapterNumber(clamped)) return clamped;
+
+    for (let i = clamped + 1; i < toc.length; i++) {
+      if (hasChapterNumber(i)) return i;
+    }
+
+    return clamped;
+  };
+
   // Handlers for next/prev chapter in the player.
   // Audio chapter navigation is intentionally independent from reading chapter navigation.
   const handleNextChapter = () => {
     if (audioChapterIdx < toc.length - 1) {
-      const nextIdx = audioChapterIdx + 1;
+      const nextIdx = getPlayableAudioChapterIndex(audioChapterIdx + 1);
       setAudioChapterIdx(nextIdx);
       setAudioAutoPlayRequest((v) => v + 1);
     }
   };
   const handlePrevChapter = () => {
     if (audioChapterIdx > 0) {
-      const prevIdx = audioChapterIdx - 1;
+      const prevIdx = getPlayableAudioChapterIndex(audioChapterIdx - 1);
       setAudioChapterIdx(prevIdx);
       setAudioAutoPlayRequest((v) => v + 1);
     }
@@ -2329,10 +2347,10 @@ export default function BookReader() {
       setAudioChapterIdx(0);
       return;
     }
-    if (audioChapterIdx >= toc.length) {
-      setAudioChapterIdx(Math.max(0, toc.length - 1));
+    if (audioChapterIdx >= toc.length || getChapterNumber((toc[audioChapterIdx]?.title || '').trim()) === null) {
+      setAudioChapterIdx(getPlayableAudioChapterIndex(Math.max(0, Math.min(audioChapterIdx, toc.length - 1))));
     }
-  }, [toc.length, audioChapterIdx]);
+  }, [toc, audioChapterIdx]);
 
   // --- Minimized audio bar and auto-next logic ---
   // Auto-minimize audio bar on scroll (mobile)
@@ -4096,9 +4114,11 @@ export default function BookReader() {
   const copyToastLabel = COPY_TOAST_LABELS[(LANGUAGE_ABBREV[lang] || 'en').toLowerCase()] || COPY_TOAST_LABELS.en;
 
   const openChapterAudioFromToc = (idx: number) => {
-    setAudioChapterIdx(idx);
+    const playableIdx = getPlayableAudioChapterIndex(idx);
+    setAudioChapterIdx(playableIdx);
     setAudioUserExpanded(false);
     setAudioMinimized(true);
+    setAudioHidden(false);
     setAudioAutoPlayRequest((v) => v + 1);
   };
 
@@ -4596,36 +4616,48 @@ export default function BookReader() {
         />
       )}
 
-      <section
-        className="reader-audio-section"
-        aria-label="Chapter audio player"
-        style={{ width: isDesktop ? `${pageWidth}px` : 'calc(100vw - 16px)' }}
-      >
-        <AudioPlayer
-          key={`audio-${lang}`}
-          lang={lang}
-          chapterIdx={audioChapterIdx}
-          chapterTitle={audioChapterTitle}
-          onNextChapter={handleNextChapter}
-          onPrevChapter={handlePrevChapter}
-          canNextChapter={audioChapterIdx < toc.length - 1}
-          canPrevChapter={audioChapterIdx > 0}
-          minimized={FORCE_MINIMIZED_PLAYER ? true : audioMinimized}
-          autoPlayRequest={audioAutoPlayRequest}
-          onPlayingChange={setAudioPlaying}
-          onExpand={() => {
-            if (FORCE_MINIMIZED_PLAYER) return;
-            setAudioUserExpanded(true);
-            setAudioMinimized(false);
-          }}
-          onMinimize={() => {
-            if (FORCE_MINIMIZED_PLAYER) return;
-            setAudioUserExpanded(false);
-            setAudioMinimized(true);
-          }}
-          containerWidth={isDesktop ? pageWidth : null}
-        />
-      </section>
+      {audioHidden ? (
+        <button
+          className={`reader-audio-restore-btn${audioPlaying ? ' is-playing' : ''}`}
+          onClick={() => setAudioHidden(false)}
+          aria-label="Show player"
+          title="Show player"
+        >
+          <MdHeadphones size={16} />
+        </button>
+      ) : (
+        <section
+          className="reader-audio-section"
+          aria-label="Chapter audio player"
+          style={{ width: isDesktop ? `${pageWidth}px` : 'calc(100vw - 16px)' }}
+        >
+          <AudioPlayer
+            key={`audio-${lang}`}
+            lang={lang}
+            chapterIdx={audioChapterIdx}
+            chapterTitle={audioChapterTitle}
+            onNextChapter={handleNextChapter}
+            onPrevChapter={handlePrevChapter}
+            canNextChapter={audioChapterIdx < toc.length - 1}
+            canPrevChapter={audioChapterIdx > 0}
+            minimized={FORCE_MINIMIZED_PLAYER ? true : audioMinimized}
+            autoPlayRequest={audioAutoPlayRequest}
+            onPlayingChange={setAudioPlaying}
+            onExpand={() => {
+              if (FORCE_MINIMIZED_PLAYER) return;
+              setAudioUserExpanded(true);
+              setAudioMinimized(false);
+            }}
+            onMinimize={() => {
+              if (FORCE_MINIMIZED_PLAYER) return;
+              setAudioUserExpanded(false);
+              setAudioMinimized(true);
+            }}
+            onHide={() => setAudioHidden(true)}
+            containerWidth={isDesktop ? pageWidth : null}
+          />
+        </section>
+      )}
 
       {showSearch && (
         <div className="reader-search-modal" onClick={() => setShowSearch(false)}>
