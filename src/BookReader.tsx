@@ -41,21 +41,7 @@ const BookContent = React.memo(function BookContent({
   contactWhatsAppLabel,
   lang,
   chapterIdx,
-  chapterTitle,
-  audioMinimized,
-  setAudioMinimized,
-  setAudioUserExpanded,
-  audioAutoPlayRequest,
-  onNextChapter,
-  onPrevChapter,
 }: BookContentProps & {
-  chapterTitle: string;
-  audioMinimized: boolean;
-  setAudioMinimized: (v: boolean) => void;
-  setAudioUserExpanded: (v: boolean) => void;
-  audioAutoPlayRequest: number;
-  onNextChapter: () => void;
-  onPrevChapter: () => void;
 }) {
   if (loading) {
     return (
@@ -79,37 +65,6 @@ const BookContent = React.memo(function BookContent({
             <div ref={contentRef} className="reader-book-html" dangerouslySetInnerHTML={{ __html: displayedHtml }} />
           </div>
         </div>
-        <section className="reader-audio-section" aria-label="Chapter audio player">
-          <AudioPlayer
-            lang={lang}
-            chapterIdx={chapterIdx}
-            chapterTitle={chapterTitle}
-            onNextChapter={onNextChapter}
-            onPrevChapter={onPrevChapter}
-            minimized={audioMinimized}
-            autoPlayRequest={audioAutoPlayRequest}
-            onExpand={() => {
-              setAudioUserExpanded(true);
-              setAudioMinimized(false);
-              const section = document.querySelector('.reader-audio-section');
-              if (section) {
-                try {
-                  const header = document.querySelector('.reader-header-bar') as HTMLElement | null;
-                  const headerOffset = (header?.offsetHeight || 56) + 8;
-                  const top = window.scrollY + section.getBoundingClientRect().top - headerOffset;
-                  window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
-                } catch {
-                  section.scrollIntoView();
-                }
-              }
-            }}
-            onMinimize={() => {
-              setAudioUserExpanded(false);
-              setAudioMinimized(true);
-            }}
-            containerWidth={isDesktop ? pageWidth : null}
-          />
-        </section>
         <footer className="reader-footer">
           <div className="reader-footer-inner">
             {copyrightText}
@@ -134,10 +89,7 @@ const BookContent = React.memo(function BookContent({
   prev.textSize === next.textSize &&
   prev.displayedHtml === next.displayedHtml &&
   prev.contentRef === next.contentRef &&
-  prev.copyrightText === next.copyrightText &&
-  prev.chapterTitle === next.chapterTitle &&
-  prev.audioMinimized === next.audioMinimized &&
-  prev.audioAutoPlayRequest === next.audioAutoPlayRequest
+  prev.copyrightText === next.copyrightText
 ));
 
 const AMHARIC_FOLDER = 'Amharic - Ellen G. White';
@@ -2258,6 +2210,7 @@ export default function BookReader() {
   const plainTextCache = useRef<Map<number, string>>(new Map());
   const albanianInFlight = useRef<Set<number>>(new Set());
   const [chapterIdx, setChapterIdx] = useState(0);
+  const [audioChapterIdx, setAudioChapterIdx] = useState(0);
   const [loading, setLoading] = useState(true);
   const [, setChapterCacheVersion] = useState(0);
   const [pageWidth, setPageWidth] = useState(() => {
@@ -2353,19 +2306,22 @@ export default function BookReader() {
 
   // Handlers for next/prev chapter (for audio auto-next)
   const handleNextChapter = () => {
-    if (chapterIdx < toc.length - 1) {
-      setChapterIdx(chapterIdx + 1);
+    if (audioChapterIdx < toc.length - 1) {
+      const nextIdx = audioChapterIdx + 1;
+      setAudioChapterIdx(nextIdx);
+      setChapterIdx(nextIdx);
       scrollToTop();
     }
   };
   const handlePrevChapter = () => {
-    if (chapterIdx > 0) {
-      setChapterIdx(chapterIdx - 1);
+    if (audioChapterIdx > 0) {
+      const prevIdx = audioChapterIdx - 1;
+      setAudioChapterIdx(prevIdx);
+      setChapterIdx(prevIdx);
       scrollToTop();
     }
   };
-  // Get current chapter title
-  const chapterTitle = toc[chapterIdx]?.title || '';
+  const audioChapterTitle = toc[audioChapterIdx]?.title || '';
 
   // --- Minimized audio bar and auto-next logic ---
   // Auto-minimize audio bar on scroll (mobile)
@@ -4122,12 +4078,11 @@ export default function BookReader() {
     bookmark.chapterIdx === chapterIdx;
   const copyToastLabel = COPY_TOAST_LABELS[(LANGUAGE_ABBREV[lang] || 'en').toLowerCase()] || COPY_TOAST_LABELS.en;
 
-  const openChapterAudioFromToc = (idx: number, closeOpeningToc: boolean) => {
-    setChapterIdx(idx);
+  const openChapterAudioFromToc = (idx: number) => {
+    setAudioChapterIdx(idx);
     setAudioUserExpanded(false);
     setAudioMinimized(true);
     setAudioAutoPlayRequest((v) => v + 1);
-    if (closeOpeningToc) setShowOpeningToc(false);
   };
 
   const handleBookmark = () => {
@@ -4572,7 +4527,7 @@ export default function BookReader() {
                                 className="reader-toc-audio-btn"
                                 aria-label={playChapterAudioLabel}
                                 title={playChapterAudioLabel}
-                                onClick={() => openChapterAudioFromToc(i, true)}
+                                onClick={() => openChapterAudioFromToc(i)}
                               >
                                 <MdPlayArrow size={16} />
                               </button>
@@ -4615,15 +4570,40 @@ export default function BookReader() {
           contactWhatsAppLabel={contactWhatsAppLabel}
           lang={lang}
           chapterIdx={chapterIdx}
-          chapterTitle={chapterTitle}
-          audioMinimized={audioMinimized}
-          setAudioMinimized={setAudioMinimized}
-          setAudioUserExpanded={setAudioUserExpanded}
-          audioAutoPlayRequest={audioAutoPlayRequest}
-          onNextChapter={handleNextChapter}
-          onPrevChapter={handlePrevChapter}
         />
       )}
+
+      <section className="reader-audio-section" aria-label="Chapter audio player">
+        <AudioPlayer
+          lang={lang}
+          chapterIdx={audioChapterIdx}
+          chapterTitle={audioChapterTitle}
+          onNextChapter={handleNextChapter}
+          onPrevChapter={handlePrevChapter}
+          minimized={audioMinimized}
+          autoPlayRequest={audioAutoPlayRequest}
+          onExpand={() => {
+            setAudioUserExpanded(true);
+            setAudioMinimized(false);
+            const section = document.querySelector('.reader-audio-section');
+            if (section) {
+              try {
+                const header = document.querySelector('.reader-header-bar') as HTMLElement | null;
+                const headerOffset = (header?.offsetHeight || 56) + 8;
+                const top = window.scrollY + section.getBoundingClientRect().top - headerOffset;
+                window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+              } catch {
+                section.scrollIntoView();
+              }
+            }
+          }}
+          onMinimize={() => {
+            setAudioUserExpanded(false);
+            setAudioMinimized(true);
+          }}
+          containerWidth={isDesktop ? pageWidth : null}
+        />
+      </section>
 
       {showSearch && (
         <div className="reader-search-modal" onClick={() => setShowSearch(false)}>
@@ -4739,6 +4719,7 @@ export default function BookReader() {
                   onClick={() => {
                     setLang(f);
                     setChapterIdx(0);
+                    setAudioChapterIdx(0);
                     setShowLangMenu(false);
                   }}
                 >
