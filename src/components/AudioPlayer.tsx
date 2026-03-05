@@ -9,6 +9,8 @@ type Props = {
   chapterTitle?: string;
   onNextChapter?: () => void;
   onPrevChapter?: () => void;
+  canNextChapter?: boolean;
+  canPrevChapter?: boolean;
   minimized?: boolean;
   autoPlayRequest?: number;
   onPlayingChange?: (playing: boolean) => void;
@@ -256,7 +258,7 @@ function fmtTime(s: number) {
 
 const SPEED_STEPS = [0.75, 1, 1.25, 1.5, 2];
 
-export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChapter, onPrevChapter, minimized, autoPlayRequest = 0, onPlayingChange, onExpand, onMinimize, containerWidth }: Props) {
+export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChapter, onPrevChapter, canNextChapter = true, canPrevChapter = true, minimized, autoPlayRequest = 0, onPlayingChange, onExpand, onMinimize, containerWidth }: Props) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const isDev = import.meta.env.DEV;
   const [src, setSrc] = useState<string | null>(null);
@@ -734,6 +736,10 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
         onSeekRelative={seekRelative}
         onSeekTo={seekTo}
         onCycleSpeed={cycleSpeed}
+        onPrevChapter={onPrevChapter}
+        onNextChapter={onNextChapter}
+        canPrevChapter={canPrevChapter}
+        canNextChapter={canNextChapter}
         onExpand={onExpand || (() => {})}
         chapterTitle={chapterTitle || ''}
         containerWidth={containerWidth}

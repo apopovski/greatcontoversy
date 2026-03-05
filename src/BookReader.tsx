@@ -4600,6 +4600,8 @@ export default function BookReader() {
           chapterTitle={audioChapterTitle}
           onNextChapter={handleNextChapter}
           onPrevChapter={handlePrevChapter}
+          canNextChapter={audioChapterIdx < toc.length - 1}
+          canPrevChapter={audioChapterIdx > 0}
           minimized={audioMinimized}
           autoPlayRequest={audioAutoPlayRequest}
           onPlayingChange={setAudioPlaying}
