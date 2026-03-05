@@ -253,6 +253,8 @@ function fmtTime(s: number) {
   return `${m}:${sec}`;
 }
 
+const SPEED_STEPS = [0.75, 1, 1.25, 1.5, 2];
+
 export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChapter, onPrevChapter, minimized, autoPlayRequest = 0, onExpand, onMinimize, containerWidth }: Props) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const isDev = import.meta.env.DEV;
@@ -662,6 +664,22 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
     a.currentTime = p;
   };
 
+  const seekRelative = (deltaSeconds: number) => {
+    const a = audioRef.current;
+    if (!a) return;
+    const next = (a.currentTime || 0) + deltaSeconds;
+    const max = Number.isFinite(a.duration) && a.duration > 0 ? a.duration : Number.MAX_SAFE_INTEGER;
+    a.currentTime = Math.max(0, Math.min(max, next));
+  };
+
+  const cycleSpeed = () => {
+    setSpeed((prev) => {
+      const currentIndex = SPEED_STEPS.findIndex((s) => Math.abs(s - prev) < 0.001);
+      const nextIndex = currentIndex >= 0 ? (currentIndex + 1) % SPEED_STEPS.length : 1;
+      return SPEED_STEPS[nextIndex];
+    });
+  };
+
   const copyCurrentSourceUrl = async () => {
     if (!src) return;
     try {
@@ -703,7 +721,11 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
         playing={playing}
         time={time}
         duration={duration}
+        speed={speed}
         onToggle={toggle}
+        onSeekRelative={seekRelative}
+        onSeekTo={seekTo}
+        onCycleSpeed={cycleSpeed}
         onExpand={onExpand || (() => {})}
         chapterTitle={chapterTitle || ''}
         containerWidth={containerWidth}
