@@ -727,23 +727,25 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
 
   if (minimized) {
     return (
-      <MinimizedAudioBar
-        playing={playing}
-        time={time}
-        duration={duration}
-        speed={speed}
-        onToggle={toggle}
-        onSeekRelative={seekRelative}
-        onSeekTo={seekTo}
-        onCycleSpeed={cycleSpeed}
-        onPrevChapter={onPrevChapter}
-        onNextChapter={onNextChapter}
-        canPrevChapter={canPrevChapter}
-        canNextChapter={canNextChapter}
-        onExpand={onExpand || (() => {})}
-        chapterTitle={chapterTitle || ''}
-        containerWidth={containerWidth}
-      />
+      <>
+        <audio ref={audioRef} src={src} preload="metadata" />
+        <MinimizedAudioBar
+          playing={playing}
+          time={time}
+          duration={duration}
+          speed={speed}
+          onToggle={toggle}
+          onSeekRelative={seekRelative}
+          onSeekTo={seekTo}
+          onCycleSpeed={cycleSpeed}
+          onPrevChapter={onPrevChapter}
+          onNextChapter={onNextChapter}
+          canPrevChapter={canPrevChapter}
+          canNextChapter={canNextChapter}
+          onExpand={onExpand || (() => {})}
+          containerWidth={containerWidth}
+        />
+      </>
     );
   }
 

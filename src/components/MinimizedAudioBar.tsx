@@ -16,16 +16,8 @@ type Props = {
   canPrevChapter?: boolean;
   canNextChapter?: boolean;
   onExpand: () => void;
-  chapterTitle: string;
   containerWidth?: number | null;
 };
-
-function fmtTime(s: number) {
-  if (!isFinite(s) || s <= 0) return '0:00';
-  const m = Math.floor(s / 60);
-  const sec = Math.floor(s % 60).toString().padStart(2, '0');
-  return `${m}:${sec}`;
-}
 
 export default function MinimizedAudioBar({
   playing,
@@ -41,7 +33,6 @@ export default function MinimizedAudioBar({
   canPrevChapter,
   canNextChapter,
   onExpand,
-  chapterTitle,
   containerWidth,
 }: Props) {
   const barStyle: React.CSSProperties | undefined = containerWidth
@@ -57,38 +48,29 @@ export default function MinimizedAudioBar({
 
   return (
     <div className="audio-minibar" style={barStyle}>
-      <div className="audio-minibar-title">{chapterTitle}</div>
       <div className="audio-minibar-controls" onClick={e => e.stopPropagation()}>
         <button className="audio-minibar-btn" onClick={() => onPrevChapter?.()} aria-label="Previous chapter" title="Previous chapter" disabled={!canPrevChapter}>
-          <MdSkipPrevious size={17} />
-          <span className="audio-minibar-btn-label">Prev</span>
+          <MdSkipPrevious size={18} />
         </button>
         <button className="audio-minibar-btn" onClick={() => onSeekRelative(-15)} aria-label="Back 15 seconds" title="Back 15 seconds">
-          <span className="audio-minibar-icon-wrap"><MdReplay10 size={17} /><span className="audio-minibar-icon-badge">5</span></span>
-          <span className="audio-minibar-btn-label">-15s</span>
+          <span className="audio-minibar-icon-wrap"><MdReplay10 size={18} /><span className="audio-minibar-icon-badge">5</span></span>
         </button>
         <button className="audio-minibar-btn" onClick={onToggle} aria-label="Play/Pause" title={playing ? 'Pause' : 'Play'}>
           {playing ? <MdPause size={18} /> : <MdPlayArrow size={18} />}
-          <span className="audio-minibar-btn-label">{playing ? 'Pause' : 'Play'}</span>
         </button>
         <button className="audio-minibar-btn" onClick={() => onSeekRelative(15)} aria-label="Forward 15 seconds" title="Forward 15 seconds">
-          <span className="audio-minibar-icon-wrap"><MdForward10 size={17} /><span className="audio-minibar-icon-badge">5</span></span>
-          <span className="audio-minibar-btn-label">+15s</span>
+          <span className="audio-minibar-icon-wrap"><MdForward10 size={18} /><span className="audio-minibar-icon-badge">5</span></span>
         </button>
         <button className="audio-minibar-btn" onClick={() => onNextChapter?.()} aria-label="Next chapter" title="Next chapter" disabled={!canNextChapter}>
-          <MdSkipNext size={17} />
-          <span className="audio-minibar-btn-label">Next</span>
+          <MdSkipNext size={18} />
         </button>
         <button className="audio-minibar-btn audio-minibar-btn-speed" onClick={onCycleSpeed} aria-label="Change speed" title="Change speed">
-          <MdSpeed size={17} />
-          <span className="audio-minibar-btn-label">{`${speed}x`}</span>
+          <MdSpeed size={18} />
           <span className="audio-minibar-speed-chip" aria-hidden="true">{`${speed}x`}</span>
         </button>
         <button className="audio-minibar-btn audio-minibar-btn-open" onClick={onExpand} aria-label="Open player" title="Open player">
-          <MdExpandLess size={18} />
-          <span className="audio-minibar-btn-label">Open</span>
+          <MdExpandLess size={20} />
         </button>
-        <span className="audio-minibar-time">{fmtTime(time)} / {fmtTime(duration)}</span>
       </div>
       <div
         className="audio-minibar-progress"
