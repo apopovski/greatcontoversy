@@ -4227,31 +4227,17 @@ export default function BookReader() {
               ref={burgerBtnRef}
               onClick={(e) => {
                 e.stopPropagation();
-                const btn = burgerBtnRef.current;
-                const panelW = 360;
-                const maxAllowed = Math.max(120, window.innerWidth - 32);
-                const w = Math.min(panelW, maxAllowed);
-                if (btn) {
-                  const r = btn.getBoundingClientRect();
-                  // compute left so panel stays fully on-screen, prefer aligning to button left
-                  let left = r.left;
-                  if (left + w + 16 > window.innerWidth) left = Math.max(12, window.innerWidth - w - 16);
-                  if (left < 12) left = 12;
-                  const style: React.CSSProperties = {
-                    position: 'fixed',
-                    top: r.bottom + 8,
-                    left,
-                    width: w,
-                    maxWidth: '92%',
-                    zIndex: 9999,
-                  };
-                  setChaptersPanelStyle(style);
-                } else {
-                  // fallback: center near top
-                  const left = Math.max(12, Math.floor((window.innerWidth - w) / 2));
-                  setChaptersPanelStyle({ position: 'fixed', top: 72, left, width: w, zIndex: 9999 });
+                setShowChaptersMenu(false);
+                setShowSearch(false);
+                setShowShareMenu(false);
+                setShowLangMenu(false);
+                setShowMoreMenu(false);
+                setShowOpeningToc(true);
+                try {
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                } catch {
+                  window.scrollTo(0, 0);
                 }
-                setShowChaptersMenu((v) => !v);
               }}
               aria-label={contentsLabel}
             >
