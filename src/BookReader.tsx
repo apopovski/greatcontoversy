@@ -3217,6 +3217,10 @@ export default function BookReader() {
         const shouldSkipToc = (t: string) => {
           const s = sanitizeTocTitle(t);
           if (!s) return true;
+          // Skip footnote/endnote markers that can leak into TOC fallback scans
+          // (e.g. "1", "2", "[12]", "12.") in some source HTML files.
+          if (/^[\[(]?\d{1,4}(?:[\].,:;\-]\d{0,4})?[\])\.]?$/u.test(s)) return true;
+          if (/^(?:n(?:ote)?\s*)?\d{1,4}$/iu.test(s)) return true;
           if (isInfoPage(s)) return true;
           if (/^\s*(?:preface|foreword)\b/i.test(s)) return true;
           // Language-specific exclusions (Spanish titles)

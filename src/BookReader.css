@@ -324,6 +324,24 @@ html,body,#root,.reader-root{height:100%;margin:0;padding:0;background:var(--rea
 .reader-main{position:relative;z-index:1}
 .reader-book-html{width:100%}
 
+/* Guard against source anomalies with very long unbroken strings
+   (e.g. dense English citations inside non-Latin chapters). */
+.reader-book-html,
+.reader-book-html p,
+.reader-book-html blockquote,
+.reader-book-html li,
+.reader-book-html div,
+.reader-book-html span,
+.reader-book-html h1,
+.reader-book-html h2,
+.reader-book-html h3,
+.reader-book-html h4,
+.reader-book-html h5,
+.reader-book-html h6 {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 /* Chapter content layout with timeline sidebar */
 .reader-content-layout{
   display:flex;
