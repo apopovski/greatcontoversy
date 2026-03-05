@@ -23,8 +23,6 @@ type BookContentProps = {
   displayedHtml: string;
   contentRef: React.RefObject<HTMLDivElement | null>;
   copyrightText: string;
-  onContactWhatsApp: () => void;
-  contactWhatsAppLabel: string;
   lang: string;
   chapterIdx: number;
 };
@@ -37,8 +35,6 @@ const BookContent = React.memo(function BookContent({
   displayedHtml,
   contentRef,
   copyrightText,
-  onContactWhatsApp,
-  contactWhatsAppLabel,
   lang,
   chapterIdx,
 }: BookContentProps & {
@@ -69,14 +65,9 @@ const BookContent = React.memo(function BookContent({
           <div className="reader-footer-inner">
             {copyrightText}
             {' · '}
-            <button
-              type="button"
-              onClick={onContactWhatsApp}
-              style={{ border: 'none', background: 'transparent', color: 'inherit', textDecoration: 'underline', cursor: 'pointer', padding: 0, font: 'inherit' }}
-              aria-label={contactWhatsAppLabel}
-            >
-              {contactWhatsAppLabel}
-            </button>
+            <a href="https://github.com/apopovski" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>
+              Developed by Aleksandar Popovski
+            </a>
           </div>
         </footer>
       </div>
@@ -118,6 +109,8 @@ const FRENCH_FOLDER = 'French - Ellen G. White';
 const ALBANIAN_FOLDER = 'Beteja e Madhe - Ellen G. White';
 const CONTACT_WHATSAPP_NUMBER = '19562447002';
 const CONTACT_WHATSAPP_PREFILL = 'The Great Controversy — ';
+const DEVELOPER_LINK = 'https://github.com/apopovski';
+const DEVELOPER_CREDIT = 'Developed by Aleksandar Popovski';
 const CONTACT_WHATSAPP_LABELS: Record<string, string> = {
   'The Great Controversy - Ellen G. White 2': 'Contact on WhatsApp',
   'El Conflicto de los Siglos - Ellen G. White': 'Contactar por WhatsApp',
@@ -2203,6 +2196,7 @@ export default function BookReader() {
   const [audioAutoPlayRequest, setAudioAutoPlayRequest] = useState(0);
   const [audioPlaying, setAudioPlaying] = useState(false);
   const [audioHidden, setAudioHidden] = useState(false);
+  const [audioContinuePlay, setAudioContinuePlay] = useState(false);
 
   // --- MAIN APP STATE ---
   const [lang, setLang] = useState(() => getInitialLanguageFolder());
@@ -2326,18 +2320,18 @@ export default function BookReader() {
 
   // Handlers for next/prev chapter in the player.
   // Audio chapter navigation is intentionally independent from reading chapter navigation.
-  const handleNextChapter = () => {
+  const handleNextChapter = (autoPlay = false) => {
     if (audioChapterIdx < toc.length - 1) {
       const nextIdx = getPlayableAudioChapterIndex(audioChapterIdx + 1);
       setAudioChapterIdx(nextIdx);
-      setAudioAutoPlayRequest((v) => v + 1);
+      if (autoPlay) setAudioAutoPlayRequest((v) => v + 1);
     }
   };
-  const handlePrevChapter = () => {
+  const handlePrevChapter = (autoPlay = false) => {
     if (audioChapterIdx > 0) {
       const prevIdx = getPlayableAudioChapterIndex(audioChapterIdx - 1);
       setAudioChapterIdx(prevIdx);
-      setAudioAutoPlayRequest((v) => v + 1);
+      if (autoPlay) setAudioAutoPlayRequest((v) => v + 1);
     }
   };
   const audioChapterTitle = toc[audioChapterIdx]?.title || '';
@@ -4493,6 +4487,10 @@ export default function BookReader() {
             <FaXTwitter size={16} />
             <span>X (Twitter)</span>
           </button>
+          <button onClick={handleWhatsAppContact} aria-label={contactWhatsAppLabel}>
+            <FaWhatsapp size={18} />
+            <span>{contactWhatsAppLabel}</span>
+          </button>
           <button onClick={() => handleShareApp('whatsapp')} aria-label="Share on WhatsApp">
             <FaWhatsapp size={18} />
             <span>WhatsApp</span>
@@ -4588,14 +4586,9 @@ export default function BookReader() {
               <div className="reader-footer-inner">
                 {COPYRIGHTS[lang] || `© ${getBookTitleFromFolder(lang) || LANGUAGE_NAMES[lang] || lang}`}
                 {' · '}
-                <button
-                  type="button"
-                  onClick={handleWhatsAppContact}
-                  style={{ border: 'none', background: 'transparent', color: 'inherit', textDecoration: 'underline', cursor: 'pointer', padding: 0, font: 'inherit' }}
-                  aria-label={contactWhatsAppLabel}
-                >
-                  {contactWhatsAppLabel}
-                </button>
+                <a href={DEVELOPER_LINK} target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>
+                  {DEVELOPER_CREDIT}
+                </a>
               </div>
             </footer>
           </div>
@@ -4609,8 +4602,6 @@ export default function BookReader() {
           displayedHtml={displayedHtml}
           contentRef={contentRef}
           copyrightText={(COPYRIGHTS[lang] || `© ${getBookTitleFromFolder(lang) || LANGUAGE_NAMES[lang] || lang}`)}
-          onContactWhatsApp={handleWhatsAppContact}
-          contactWhatsAppLabel={contactWhatsAppLabel}
           lang={lang}
           chapterIdx={chapterIdx}
         />
@@ -4643,6 +4634,8 @@ export default function BookReader() {
             minimized={FORCE_MINIMIZED_PLAYER ? true : audioMinimized}
             autoPlayRequest={audioAutoPlayRequest}
             onPlayingChange={setAudioPlaying}
+            continuePlay={audioContinuePlay}
+            onToggleContinuePlay={() => setAudioContinuePlay((v) => !v)}
             onExpand={() => {
               if (FORCE_MINIMIZED_PLAYER) return;
               setAudioUserExpanded(true);

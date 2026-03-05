@@ -1,5 +1,5 @@
 import React from 'react';
-import { MdExpandLess, MdExpandMore, MdForward10, MdPause, MdPlayArrow, MdReplay10, MdSkipNext, MdSkipPrevious, MdSpeed } from 'react-icons/md';
+import { MdExpandMore, MdForward10, MdPause, MdPlayArrow, MdReplay10, MdRepeat, MdSkipNext, MdSkipPrevious, MdSpeed } from 'react-icons/md';
 import './AudioPlayer.css';
 
 type PlayerLabels = {
@@ -16,6 +16,7 @@ type PlayerLabels = {
   audioProgress: string;
   left: string;
   hidePlayer: string;
+  continuePlay: string;
 };
 
 type Props = {
@@ -35,6 +36,8 @@ type Props = {
   canNextChapter?: boolean;
   onExpand: () => void;
   onHide?: () => void;
+  continuePlay: boolean;
+  onToggleContinuePlay?: () => void;
   containerWidth?: number | null;
 };
 
@@ -55,6 +58,8 @@ export default function MinimizedAudioBar({
   canNextChapter,
   onExpand,
   onHide,
+  continuePlay,
+  onToggleContinuePlay,
   containerWidth,
 }: Props) {
   const barStyle: React.CSSProperties | undefined = containerWidth
@@ -115,9 +120,16 @@ export default function MinimizedAudioBar({
           <MdSpeed size={18} />
           <span className="audio-minibar-speed-chip" aria-hidden="true">{`${speed}x`}</span>
         </button>
-        <button className="audio-minibar-btn audio-minibar-btn-open" onClick={onExpand} aria-label={labels.openPlayer} title={labels.openPlayer}>
-          <MdExpandLess size={20} />
-        </button>
+        {onToggleContinuePlay ? (
+          <button
+            className={`audio-minibar-btn audio-minibar-btn-toggle${continuePlay ? ' is-active' : ''}`}
+            onClick={onToggleContinuePlay}
+            aria-label={labels.continuePlay}
+            title={labels.continuePlay}
+          >
+            <MdRepeat size={18} />
+          </button>
+        ) : null}
         {onHide ? (
           <button className="audio-minibar-btn audio-minibar-btn-hide" onClick={onHide} aria-label={labels.hidePlayer} title={labels.hidePlayer}>
             <MdExpandMore size={20} />
