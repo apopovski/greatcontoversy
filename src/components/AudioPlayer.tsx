@@ -10,6 +10,7 @@ type Props = {
   onNextChapter?: () => void;
   onPrevChapter?: () => void;
   minimized?: boolean;
+  autoPlayRequest?: number;
   onExpand?: () => void;
   onMinimize?: () => void;
   containerWidth?: number | null;
@@ -252,7 +253,7 @@ function fmtTime(s: number) {
   return `${m}:${sec}`;
 }
 
-export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChapter, onPrevChapter, minimized, onExpand, onMinimize, containerWidth }: Props) {
+export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChapter, onPrevChapter, minimized, autoPlayRequest = 0, onExpand, onMinimize, containerWidth }: Props) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const isDev = import.meta.env.DEV;
   const [src, setSrc] = useState<string | null>(null);
@@ -611,6 +612,34 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
     t = window.setInterval(save, 3000);
     return () => { if (t) window.clearInterval(t); };
   }, [src, lang, chapterIdx]);
+
+  // Request autoplay from external chapter actions (e.g., ToC play buttons).
+  useEffect(() => {
+    if (!autoPlayRequest || !src) return;
+    const a = audioRef.current;
+    if (!a) return;
+
+    const playNow = async () => {
+      try {
+        await a.play();
+      } catch (err) {
+        console.error('[AudioPlayer] Autoplay request failed:', err);
+      }
+    };
+
+    if (a.readyState >= 2) {
+      void playNow();
+      return;
+    }
+
+    const onCanPlay = () => {
+      void playNow();
+    };
+    a.addEventListener('canplay', onCanPlay, { once: true });
+    return () => {
+      a.removeEventListener('canplay', onCanPlay);
+    };
+  }, [autoPlayRequest, src]);
   
   // toggle play/pause
   const toggle = async () => {

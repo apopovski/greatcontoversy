@@ -45,6 +45,7 @@ const BookContent = React.memo(function BookContent({
   audioMinimized,
   setAudioMinimized,
   setAudioUserExpanded,
+  audioAutoPlayRequest,
   onNextChapter,
   onPrevChapter,
 }: BookContentProps & {
@@ -52,6 +53,7 @@ const BookContent = React.memo(function BookContent({
   audioMinimized: boolean;
   setAudioMinimized: (v: boolean) => void;
   setAudioUserExpanded: (v: boolean) => void;
+  audioAutoPlayRequest: number;
   onNextChapter: () => void;
   onPrevChapter: () => void;
 }) {
@@ -85,6 +87,7 @@ const BookContent = React.memo(function BookContent({
             onNextChapter={onNextChapter}
             onPrevChapter={onPrevChapter}
             minimized={audioMinimized}
+            autoPlayRequest={audioAutoPlayRequest}
             onExpand={() => {
               setAudioUserExpanded(true);
               setAudioMinimized(false);
@@ -133,7 +136,8 @@ const BookContent = React.memo(function BookContent({
   prev.contentRef === next.contentRef &&
   prev.copyrightText === next.copyrightText &&
   prev.chapterTitle === next.chapterTitle &&
-  prev.audioMinimized === next.audioMinimized
+  prev.audioMinimized === next.audioMinimized &&
+  prev.audioAutoPlayRequest === next.audioAutoPlayRequest
 ));
 
 const AMHARIC_FOLDER = 'Amharic - Ellen G. White';
@@ -2243,6 +2247,7 @@ export default function BookReader() {
   // --- AUDIO STATE ---
   const [audioMinimized, setAudioMinimized] = useState(false);
   const [audioUserExpanded, setAudioUserExpanded] = useState(false);
+  const [audioAutoPlayRequest, setAudioAutoPlayRequest] = useState(0);
 
   // --- MAIN APP STATE ---
   const [lang, setLang] = useState(() => getInitialLanguageFolder());
@@ -4137,28 +4142,13 @@ export default function BookReader() {
     bookmark.chapterIdx === chapterIdx;
   const copyToastLabel = COPY_TOAST_LABELS[(LANGUAGE_ABBREV[lang] || 'en').toLowerCase()] || COPY_TOAST_LABELS.en;
 
-  const scrollToAudioSection = () => {
-    const section = document.querySelector('.reader-audio-section');
-    if (!section) return;
-    try {
-      const header = document.querySelector('.reader-header-bar') as HTMLElement | null;
-      const headerOffset = (header?.offsetHeight || 56) + 8;
-      const top = window.scrollY + section.getBoundingClientRect().top - headerOffset;
-      window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
-    } catch {
-      section.scrollIntoView();
-    }
-  };
-
   const openChapterAudioFromToc = (idx: number, closeOpeningToc: boolean) => {
     setChapterIdx(idx);
-    setAudioUserExpanded(true);
-    setAudioMinimized(false);
+    setAudioUserExpanded(false);
+    setAudioMinimized(true);
+    setAudioAutoPlayRequest((v) => v + 1);
     setShowChaptersMenu(false);
     if (closeOpeningToc) setShowOpeningToc(false);
-    window.setTimeout(() => {
-      scrollToAudioSection();
-    }, closeOpeningToc ? 120 : 40);
   };
 
   const handleBookmark = () => {
@@ -4714,6 +4704,7 @@ export default function BookReader() {
           audioMinimized={audioMinimized}
           setAudioMinimized={setAudioMinimized}
           setAudioUserExpanded={setAudioUserExpanded}
+          audioAutoPlayRequest={audioAutoPlayRequest}
           onNextChapter={handleNextChapter}
           onPrevChapter={handlePrevChapter}
         />
