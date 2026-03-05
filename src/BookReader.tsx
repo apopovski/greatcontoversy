@@ -2324,6 +2324,16 @@ export default function BookReader() {
   };
   const audioChapterTitle = toc[audioChapterIdx]?.title || '';
 
+  useEffect(() => {
+    if (!toc.length) {
+      setAudioChapterIdx(0);
+      return;
+    }
+    if (audioChapterIdx >= toc.length) {
+      setAudioChapterIdx(Math.max(0, toc.length - 1));
+    }
+  }, [toc.length, audioChapterIdx]);
+
   // --- Minimized audio bar and auto-next logic ---
   // Auto-minimize audio bar on scroll (mobile)
   useEffect(() => {
@@ -4584,6 +4594,7 @@ export default function BookReader() {
 
       <section className="reader-audio-section" aria-label="Chapter audio player">
         <AudioPlayer
+          key={`audio-${lang}`}
           lang={lang}
           chapterIdx={audioChapterIdx}
           chapterTitle={audioChapterTitle}
