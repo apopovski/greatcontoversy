@@ -139,7 +139,30 @@ const AUDIO_SOURCE_CANDIDATES: Record<string, AudioSourceCandidate> = {
   },
 };
 
-export const AUDIO_AVAILABLE_LANGUAGE_FOLDERS = new Set<string>(Object.keys(AUDIO_SOURCE_CANDIDATES));
+// Show language-menu audio badges only for folders with deterministic, known
+// manifest-backed audio availability (to avoid false positives).
+const MANIFEST_AUDIO_LANGUAGE_CODES = new Set<string>([
+  'en',
+  'ar',
+  'sr',
+  'sp',
+  'fr',
+  'pt',
+  'cn',
+  'it',
+  'no',
+  'ru',
+  'sl',
+  'sk',
+]);
+
+export const AUDIO_AVAILABLE_LANGUAGE_FOLDERS = new Set<string>(
+  Object.entries(AUDIO_SOURCE_CANDIDATES)
+    .filter(([, candidate]) =>
+      candidate.languageCodes.some((code) => MANIFEST_AUDIO_LANGUAGE_CODES.has(code.trim().toLowerCase()))
+    )
+    .map(([folder]) => folder)
+);
 
 type DirectoryTrack = {
   order: number;

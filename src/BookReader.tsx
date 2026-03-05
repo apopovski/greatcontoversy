@@ -91,7 +91,10 @@ const BookContent = React.memo(function BookContent({
               const section = document.querySelector('.reader-audio-section');
               if (section) {
                 try {
-                  section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                  const header = document.querySelector('.reader-header-bar') as HTMLElement | null;
+                  const headerOffset = (header?.offsetHeight || 56) + 8;
+                  const top = window.scrollY + section.getBoundingClientRect().top - headerOffset;
+                  window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
                 } catch {
                   section.scrollIntoView();
                 }
