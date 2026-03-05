@@ -834,6 +834,45 @@ const COPY_TOAST_LABELS: Record<string, string> = {
   sq: 'U kopjua',
 };
 
+const AUDIO_AVAILABLE_LABELS: Record<string, string> = {
+  en: 'Audio available',
+  es: 'Audio disponible',
+  de: 'Audio verfügbar',
+  it: 'Audio disponibile',
+  da: 'Lyd tilgængelig',
+  no: 'Lyd tilgjengelig',
+  pt: 'Áudio disponível',
+  sm: 'E avanoa le leo',
+  et: 'Heli saadaval',
+  ro: 'Audio disponibil',
+  hr: 'Audio dostupan',
+  bg: 'Налично аудио',
+  sk: 'Dostupné audio',
+  cs: 'Dostupné audio',
+  uk: 'Доступне аудіо',
+  ru: 'Аудио доступно',
+  pl: 'Dostępne audio',
+  ar: 'الصوت متاح',
+  am: 'ድምጽ ይገኛል',
+  zh: '有音频',
+  ko: '오디오 사용 가능',
+  ja: '音声あり',
+  sr: 'Аудио доступан',
+  fa: 'صوت در دسترس است',
+  af: 'Klank beskikbaar',
+  hi: 'ऑडियो उपलब्ध',
+  bn: 'অডিও উপলভ্য',
+  id: 'Audio tersedia',
+  ur: 'آڈیو دستیاب ہے',
+  fr: 'Audio disponible',
+  sq: 'Audio i disponuesh',
+};
+
+function getAudioAvailableLabel(folder: string) {
+  const code = (LANGUAGE_ABBREV[folder] || 'en').toLowerCase();
+  return AUDIO_AVAILABLE_LABELS[code] || AUDIO_AVAILABLE_LABELS.en;
+}
+
 const COPYRIGHTS: Record<string, string> = {
   // Use the localized book title (derived from the language folder) as the copyright holder.
   ...Object.fromEntries(LANGUAGE_FOLDERS.map(f => [f, `© 2026 ${getBookTitleFromFolder(f)}`]))
@@ -4746,7 +4785,7 @@ export default function BookReader() {
                 >
                   <span>{LANGUAGE_NAMES[f] || f}</span>
                   {AUDIO_AVAILABLE_LANGUAGE_FOLDERS.has(f) ? (
-                    <span className="reader-lang-audio-icon" aria-label="Audio available" title="Audio available">
+                    <span className="reader-lang-audio-icon" aria-label={getAudioAvailableLabel(f)} title={getAudioAvailableLabel(f)}>
                       <MdHeadphones size={16} />
                     </span>
                   ) : null}
