@@ -11,6 +11,7 @@ type Props = {
   onPrevChapter?: () => void;
   minimized?: boolean;
   autoPlayRequest?: number;
+  onPlayingChange?: (playing: boolean) => void;
   onExpand?: () => void;
   onMinimize?: () => void;
   containerWidth?: number | null;
@@ -255,7 +256,7 @@ function fmtTime(s: number) {
 
 const SPEED_STEPS = [0.75, 1, 1.25, 1.5, 2];
 
-export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChapter, onPrevChapter, minimized, autoPlayRequest = 0, onExpand, onMinimize, containerWidth }: Props) {
+export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChapter, onPrevChapter, minimized, autoPlayRequest = 0, onPlayingChange, onExpand, onMinimize, containerWidth }: Props) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const isDev = import.meta.env.DEV;
   const [src, setSrc] = useState<string | null>(null);
@@ -544,12 +545,19 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
   useEffect(() => {
     const a = audioRef.current;
     if (!a) return;
-    const onPlay = () => setPlaying(true);
-    const onPause = () => setPlaying(false);
+    const onPlay = () => {
+      setPlaying(true);
+      onPlayingChange?.(true);
+    };
+    const onPause = () => {
+      setPlaying(false);
+      onPlayingChange?.(false);
+    };
     const onTime = () => setTime(a.currentTime || 0);
     const onMeta = () => setDuration(a.duration || 0);
     const onEnd = () => {
       setPlaying(false);
+      onPlayingChange?.(false);
       // Auto-play next chapter if available
       if (onNextChapter) onNextChapter();
     };
@@ -569,7 +577,7 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
       a.removeEventListener('ended', onEnd);
       a.removeEventListener('error', onError);
     };
-  }, [src, onNextChapter]);
+  }, [src, onNextChapter, onPlayingChange]);
 
   // resume saved position per lang+chapter
   useEffect(() => {

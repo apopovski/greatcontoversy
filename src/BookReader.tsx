@@ -2200,6 +2200,7 @@ export default function BookReader() {
   const [audioMinimized, setAudioMinimized] = useState(false);
   const [audioUserExpanded, setAudioUserExpanded] = useState(false);
   const [audioAutoPlayRequest, setAudioAutoPlayRequest] = useState(0);
+  const [audioPlaying, setAudioPlaying] = useState(false);
 
   // --- MAIN APP STATE ---
   const [lang, setLang] = useState(() => getInitialLanguageFolder());
@@ -4047,6 +4048,8 @@ export default function BookReader() {
   const continueLabel = LANGUAGE_CONTINUE_LABELS[lang] || 'Continue';
   const hasLanguageAudio = AUDIO_AVAILABLE_LANGUAGE_FOLDERS.has(lang);
   const playChapterAudioLabel = 'Play chapter audio';
+  const nowPlayingAudioLabel = 'Now playing';
+  const selectedAudioLabel = 'Audio selected';
   const isRtl = (lang || '').toLowerCase().includes('alsra') || lang === FARSI_FOLDER || lang === URDU_FOLDER;
 
   const languageMenuFolders = useMemo(() => {
@@ -4503,6 +4506,7 @@ export default function BookReader() {
                       const chapterNum = getChapterNumber(t.title);
                       const titleOnly = chapterNum ? stripChapterPrefix(t.title) : t.title;
                       const chapterLabel = LANGUAGE_CHAPTER_LABELS[lang] || 'Chapter';
+                      const isActiveAudioChapter = hasLanguageAudio && i === audioChapterIdx;
                       return (
                         <li key={t.href}>
                           <div className="reader-toc-row">
@@ -4520,6 +4524,11 @@ export default function BookReader() {
                             >
                               {chapterNum && <span className="reader-toc-num">{chapterLabel} {chapterNum}</span>}
                               <span className={`reader-toc-title${chapterNum ? '' : ' full-title'}`}>{titleOnly}</span>
+                              {isActiveAudioChapter ? (
+                                <span className="reader-toc-audio-chip" aria-label={audioPlaying ? nowPlayingAudioLabel : selectedAudioLabel}>
+                                  {audioPlaying ? nowPlayingAudioLabel : selectedAudioLabel}
+                                </span>
+                              ) : null}
                             </button>
                             {hasLanguageAudio ? (
                               <button
@@ -4582,6 +4591,7 @@ export default function BookReader() {
           onPrevChapter={handlePrevChapter}
           minimized={audioMinimized}
           autoPlayRequest={audioAutoPlayRequest}
+          onPlayingChange={setAudioPlaying}
           onExpand={() => {
             setAudioUserExpanded(true);
             setAudioMinimized(false);
@@ -4720,6 +4730,7 @@ export default function BookReader() {
                     setLang(f);
                     setChapterIdx(0);
                     setAudioChapterIdx(0);
+                    setAudioPlaying(false);
                     setShowLangMenu(false);
                   }}
                 >

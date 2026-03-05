@@ -425,6 +425,20 @@ html[data-theme='dark'] .reader-timeline-range{
 .reader-toc-item-btn{white-space:normal;overflow-wrap:anywhere;word-break:break-word}
 .reader-toc-item-btn .full-title{grid-column:1/-1}
 .reader-toc-item-btn.active{background:rgba(100,110,255,0.08);font-weight:700}
+.reader-toc-audio-chip{
+  display:inline-flex;
+  width:fit-content;
+  margin-top:6px;
+  font-size:0.68rem;
+  font-weight:700;
+  letter-spacing:0.02em;
+  text-transform:uppercase;
+  color:var(--reader-accent);
+  background:rgba(100,110,255,0.10);
+  border:1px solid rgba(100,110,255,0.24);
+  border-radius:999px;
+  padding:2px 8px;
+}
 
 /* Force white text for all book/TOC text in dark mode (handles language/source-specific inline styles) */
 html[data-theme='dark'] .reader-book-html,
