@@ -39,6 +39,8 @@ const BookContent = React.memo(function BookContent({
   chapterIdx,
 }: BookContentProps & {
 }) {
+  const developerCredit = getDeveloperCreditText(lang);
+
   if (loading) {
     return (
       <main className="reader-main">
@@ -66,7 +68,7 @@ const BookContent = React.memo(function BookContent({
             {copyrightText}
             {' · '}
             <a href="https://github.com/apopovski" target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>
-              Developed by Aleksandar Popovski
+              {developerCredit}
             </a>
           </div>
         </footer>
@@ -110,7 +112,40 @@ const ALBANIAN_FOLDER = 'Beteja e Madhe - Ellen G. White';
 const CONTACT_WHATSAPP_NUMBER = '19562447002';
 const CONTACT_WHATSAPP_PREFILL = 'The Great Controversy — ';
 const DEVELOPER_LINK = 'https://github.com/apopovski';
-const DEVELOPER_CREDIT = 'Developed by Aleksandar Popovski';
+const DEVELOPER_BY_LABELS: Record<string, string> = {
+  en: 'Developed by',
+  es: 'Desarrollado por',
+  de: 'Entwickelt von',
+  it: 'Sviluppato da',
+  da: 'Udviklet af',
+  no: 'Utviklet av',
+  pt: 'Desenvolvido por',
+  sm: 'Atiaʻe e',
+  et: 'Arendaja',
+  ro: 'Dezvoltat de',
+  hr: 'Razvio',
+  bg: 'Разработено от',
+  sk: 'Vyvinul',
+  cs: 'Vyvinul',
+  uk: 'Розроблено',
+  ru: 'Разработано',
+  pl: 'Opracowane przez',
+  ar: 'تطوير',
+  am: 'የተገነባው በ',
+  zh: '开发者',
+  ko: '개발',
+  ja: '開発',
+  sr: 'Развио',
+  fa: 'توسعه توسط',
+  af: 'Ontwikkel deur',
+  hi: 'द्वारा विकसित',
+  bn: 'ডেভেলপ করেছেন',
+  id: 'Dikembangkan oleh',
+  ur: 'تیار کردہ از',
+  fr: 'Développé par',
+  sq: 'Zhvilluar nga',
+};
+const DEVELOPER_NAME = 'Aleksandar Popovski';
 const CONTACT_WHATSAPP_LABELS: Record<string, string> = {
   'The Great Controversy - Ellen G. White 2': 'Contact on WhatsApp',
   'El Conflicto de los Siglos - Ellen G. White': 'Contactar por WhatsApp',
@@ -820,6 +855,12 @@ const AUDIO_AVAILABLE_LABELS: Record<string, string> = {
 function getAudioAvailableLabel(folder: string) {
   const code = (LANGUAGE_ABBREV[folder] || 'en').toLowerCase();
   return AUDIO_AVAILABLE_LABELS[code] || AUDIO_AVAILABLE_LABELS.en;
+}
+
+function getDeveloperCreditText(folder: string) {
+  const code = (LANGUAGE_ABBREV[folder] || 'en').toLowerCase();
+  const prefix = DEVELOPER_BY_LABELS[code] || DEVELOPER_BY_LABELS.en;
+  return `${prefix} ${DEVELOPER_NAME}`;
 }
 
 const COPYRIGHTS: Record<string, string> = {
@@ -4075,8 +4116,9 @@ export default function BookReader() {
   const continueLabel = LANGUAGE_CONTINUE_LABELS[lang] || 'Continue';
   const hasLanguageAudio = AUDIO_AVAILABLE_LANGUAGE_FOLDERS.has(lang);
   const playChapterAudioLabel = 'Play chapter audio';
-  const nowPlayingAudioLabel = 'Now playing';
-  const selectedAudioLabel = 'Audio selected';
+  const nowPlayingAudioLabel = 'Now playing audio chapter';
+  const selectedAudioLabel = 'Audio chapter selected';
+  const developerCredit = getDeveloperCreditText(lang);
   const isRtl = (lang || '').toLowerCase().includes('alsra') || lang === FARSI_FOLDER || lang === URDU_FOLDER;
 
   const languageMenuFolders = useMemo(() => {
@@ -4566,17 +4608,12 @@ export default function BookReader() {
                             >
                               {chapterNum && <span className="reader-toc-num">{chapterLabel} {chapterNum}</span>}
                               <span className={`reader-toc-title${chapterNum ? '' : ' full-title'}`}>{titleOnly}</span>
-                              {isActiveAudioChapter ? (
-                                <span className="reader-toc-audio-chip" aria-label={audioPlaying ? nowPlayingAudioLabel : selectedAudioLabel}>
-                                  {audioPlaying ? nowPlayingAudioLabel : selectedAudioLabel}
-                                </span>
-                              ) : null}
                             </button>
                             {hasLanguageAudio ? (
                               <button
                                 type="button"
-                                className="reader-toc-audio-btn"
-                                aria-label={playChapterAudioLabel}
+                                className={`reader-toc-audio-btn${isActiveAudioChapter ? ' is-selected' : ''}${isActiveAudioChapter && audioPlaying ? ' is-playing' : ''}`}
+                                aria-label={isActiveAudioChapter ? (audioPlaying ? nowPlayingAudioLabel : selectedAudioLabel) : playChapterAudioLabel}
                                 title={playChapterAudioLabel}
                                 onClick={() => openChapterAudioFromToc(i)}
                               >
@@ -4597,7 +4634,7 @@ export default function BookReader() {
                 {COPYRIGHTS[lang] || `© ${getBookTitleFromFolder(lang) || LANGUAGE_NAMES[lang] || lang}`}
                 {' · '}
                 <a href={DEVELOPER_LINK} target="_blank" rel="noreferrer" style={{ color: 'inherit', textDecoration: 'underline' }}>
-                  {DEVELOPER_CREDIT}
+                  {developerCredit}
                 </a>
               </div>
             </footer>

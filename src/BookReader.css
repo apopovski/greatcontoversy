@@ -433,6 +433,8 @@ html[data-theme='dark'] .reader-timeline-range{
 .reader-toc-audio-btn{border:0;background:rgba(100,110,255,0.08);color:var(--reader-accent);border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;align-self:center;margin-right:2px}
 .reader-toc-audio-btn:hover{background:rgba(100,110,255,0.16)}
 .reader-toc-audio-btn:focus-visible{outline:2px solid var(--reader-accent);outline-offset:2px}
+.reader-toc-audio-btn.is-selected{background:rgba(100,110,255,0.22);border:1px solid rgba(100,110,255,0.42)}
+.reader-toc-audio-btn.is-playing{background:linear-gradient(135deg,#646cff 0%,#535bf2 100%);color:#fff;border-color:transparent;box-shadow:0 0 0 2px rgba(100,110,255,0.14)}
 
 /* Prevent horizontal scrolling in the anchored chapters/contents panel and
   ensure long titles wrap cleanly. The opening TOC already has similar
@@ -441,21 +443,6 @@ html[data-theme='dark'] .reader-timeline-range{
 .reader-toc-item-btn{white-space:normal;overflow-wrap:anywhere;word-break:break-word}
 .reader-toc-item-btn .full-title{grid-column:1/-1}
 .reader-toc-item-btn.active{background:rgba(100,110,255,0.08);font-weight:700}
-.reader-toc-audio-chip{
-  display:inline-flex;
-  width:fit-content;
-  margin-top:6px;
-  font-size:0.68rem;
-  font-weight:700;
-  letter-spacing:0.02em;
-  text-transform:uppercase;
-  color:var(--reader-accent);
-  background:rgba(100,110,255,0.10);
-  border:1px solid rgba(100,110,255,0.24);
-  border-radius:999px;
-  padding:2px 8px;
-}
-
 /* Force white text for all book/TOC text in dark mode (handles language/source-specific inline styles) */
 html[data-theme='dark'] .reader-book-html,
 html[data-theme='dark'] .reader-book-html *,
