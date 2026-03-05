@@ -1,4 +1,5 @@
 import React from 'react';
+import { MdForward10, MdPause, MdPlayArrow, MdReplay10, MdSpeed } from 'react-icons/md';
 import './AudioPlayer.css';
 
 type Props = {
@@ -50,10 +51,23 @@ export default function MinimizedAudioBar({
     <div className="audio-minibar" style={barStyle} onClick={onExpand}>
       <div className="audio-minibar-title">{chapterTitle}</div>
       <div className="audio-minibar-controls" onClick={e => e.stopPropagation()}>
-        <button onClick={() => onSeekRelative(-15)} aria-label="Back 15 seconds">-15</button>
-        <button onClick={onToggle} aria-label="Play/Pause">{playing ? 'Pause' : 'Play'}</button>
-        <button onClick={() => onSeekRelative(15)} aria-label="Forward 15 seconds">+15</button>
-        <button onClick={onCycleSpeed} aria-label="Change speed">{`${speed}x`}</button>
+        <button className="audio-minibar-btn" onClick={() => onSeekRelative(-15)} aria-label="Back 15 seconds" title="Back 15 seconds">
+          <span className="audio-minibar-icon-wrap"><MdReplay10 size={17} /><span className="audio-minibar-icon-badge">5</span></span>
+          <span className="audio-minibar-btn-label">-15s</span>
+        </button>
+        <button className="audio-minibar-btn" onClick={onToggle} aria-label="Play/Pause" title={playing ? 'Pause' : 'Play'}>
+          {playing ? <MdPause size={18} /> : <MdPlayArrow size={18} />}
+          <span className="audio-minibar-btn-label">{playing ? 'Pause' : 'Play'}</span>
+        </button>
+        <button className="audio-minibar-btn" onClick={() => onSeekRelative(15)} aria-label="Forward 15 seconds" title="Forward 15 seconds">
+          <span className="audio-minibar-icon-wrap"><MdForward10 size={17} /><span className="audio-minibar-icon-badge">5</span></span>
+          <span className="audio-minibar-btn-label">+15s</span>
+        </button>
+        <button className="audio-minibar-btn audio-minibar-btn-speed" onClick={onCycleSpeed} aria-label="Change speed" title="Change speed">
+          <MdSpeed size={17} />
+          <span className="audio-minibar-btn-label">{`${speed}x`}</span>
+          <span className="audio-minibar-speed-chip" aria-hidden="true">{`${speed}x`}</span>
+        </button>
         <span className="audio-minibar-time">{fmtTime(time)} / {fmtTime(duration)}</span>
       </div>
       <div

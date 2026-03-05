@@ -363,20 +363,61 @@
 	align-items: center;
 	gap: 8px;
 }
-.audio-minibar-controls button {
+.audio-minibar-btn {
 	appearance: none;
 	border: 1px solid rgba(100,108,255,0.18);
 	background: rgba(100,108,255,0.08);
 	color: var(--reader-modal-fg);
 	border-radius: 8px;
-	height: 30px;
+	height: 34px;
+	min-width: 34px;
 	padding: 0 10px;
-	font-size: 0.78rem;
+	font-size: 0.76rem;
 	font-weight: 600;
 	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 5px;
+	position: relative;
 }
-.audio-minibar-controls button:hover {
+.audio-minibar-btn:hover {
 	background: rgba(100,108,255,0.15);
+}
+.audio-minibar-btn-label {
+	line-height: 1;
+	white-space: nowrap;
+}
+
+.audio-minibar-icon-wrap {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.audio-minibar-icon-badge {
+	position: absolute;
+	right: -3px;
+	top: -4px;
+	font-size: 0.54rem;
+	font-weight: 700;
+	line-height: 1;
+	opacity: 0.9;
+}
+
+.audio-minibar-speed-chip {
+	display: none;
+	position: absolute;
+	right: 2px;
+	bottom: 2px;
+	font-size: 0.55rem;
+	font-weight: 700;
+	line-height: 1;
+	padding: 1px 3px;
+	border-radius: 999px;
+	background: rgba(100,108,255,0.18);
+	color: inherit;
 }
 .audio-minibar-time {
 	font-size: 0.875rem;
@@ -421,5 +462,38 @@
 	}
 	.audio-download {
 		margin-left: 0;
+	}
+
+	.audio-minibar {
+		padding: 12px 12px 10px;
+		gap: 8px;
+	}
+
+	.audio-minibar-controls {
+		gap: 6px;
+	}
+
+	.audio-minibar-btn {
+		width: 42px;
+		height: 42px;
+		min-width: 42px;
+		padding: 0;
+		border-radius: 11px;
+	}
+
+	.audio-minibar-btn-label {
+		display: none;
+	}
+
+	.audio-minibar-btn-speed .audio-minibar-speed-chip {
+		display: inline-flex;
+	}
+
+	.audio-minibar-time {
+		font-size: 0.8rem;
+	}
+
+	.audio-minibar-progress {
+		height: 6px;
 	}
 }

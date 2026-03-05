@@ -2282,7 +2282,6 @@ export default function BookReader() {
     return v ? Number(v) : 18;
   });
   const [isDesktop, setIsDesktop] = useState(true);
-  const [showChaptersMenu, setShowChaptersMenu] = useState(false);
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
@@ -2340,7 +2339,6 @@ export default function BookReader() {
   const searchBtnRef = useRef<HTMLButtonElement | null>(null);
   const shareBtnRef = useRef<HTMLButtonElement | null>(null);
   const shareMenuRef = useRef<HTMLDivElement | null>(null);
-  const chaptersMenuRef = useRef<HTMLDivElement | null>(null);
   const langMenuRef = useRef<HTMLDivElement | null>(null);
   const moreBtnRef = useRef<HTMLButtonElement | null>(null);
   const moreMenuRef = useRef<HTMLDivElement | null>(null);
@@ -2451,7 +2449,6 @@ export default function BookReader() {
   };
 
   const [langPanelStyle, setLangPanelStyle] = useState<React.CSSProperties | null>(null);
-  const [chaptersPanelStyle, setChaptersPanelStyle] = useState<React.CSSProperties | null>(null);
   const [searchPanelStyle, setSearchPanelStyle] = useState<React.CSSProperties | null>(null);
   const [sharePanelStyle, setSharePanelStyle] = useState<React.CSSProperties | null>(null);
   const [morePanelStyle, setMorePanelStyle] = useState<React.CSSProperties | null>(null);
@@ -2607,22 +2604,6 @@ export default function BookReader() {
       document.removeEventListener('touchstart', onDown);
     };
   }, [showShareMenu]);
-
-  useEffect(() => {
-    if (!showChaptersMenu) return;
-    const onDown = (ev: MouseEvent | TouchEvent) => {
-      const target = ev.target as Node | null;
-      if (target && chaptersMenuRef.current?.contains(target)) return;
-      if (target && burgerBtnRef.current?.contains(target)) return;
-      setShowChaptersMenu(false);
-    };
-    document.addEventListener('mousedown', onDown);
-    document.addEventListener('touchstart', onDown);
-    return () => {
-      document.removeEventListener('mousedown', onDown);
-      document.removeEventListener('touchstart', onDown);
-    };
-  }, [showChaptersMenu]);
 
   useEffect(() => {
     if (!showLangMenu) return;
@@ -4105,7 +4086,6 @@ export default function BookReader() {
 
   const contentsLabel = LANGUAGE_CONTENTS_LABELS[lang] || 'Contents';
   const tableOfContentsLabel = contentsLabel;
-  const noContentsLabel = lang === CHINESE_FOLDER ? '暂无目录' : 'No contents';
   const noContentsAvailableLabel = lang === CHINESE_FOLDER ? '暂无目录' : 'No contents available';
   const contactWhatsAppLabel = CONTACT_WHATSAPP_LABELS[lang] || 'Contact on WhatsApp';
   const continueLabel = LANGUAGE_CONTINUE_LABELS[lang] || 'Continue';
@@ -4147,7 +4127,6 @@ export default function BookReader() {
     setAudioUserExpanded(false);
     setAudioMinimized(true);
     setAudioAutoPlayRequest((v) => v + 1);
-    setShowChaptersMenu(false);
     if (closeOpeningToc) setShowOpeningToc(false);
   };
 
@@ -4227,7 +4206,6 @@ export default function BookReader() {
               ref={burgerBtnRef}
               onClick={(e) => {
                 e.stopPropagation();
-                setShowChaptersMenu(false);
                 setShowSearch(false);
                 setShowShareMenu(false);
                 setShowLangMenu(false);
@@ -4531,55 +4509,6 @@ export default function BookReader() {
             <IoMdMail size={18} />
             <span>Email</span>
           </button>
-        </div>
-      )}
-
-      {showChaptersMenu && (
-        <div
-          ref={chaptersMenuRef}
-          className="reader-chapters-panel"
-          style={chaptersPanelStyle || { position: 'fixed', top: 72, left: 16, minWidth: 280 }}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="reader-modal-header">
-            <strong>{contentsLabel}</strong>
-            <button onClick={() => setShowChaptersMenu(false)}>✕</button>
-          </div>
-          <ul className="reader-toc-list">
-            {toc.length === 0 && <li className="reader-toc-empty">{noContentsLabel}</li>}
-            {toc.map((t, i) => {
-              const chapterNum = getChapterNumber(t.title);
-              const titleOnly = chapterNum ? stripChapterPrefix(t.title) : t.title;
-              const chapterLabel = LANGUAGE_CHAPTER_LABELS[lang] || 'Chapter';
-              return (
-                <li key={t.href}>
-                  <div className="reader-toc-row">
-                    <button
-                      className={`reader-toc-item-btn ${i === chapterIdx ? 'active' : ''}`}
-                      onClick={() => {
-                        setChapterIdx(i);
-                        setShowChaptersMenu(false);
-                      }}
-                    >
-                      {chapterNum && <span className="reader-toc-num">{chapterLabel} {chapterNum}</span>}
-                      <span className={`reader-toc-title${chapterNum ? '' : ' full-title'}`}>{titleOnly}</span>
-                    </button>
-                    {hasLanguageAudio ? (
-                      <button
-                        type="button"
-                        className="reader-toc-audio-btn"
-                        aria-label={playChapterAudioLabel}
-                        title={playChapterAudioLabel}
-                        onClick={() => openChapterAudioFromToc(i, false)}
-                      >
-                        <MdPlayArrow size={16} />
-                      </button>
-                    ) : null}
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
         </div>
       )}
 
