@@ -109,9 +109,10 @@
 
 			@media (max-width: 640px) {
 				.gc-chat-launcher {
-					left: 12px;
-					right: auto;
-					bottom: 88px;
+					left: auto;
+					right: 12px;
+					top: 68px;
+					bottom: auto;
 					padding: 10px 12px;
 					font-size: 13px;
 				}
@@ -148,6 +149,22 @@
 			};
 
 			window.__gcOpenChat = function () {
+				if (window.Tawk_API) {
+					try {
+						if (typeof window.Tawk_API.showWidget === "function") {
+							window.Tawk_API.showWidget();
+						}
+						if (typeof window.Tawk_API.maximize === "function") {
+							window.Tawk_API.maximize();
+							return;
+						}
+						if (typeof window.Tawk_API.toggle === "function") {
+							window.Tawk_API.toggle();
+							return;
+						}
+					} catch (_) {}
+				}
+
 				var attempts = 0;
 				var maxAttempts = 25;
 
@@ -170,19 +187,16 @@
 					}
 
 					if (typeof window.Tawk_API.maximize === "function") {
-						window.__gcHideChatLauncher();
 						window.Tawk_API.maximize();
 						return;
 					}
 
 					if (typeof window.Tawk_API.toggle === "function") {
-						window.__gcHideChatLauncher();
 						window.Tawk_API.toggle();
 						return;
 					}
 
 					if (typeof window.Tawk_API.popup === "function") {
-						window.__gcHideChatLauncher();
 						window.Tawk_API.popup();
 						return;
 					}
