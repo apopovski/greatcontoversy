@@ -3868,6 +3868,7 @@ export default function BookReader() {
     setSearchResults(results);
     if (results.length) {
       const first = results[0];
+      setShowOpeningToc(false);
       setChapterIdx(first.idx);
       // In AND mode, results are paragraph-based and not a single phrase highlight.
       setHighlighted(isAnd ? null : query);
@@ -3943,6 +3944,7 @@ export default function BookReader() {
     const r = searchResults[Math.min(searchIdx, searchResults.length - 1)];
     if (r) {
       const parsedQuery = parseSearchQuery(searchQuery);
+      setShowOpeningToc(false);
       setChapterIdx(r.idx);
       setHighlighted(parsedQuery.isAnd ? null : (parsedQuery.query || null));
       setTimeout(() => {
@@ -4653,10 +4655,6 @@ export default function BookReader() {
             <FaWhatsapp size={18} />
             <span>{contactWhatsAppWithNumberLabel}</span>
           </button>
-          <button onClick={() => handleShareApp('whatsapp')} aria-label="Share on WhatsApp">
-            <FaWhatsapp size={18} />
-            <span>WhatsApp</span>
-          </button>
           <button onClick={() => handleShareApp('email')} aria-label="Share via Email">
             <IoMdMail size={18} />
             <span>Email</span>
@@ -4879,6 +4877,7 @@ export default function BookReader() {
                         // close search modal so the book content is visible,
                         // then navigate to the chapter and request a scroll to the matched paragraph/occurrence
                         setShowSearch(false);
+                      setShowOpeningToc(false);
                         setChapterIdx(r.idx);
                         setSearchIdx(i);
                         if (parsed.isAnd) {
