@@ -178,6 +178,9 @@ const ENGLISH_FOLDER = 'The Great Controversy - Ellen G. White 2';
 const ENGLISH_MANIFEST_PATH = '/book-content/audio-manifests/gc-english.json';
 const MULTILANG_MANIFEST_PATH = '/book-content/audio-manifests/gc-multilang.json';
 const MULTILANG_EXTRA_MANIFEST_PATH = '/book-content/audio-manifests/gc-multilang-extra.json';
+const LOCAL_AUDIO_FIRST_LANGUAGE_FOLDERS = new Set<string>([
+  'Der grosse Kampf - Ellen G. White',
+]);
 
 const EWA_BASE = 'https://ellenwhiteaudio.org/audio';
 
@@ -272,6 +275,7 @@ const MANIFEST_AUDIO_LANGUAGE_CODES = new Set<string>([
   'en',
   'ar',
   'sr',
+  'de',
   'sp',
   'fr',
   'pt',
@@ -531,6 +535,34 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
       return null;
     };
 
+    const resolveLocalIndexTrack = async (languageName: string, currentChapterIdx: number) => {
+      const result = await fetchIndex(languageName);
+      if (!result?.list?.length) return null;
+
+      const pad = String(currentChapterIdx + 1).padStart(2, '0');
+      const exactPrefixMatch = result.list.find((f) => f.startsWith(`GC-${pad}-`) || f.startsWith(`GC-${pad}`));
+      if (exactPrefixMatch) {
+        return {
+          url: `${result.base}/${encodeURIComponent(exactPrefixMatch)}`,
+          languageName,
+        };
+      }
+
+      const tracks: DirectoryTrack[] = result.list.map((name) => ({
+        order: inferTrackOrder(name),
+        name,
+        url: `${result.base}/${encodeURIComponent(name)}`,
+      }));
+
+      const chosen = pickDirectoryTrackForChapter(tracks, currentChapterIdx);
+      if (!chosen?.url) return null;
+
+      return {
+        url: chosen.url,
+        languageName,
+      };
+    };
+
     const findTrackFromManifest = (manifest: AudioManifest | null, currentChapterIdx: number) => {
       if (!manifest?.tracks?.length) return null;
       return manifest.tracks.find((t) => t.chapterIdx === currentChapterIdx) || null;
@@ -548,6 +580,23 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
 
       // Use mapped name if available, otherwise use input directly
       const preferredLang = mappedLang || lang;
+
+      // 0) Local-first mirror for selected languages (currently German).
+      if (LOCAL_AUDIO_FIRST_LANGUAGE_FOLDERS.has(lang)) {
+        const localTrack = await resolveLocalIndexTrack(preferredLang, chapterIdx);
+        if (mounted && localTrack?.url) {
+          setSrc(localTrack.url);
+          setAudioLang(localTrack.languageName);
+          setSourceKind('local-index');
+          setAttribution({
+            name: 'Amazing Recordings',
+            url: 'https://amazingrecordings.org/audio/horbuch_vom_schatten_zum_licht_von_ellen_g_white.html',
+            licenseSummary: 'Locally mirrored for offline playback.',
+          });
+          setLoadingAudio(false);
+          return;
+        }
+      }
 
       // 1) Try manifest source for the selected language (currently English GC)
       const preferredManifestPath = resolveManifestPath(lang, preferredLang);
@@ -639,17 +688,13 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
       }
 
       // 3) Fallback to local audio index support for selected language only
-      let result = await fetchIndex(preferredLang);
-
       if (!mounted) return;
 
-      if (result) {
-        const pad = String(chapterIdx + 1).padStart(2, '0');
-        const match = result.list.find((f) => f.startsWith(`GC-${pad}-`) || f.startsWith(`GC-${pad}`));
-        setAudioLang(preferredLang);
-        const newSrc = match ? `${result.base}/${encodeURIComponent(match)}` : null;
-        setSrc(newSrc);
-        setSourceKind(newSrc ? 'local-index' : null);
+      const localTrack = await resolveLocalIndexTrack(preferredLang, chapterIdx);
+      if (localTrack?.url) {
+        setAudioLang(localTrack.languageName);
+        setSrc(localTrack.url);
+        setSourceKind('local-index');
       } else {
         setAudioLang(null);
         setSrc(null);
