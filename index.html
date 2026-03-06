@@ -83,6 +83,12 @@
 				transition: transform 0.15s ease, box-shadow 0.2s ease;
 			}
 
+			.gc-chat-launcher.is-hidden {
+				opacity: 0;
+				pointer-events: none;
+				transform: translateY(8px);
+			}
+
 			.gc-chat-launcher:hover {
 				transform: translateY(-1px);
 				box-shadow: 0 14px 30px rgba(16, 24, 40, 0.3), 0 4px 10px rgba(16, 24, 40, 0.2);
@@ -103,7 +109,8 @@
 
 			@media (max-width: 640px) {
 				.gc-chat-launcher {
-					right: 12px;
+					left: 12px;
+					right: auto;
 					bottom: 12px;
 					padding: 10px 12px;
 					font-size: 13px;
@@ -125,15 +132,80 @@
 		<!--Start of Tawk.to Script-->
 		<script type="text/javascript">
 			var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+			window.__gcTawkReady = false;
+
+			window.__gcShowChatLauncher = function () {
+				var btn = document.getElementById("gc-chat-launcher");
+				if (!btn) return;
+				btn.classList.remove("is-hidden");
+			};
+
+			window.__gcHideChatLauncher = function () {
+				var btn = document.getElementById("gc-chat-launcher");
+				if (!btn) return;
+				btn.classList.add("is-hidden");
+			};
+
+			window.__gcOpenChat = function () {
+				var attempts = 0;
+				var maxAttempts = 20;
+
+				var tryOpen = function () {
+					attempts += 1;
+					if (!window.Tawk_API) {
+						if (attempts < maxAttempts) setTimeout(tryOpen, 200);
+						return;
+					}
+
+					if (typeof window.Tawk_API.showWidget === "function") {
+						window.Tawk_API.showWidget();
+					}
+
+					if (typeof window.Tawk_API.maximize === "function") {
+						window.__gcHideChatLauncher();
+						window.Tawk_API.maximize();
+						return;
+					}
+
+					if (attempts < maxAttempts) {
+						setTimeout(tryOpen, 200);
+					}
+				};
+
+				tryOpen();
+			};
+
 			Tawk_API.onLoad = function () {
+				window.__gcTawkReady = true;
 				if (window.Tawk_API && typeof window.Tawk_API.hideWidget === "function") {
 					window.Tawk_API.hideWidget();
+				}
+				window.__gcShowChatLauncher();
+			};
+
+			Tawk_API.onChatMinimized = function () {
+				window.__gcShowChatLauncher();
+				if (window.Tawk_API && typeof window.Tawk_API.hideWidget === "function") {
+					setTimeout(function () {
+						window.Tawk_API.hideWidget();
+					}, 100);
 				}
 			};
-			Tawk_API.onChatMinimized = function () {
-				if (window.Tawk_API && typeof window.Tawk_API.hideWidget === "function") {
-					window.Tawk_API.hideWidget();
-				}
+
+			Tawk_API.onChatMaximized = function () {
+				window.__gcHideChatLauncher();
+			};
+
+			Tawk_API.onChatStarted = function () {
+				window.__gcHideChatLauncher();
+			};
+
+			Tawk_API.onChatEnded = function () {
+				window.__gcShowChatLauncher();
+			};
+
+			Tawk_API.onChatHidden = function () {
+				window.__gcShowChatLauncher();
 			};
 			(function () {
 				var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
@@ -151,13 +223,8 @@
 				if (!btn) return;
 
 				btn.addEventListener("click", function () {
-					if (window.Tawk_API) {
-						if (typeof window.Tawk_API.showWidget === "function") {
-							window.Tawk_API.showWidget();
-						}
-						if (typeof window.Tawk_API.maximize === "function") {
-							window.Tawk_API.maximize();
-						}
+					if (typeof window.__gcOpenChat === "function") {
+						window.__gcOpenChat();
 					}
 				});
 			})();
