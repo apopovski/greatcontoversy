@@ -4570,9 +4570,9 @@ export default function BookReader() {
             <FaXTwitter size={16} />
             <span>X (Twitter)</span>
           </button>
-          <button onClick={handleWhatsAppContact} aria-label={contactWhatsAppWithNumberLabel}>
+          <button onClick={handleWhatsAppContact} aria-label={contactWhatsAppLabel}>
             <FaWhatsapp size={18} />
-            <span>{contactWhatsAppWithNumberLabel}</span>
+            <span>{contactWhatsAppLabel}</span>
           </button>
           <button onClick={() => handleShareApp('email')} aria-label="Share via Email">
             <IoMdMail size={18} />
