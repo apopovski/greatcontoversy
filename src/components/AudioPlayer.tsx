@@ -535,32 +535,39 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
       return null;
     };
 
-    const resolveLocalIndexTrack = async (languageName: string, currentChapterIdx: number) => {
-      const result = await fetchIndex(languageName);
-      if (!result?.list?.length) return null;
+    const resolveLocalIndexTrack = async (pathCandidates: string[], currentChapterIdx: number) => {
+      for (const candidate of pathCandidates) {
+        const normalizedCandidate = (candidate || '').trim();
+        if (!normalizedCandidate) continue;
 
-      const pad = String(currentChapterIdx + 1).padStart(2, '0');
-      const exactPrefixMatch = result.list.find((f) => f.startsWith(`GC-${pad}-`) || f.startsWith(`GC-${pad}`));
-      if (exactPrefixMatch) {
-        return {
-          url: `${result.base}/${encodeURIComponent(exactPrefixMatch)}`,
-          languageName,
-        };
+        const result = await fetchIndex(normalizedCandidate);
+        if (!result?.list?.length) continue;
+
+        const pad = String(currentChapterIdx + 1).padStart(2, '0');
+        const exactPrefixMatch = result.list.find((f) => f.startsWith(`GC-${pad}-`) || f.startsWith(`GC-${pad}`));
+        if (exactPrefixMatch) {
+          return {
+            url: `${result.base}/${encodeURIComponent(exactPrefixMatch)}`,
+            languageName: normalizedCandidate,
+          };
+        }
+
+        const tracks: DirectoryTrack[] = result.list.map((name) => ({
+          order: inferTrackOrder(name),
+          name,
+          url: `${result.base}/${encodeURIComponent(name)}`,
+        }));
+
+        const chosen = pickDirectoryTrackForChapter(tracks, currentChapterIdx);
+        if (chosen?.url) {
+          return {
+            url: chosen.url,
+            languageName: normalizedCandidate,
+          };
+        }
       }
 
-      const tracks: DirectoryTrack[] = result.list.map((name) => ({
-        order: inferTrackOrder(name),
-        name,
-        url: `${result.base}/${encodeURIComponent(name)}`,
-      }));
-
-      const chosen = pickDirectoryTrackForChapter(tracks, currentChapterIdx);
-      if (!chosen?.url) return null;
-
-      return {
-        url: chosen.url,
-        languageName,
-      };
+      return null;
     };
 
     const findTrackFromManifest = (manifest: AudioManifest | null, currentChapterIdx: number) => {
@@ -580,13 +587,14 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
 
       // Use mapped name if available, otherwise use input directly
       const preferredLang = mappedLang || lang;
+      const localIndexPathCandidates = [lang, preferredLang, mappedLang].filter(Boolean) as string[];
 
       // 0) Local-first mirror for selected languages (currently German).
       if (LOCAL_AUDIO_FIRST_LANGUAGE_FOLDERS.has(lang)) {
-        const localTrack = await resolveLocalIndexTrack(preferredLang, chapterIdx);
+        const localTrack = await resolveLocalIndexTrack(localIndexPathCandidates, chapterIdx);
         if (mounted && localTrack?.url) {
           setSrc(localTrack.url);
-          setAudioLang(localTrack.languageName);
+          setAudioLang(mappedLang || preferredLang);
           setSourceKind('local-index');
           setAttribution({
             name: 'Amazing Recordings',
@@ -690,9 +698,9 @@ export default function AudioPlayer({ lang, chapterIdx, chapterTitle, onNextChap
       // 3) Fallback to local audio index support for selected language only
       if (!mounted) return;
 
-      const localTrack = await resolveLocalIndexTrack(preferredLang, chapterIdx);
+      const localTrack = await resolveLocalIndexTrack(localIndexPathCandidates, chapterIdx);
       if (localTrack?.url) {
-        setAudioLang(localTrack.languageName);
+        setAudioLang(mappedLang || preferredLang);
         setSrc(localTrack.url);
         setSourceKind('local-index');
       } else {
