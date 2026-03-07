@@ -38,6 +38,9 @@ const OG_TEXT_BY_LANG = {
   bn: 'ভাল ও মন্দের মধ্যে মহাজাগতিক সংঘর্ষ উন্মোচিত।',
   id: 'Konflik kosmik antara yang baik dan yang jahat terungkap.',
   fr: 'Conflit cosmique entre le bien et le mal révélé.',
+  sq: 'Konflikti kozmik ndërmjet së mirës dhe së keqes i zbuluar.',
+  hu: 'A jó és a rossz közötti kozmikus küzdelem feltárva.',
+  el: 'Αποκαλύπτεται η κοσμική σύγκρουση ανάμεσα στο καλό και το κακό.',
 };
 
 const BOOK_TITLES = {
@@ -70,6 +73,9 @@ const BOOK_TITLES = {
   bn: 'মহা বিবাদ',
   id: 'Kemenangan Akhir',
   fr: 'La Tragédie des Siècles',
+  sq: 'Beteja e Madhe',
+  hu: 'A nagy küzdelem',
+  el: 'Η Μεγάλη Διαμάχη',
 };
 
 function replaceMeta(html, attrName, attrValue, contentValue) {

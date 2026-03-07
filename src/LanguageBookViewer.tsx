@@ -4,6 +4,7 @@ import "./ModernReaderMenu.css";
 
 // List of available language folders (only those with index.html)
 const languageFolders = [
+  "A nagy küzdelem - Ellen G. White",
   "Der grosse Kampf - Ellen G. White",
   "El Conflicto de los Siglos - Ellen G. White",
   "Il gran conflitto - Ellen G. White",
@@ -21,6 +22,7 @@ const languageFolders = [
   "Vielika borot'ba - Ellen G. White",
   "Vielikaia bor'ba - Ellen G. White",
   "Wielki boj - Ellen G. White",
+  "Η Μεγάλη Διαμάχη - Ellen G. White",
   "alSra` al`Zym - Ellen G. White"
 ];
 
@@ -54,12 +56,15 @@ function getDefaultLanguageFolder() {
     sm: "O Le Finauga Tele - Ellen G. White",
     kl: "",
     nb: "",
-    hu: "",
+    hu: "A nagy küzdelem - Ellen G. White",
+    el: "Η Μεγάλη Διαμάχη - Ellen G. White",
     ar: "alSra` al`Zym - Ellen G. White",
   };
   const code = browserLang.split("-")[0];
   const folder = langMap[code as keyof typeof langMap] || languageFolders[0];
   const ordered = getOrderedLanguageFolders({
+    "A nagy küzdelem - Ellen G. White": "Magyar",
+    "Η Μεγάλη Διαμάχη - Ellen G. White": "Ελληνικά",
     "The Great Controversy - Ellen G. White 2": "English",
     "El Conflicto de los Siglos - Ellen G. White": "Español",
     "MOD EN BEDRE FREMTID - Ellen G. White": "Dansk",
@@ -86,6 +91,8 @@ type Chapter = { id: string; title: string; html: string };
 
 // Map folder names to book titles
 const bookTitles: Record<string, string> = {
+  "A nagy küzdelem - Ellen G. White": "A nagy küzdelem",
+  "Η Μεγάλη Διαμάχη - Ellen G. White": "Η Μεγάλη Διαμάχη",
   "The Great Controversy - Ellen G. White 2": "The Great Controversy",
   "El Conflicto de los Siglos - Ellen G. White": "El Conflicto de los Siglos",
   "MOD EN BEDRE FREMTID - Ellen G. White": "Mod en bedre fremtid",
@@ -116,6 +123,8 @@ export function LanguageBookViewer() {
 
   // Map folder names to language display names
   const languageNames: Record<string, string> = {
+    "A nagy küzdelem - Ellen G. White": "Magyar",
+    "Η Μεγάλη Διαμάχη - Ellen G. White": "Ελληνικά",
     "The Great Controversy - Ellen G. White 2": "English",
     "El Conflicto de los Siglos - Ellen G. White": "Español",
     "MOD EN BEDRE FREMTID - Ellen G. White": "Dansk",

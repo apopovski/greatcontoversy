@@ -112,6 +112,8 @@ const URDU_SOURCE_PATH = '/book-content/txt/GC-Urdu.txt';
 const FRENCH_FOLDER = 'French - Ellen G. White';
 const ALBANIAN_FOLDER = 'Beteja e Madhe - Ellen G. White';
 const ALBANIAN_SOURCE_PATH = '/book-content/txt/GC-Albanian.txt';
+const HUNGARIAN_FOLDER = 'A nagy küzdelem - Ellen G. White';
+const GREEK_FOLDER = 'Η Μεγάλη Διαμάχη - Ellen G. White';
 const DEFAULT_CONTACT_WHATSAPP_NUMBER = '19562447002';
 const CONTACT_WHATSAPP_NUMBERS: Record<string, string> = {
   'Der grosse Kampf - Ellen G. White': '4915753992703',
@@ -153,6 +155,8 @@ const DEVELOPER_BY_LABELS: Record<string, string> = {
   ur: 'تیار کردہ از',
   fr: 'Développé par',
   sq: 'Zhvilluar nga',
+  hu: 'Fejlesztette',
+  el: 'Ανάπτυξη από',
 };
 const DEVELOPER_NAME = 'Aleksandar Popovski';
 const CONTACT_WHATSAPP_LABELS: Record<string, string> = {
@@ -188,6 +192,8 @@ const CONTACT_WHATSAPP_LABELS: Record<string, string> = {
   [URDU_FOLDER]: 'واٹس ایپ پر رابطہ کریں',
   [FRENCH_FOLDER]: 'Contact sur WhatsApp',
   [ALBANIAN_FOLDER]: 'Kontakto në WhatsApp',
+  [HUNGARIAN_FOLDER]: 'Kapcsolat WhatsAppon',
+  [GREEK_FOLDER]: 'Επικοινωνία στο WhatsApp',
 };
 
 const DESKTOP_WIDTH_MIN = 640;
@@ -262,6 +268,8 @@ const LANGUAGE_FOLDERS = [
   URDU_FOLDER,
   FRENCH_FOLDER,
   ALBANIAN_FOLDER,
+  HUNGARIAN_FOLDER,
+  GREEK_FOLDER,
 ];
 
 const LANGUAGE_ABBREV: Record<string, string> = {
@@ -297,6 +305,8 @@ const LANGUAGE_ABBREV: Record<string, string> = {
   [URDU_FOLDER]: 'ur',
   [FRENCH_FOLDER]: 'fr',
   [ALBANIAN_FOLDER]: 'sq',
+  [HUNGARIAN_FOLDER]: 'hu',
+  [GREEK_FOLDER]: 'el',
 };
 
 const CONTACT_WHATSAPP_AUTO_MESSAGES: Record<string, string> = {
@@ -332,6 +342,8 @@ const CONTACT_WHATSAPP_AUTO_MESSAGES: Record<string, string> = {
   ur: 'ہیلو، میں رابطہ کرنا چاہتا/چاہتی ہوں۔',
   fr: 'Bonjour, je souhaite entrer en contact.',
   sq: 'Përshëndetje, do të doja të lidhesha.',
+  hu: 'Szia, szeretnék kapcsolatba lépni.',
+  el: 'Γεια σας, θα ήθελα να επικοινωνήσω.',
 };
 
 const BOOK_TITLE_OVERRIDES: Record<string, string> = {
@@ -367,6 +379,8 @@ const BOOK_TITLE_OVERRIDES: Record<string, string> = {
   [URDU_FOLDER]: 'عظیم کشمکش',
   [FRENCH_FOLDER]: 'La Tragédie des Siècles',
   [ALBANIAN_FOLDER]: 'Beteja e Madhe',
+  [HUNGARIAN_FOLDER]: 'A nagy küzdelem',
+  [GREEK_FOLDER]: 'Η Μεγάλη Διαμάχη',
 };
 
 const META_TAGLINES: Record<string, string> = {
@@ -402,6 +416,8 @@ const META_TAGLINES: Record<string, string> = {
   ur: 'نیکی اور بدی کے درمیان کائناتی کشمکش',
   fr: 'Conflit cosmique entre le bien et le mal',
   sq: 'Konflikt kozmik ndërmjet së mirës dhe së keqes',
+  hu: 'Kozmikus küzdelem a jó és a rossz között',
+  el: 'Κοσμική σύγκρουση ανάμεσα στο καλό και το κακό',
 };
 
 const getBookTitleFromFolder = (folder: string) =>
@@ -440,6 +456,8 @@ const LANGUAGE_URL_NAMES: Record<string, string> = {
   [URDU_FOLDER]: 'اردو',
   [FRENCH_FOLDER]: 'Français',
   [ALBANIAN_FOLDER]: 'Shqip',
+  [HUNGARIAN_FOLDER]: 'Magyar',
+  [GREEK_FOLDER]: 'Ελληνικά',
 };
 
 function getLanguageMenuLabel(folder: string) {
@@ -488,6 +506,8 @@ const LANGUAGE_CHAPTER_LABELS: Record<string, string> = {
   [URDU_FOLDER]: 'باب',
   [FRENCH_FOLDER]: 'Chapitre',
   [ALBANIAN_FOLDER]: 'Kapitulli',
+  [HUNGARIAN_FOLDER]: 'Fejezet',
+  [GREEK_FOLDER]: 'Κεφάλαιο',
 };
 
 const LANGUAGE_CONTENTS_LABELS: Record<string, string> = {
@@ -523,6 +543,8 @@ const LANGUAGE_CONTENTS_LABELS: Record<string, string> = {
   [URDU_FOLDER]: 'فہرست',
   [FRENCH_FOLDER]: 'Sommaire',
   [ALBANIAN_FOLDER]: 'Përmbajtja',
+  [HUNGARIAN_FOLDER]: 'Tartalomjegyzék',
+  [GREEK_FOLDER]: 'Περιεχόμενα',
 };
 
 const LANGUAGE_CONTINUE_LABELS: Record<string, string> = {
@@ -558,6 +580,8 @@ const LANGUAGE_CONTINUE_LABELS: Record<string, string> = {
   [URDU_FOLDER]: 'جاری رکھیں',
   [FRENCH_FOLDER]: 'Continuer',
   [ALBANIAN_FOLDER]: 'Vazhdo',
+  [HUNGARIAN_FOLDER]: 'Folytatás',
+  [GREEK_FOLDER]: 'Συνέχεια',
 };
 
 const HERO_COPY: Record<string, {
@@ -848,6 +872,24 @@ const HERO_COPY: Record<string, {
     chooseLanguage: 'Zgjidh gjuhën',
     availability: 'Në dispozicion në 31 gjuhë • Lexohet në mbarë botën',
   },
+  hu: {
+    line1: 'Birodalmak emelkedtek fel.',
+    line2: 'Az igazságot elnyomták.',
+    line3: 'A prófécia beteljesedett.',
+    line4: 'Mi következik ezután?',
+    startReading: 'Olvasás indítása',
+    chooseLanguage: 'Nyelv kiválasztása',
+    availability: '31 nyelven elérhető • Világszerte olvassák',
+  },
+  el: {
+    line1: 'Αυτοκρατορίες υψώθηκαν.',
+    line2: 'Η αλήθεια καταπνίγηκε.',
+    line3: 'Η προφητεία εκπληρώθηκε.',
+    line4: 'Τι ακολουθεί τώρα;',
+    startReading: 'Έναρξη ανάγνωσης',
+    chooseLanguage: 'Επιλογή γλώσσας',
+    availability: 'Διαθέσιμο σε πολλές γλώσσες • Διαβάζεται παγκοσμίως',
+  },
 };
 
 const COPY_TOAST_LABELS: Record<string, string> = {
@@ -882,6 +924,8 @@ const COPY_TOAST_LABELS: Record<string, string> = {
   ur: 'کاپی ہو گیا',
   fr: 'Copié',
   sq: 'U kopjua',
+  hu: 'Kimásolva',
+  el: 'Αντιγράφηκε',
 };
 
 const AUDIO_AVAILABLE_LABELS: Record<string, string> = {
@@ -916,6 +960,8 @@ const AUDIO_AVAILABLE_LABELS: Record<string, string> = {
   ur: 'آڈیو دستیاب ہے',
   fr: 'Audio disponible',
   sq: 'Audio i disponuesh',
+  hu: 'Hanganyag elérhető',
+  el: 'Διαθέσιμο ηχητικό',
 };
 
 function getAudioAvailableLabel(folder: string) {
