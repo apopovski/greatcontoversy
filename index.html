@@ -63,7 +63,7 @@
 		<link rel="shortcut icon" href="/gc-icon.png" />
 		<link rel="apple-touch-icon" href="/gc-icon.png" />
 		<style>
-			.gc-chat-launcher {
+			.gc-whatsapp-launcher {
 				position: fixed;
 				right: 16px;
 				bottom: 16px;
@@ -74,32 +74,27 @@
 				padding: 10px 14px;
 				border: 0;
 				border-radius: 999px;
-				background: linear-gradient(135deg, #1f2a56 0%, #2f4585 100%);
+				background: linear-gradient(135deg, #1d9e57 0%, #25d366 100%);
 				color: #ffffff;
 				font: 600 14px/1 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
 				letter-spacing: 0.01em;
+				text-decoration: none;
 				cursor: pointer;
 				box-shadow: 0 10px 26px rgba(16, 24, 40, 0.24), 0 2px 8px rgba(16, 24, 40, 0.18);
 				transition: transform 0.15s ease, box-shadow 0.2s ease;
 			}
 
-			.gc-chat-launcher.is-hidden {
-				opacity: 0;
-				pointer-events: none;
-				transform: translateY(8px);
-			}
-
-			.gc-chat-launcher:hover {
+			.gc-whatsapp-launcher:hover {
 				transform: translateY(-1px);
 				box-shadow: 0 14px 30px rgba(16, 24, 40, 0.3), 0 4px 10px rgba(16, 24, 40, 0.2);
 			}
 
-			.gc-chat-launcher:focus-visible {
-				outline: 3px solid rgba(100, 140, 255, 0.45);
+			.gc-whatsapp-launcher:focus-visible {
+				outline: 3px solid rgba(37, 211, 102, 0.45);
 				outline-offset: 2px;
 			}
 
-			.gc-chat-launcher-icon {
+			.gc-whatsapp-launcher-icon {
 				display: inline-flex;
 				align-items: center;
 				justify-content: center;
@@ -108,7 +103,7 @@
 			}
 
 			@media (max-width: 640px) {
-				.gc-chat-launcher {
+				.gc-whatsapp-launcher {
 					display: none !important;
 				}
 			}
@@ -118,145 +113,31 @@
 	</head>
 	<body>
 		<div id="root"></div>
-		<button id="gc-chat-launcher" class="gc-chat-launcher" type="button" aria-label="Open live chat" title="Live chat">
-			<span class="gc-chat-launcher-icon" aria-hidden="true">
-				<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-					<path d="M7 17L3 21V5C3 3.9 3.9 3 5 3H19C20.1 3 21 3.9 21 5V15C21 16.1 20.1 17 19 17H7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+		<a
+			id="gc-whatsapp-launcher"
+			class="gc-whatsapp-launcher"
+			href="https://wa.me/"
+			target="_blank"
+			rel="noopener noreferrer"
+			aria-label="Open WhatsApp chat"
+			title="WhatsApp"
+		>
+			<span class="gc-whatsapp-launcher-icon" aria-hidden="true">
+				<svg width="18" height="18" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<path d="M16 3C9.38 3 4 8.23 4 14.67C4 17.15 4.79 19.45 6.14 21.36L4.27 29L12.17 27.19C13.97 28.14 15.96 28.67 18.07 28.67C24.69 28.67 30.07 23.44 30.07 17C30.07 10.56 24.69 5.33 18.07 5.33C17.37 5.33 16.68 5.39 16 5.5V3Z" fill="currentColor" opacity="0.2"/>
+					<path d="M26.73 5.24A15.16 15.16 0 0 0 16 1C7.71 1 1 7.59 1 15.72C1 18.28 1.67 20.77 2.95 22.95L1 31L9.32 29.08A15.2 15.2 0 0 0 16 30.44C24.29 30.44 31 23.85 31 15.72C31 11.67 29.39 7.89 26.73 5.24ZM16 27.88A12.55 12.55 0 0 1 9.61 26.14L9.16 25.88L4.22 27.02L5.39 22.24L5.1 21.77A12.33 12.33 0 0 1 3.63 15.72C3.63 9.01 9.18 3.56 16 3.56C19.3 3.56 22.39 4.82 24.73 7.1A12.07 12.07 0 0 1 28.37 15.72C28.37 22.44 22.82 27.88 16 27.88ZM22.89 18.66C22.51 18.47 20.64 17.55 20.29 17.42C19.94 17.28 19.69 17.23 19.44 17.61C19.19 17.99 18.48 18.84 18.26 19.09C18.04 19.35 17.82 19.37 17.43 19.18C15.12 18.05 13.61 16.93 12.33 14.73C11.99 14.16 12.67 13.89 13.3 12.66C13.43 12.39 13.36 12.17 13.27 11.98C13.17 11.79 12.4 9.97 12.08 9.2C11.77 8.44 11.45 8.54 11.21 8.53L10.58 8.52C10.33 8.52 9.93 8.62 9.6 8.98C9.28 9.35 8.36 10.22 8.36 11.99C8.36 13.76 9.65 15.47 9.83 15.71C10.01 15.95 12.32 19.45 15.86 20.94C18.1 21.88 18.98 21.96 19.67 21.86C20.46 21.75 22.1 20.96 22.45 20.02C22.8 19.08 22.8 18.27 22.69 18.08C22.58 17.89 22.32 17.79 21.95 17.6L22.89 18.66Z" fill="currentColor"/>
 				</svg>
 			</span>
-			<span>Live Chat</span>
-		</button>
-		<!--Start of Tawk.to Script-->
-		<script type="text/javascript">
-			var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
-			window.__gcTawkReady = false;
-			window.__gcTawkStartRequested = false;
-
-			window.__gcShowChatLauncher = function () {
-				var btn = document.getElementById("gc-chat-launcher");
-				if (!btn) return;
-				btn.classList.remove("is-hidden");
-			};
-
-			window.__gcHideChatLauncher = function () {
-				var btn = document.getElementById("gc-chat-launcher");
-				if (!btn) return;
-				btn.classList.add("is-hidden");
-			};
-
-			window.__gcOpenChat = function () {
-				if (window.Tawk_API) {
-					try {
-						if (typeof window.Tawk_API.showWidget === "function") {
-							window.Tawk_API.showWidget();
-						}
-						if (typeof window.Tawk_API.maximize === "function") {
-							window.Tawk_API.maximize();
-							return;
-						}
-						if (typeof window.Tawk_API.toggle === "function") {
-							window.Tawk_API.toggle();
-							return;
-						}
-					} catch (_) {}
-				}
-
-				var attempts = 0;
-				var maxAttempts = 25;
-
-				var tryOpen = function () {
-					attempts += 1;
-					if (!window.Tawk_API) {
-						if (attempts < maxAttempts) setTimeout(tryOpen, 200);
-						return;
-					}
-
-					if (!window.__gcTawkStartRequested && typeof window.Tawk_API.start === "function") {
-						window.__gcTawkStartRequested = true;
-						try {
-							window.Tawk_API.start({ showWidget: true });
-						} catch (_) {}
-					}
-
-					if (typeof window.Tawk_API.showWidget === "function") {
-						window.Tawk_API.showWidget();
-					}
-
-					if (typeof window.Tawk_API.maximize === "function") {
-						window.Tawk_API.maximize();
-						return;
-					}
-
-					if (typeof window.Tawk_API.toggle === "function") {
-						window.Tawk_API.toggle();
-						return;
-					}
-
-					if (typeof window.Tawk_API.popup === "function") {
-						window.Tawk_API.popup();
-						return;
-					}
-
-					if (attempts < maxAttempts) {
-						setTimeout(tryOpen, 200);
-					}
-				};
-
-				tryOpen();
-			};
-
-			Tawk_API.onLoad = function () {
-				window.__gcTawkReady = true;
-				if (window.Tawk_API && typeof window.Tawk_API.hideWidget === "function") {
-					window.Tawk_API.hideWidget();
-				}
-				window.__gcShowChatLauncher();
-			};
-
-			Tawk_API.onChatMinimized = function () {
-				window.__gcShowChatLauncher();
-				if (window.Tawk_API && typeof window.Tawk_API.hideWidget === "function") {
-					setTimeout(function () {
-						window.Tawk_API.hideWidget();
-					}, 100);
-				}
-			};
-
-			Tawk_API.onChatMaximized = function () {
-				window.__gcHideChatLauncher();
-			};
-
-			Tawk_API.onChatStarted = function () {
-				window.__gcHideChatLauncher();
-			};
-
-			Tawk_API.onChatEnded = function () {
-				window.__gcShowChatLauncher();
-			};
-
-			Tawk_API.onChatHidden = function () {
-				window.__gcShowChatLauncher();
-			};
+			<span>WhatsApp</span>
+		</a>
+		<script>
 			(function () {
-				var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
-				s1.async = true;
-				s1.src = "https://embed.tawk.to/69aaddc8884aa31c34e8355a/1jj1n4m9q";
-				s1.charset = "UTF-8";
-				s1.setAttribute("crossorigin", "*");
-				s0.parentNode.insertBefore(s1, s0);
-			})();
-		</script>
-		<!--End of Tawk.to Script-->
-		<script type="text/javascript">
-			(function () {
-				var btn = document.getElementById("gc-chat-launcher");
+				var btn = document.getElementById("gc-whatsapp-launcher");
 				if (!btn) return;
 
-				btn.addEventListener("click", function () {
-					if (typeof window.__gcOpenChat === "function") {
-						window.__gcOpenChat();
-					}
-				});
+				var phoneCodes = [49, 57, 53, 54, 50, 52, 52, 55, 48, 48, 50];
+				var phone = phoneCodes.map(function (code) { return String.fromCharCode(code); }).join("");
+				btn.href = "https://wa.me/" + phone;
 			})();
 		</script>
 		<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "9eac9038ad82441a92e3ee14d85871d2"}'></script><!-- End Cloudflare Web Analytics -->
