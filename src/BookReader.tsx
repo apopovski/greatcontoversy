@@ -1,7 +1,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import './BookReader.css';
-import { MdMenu, MdTranslate, MdSearch, MdDarkMode, MdLightMode, MdContentCopy, MdShare, MdClose, MdMoreVert, MdBookmarkBorder, MdBookmark, MdDownload, MdCheckCircle, MdPrivacyTip, MdHeadphones, MdPlayArrow } from 'react-icons/md';
+import { MdMenu, MdTranslate, MdSearch, MdDarkMode, MdLightMode, MdContentCopy, MdShare, MdClose, MdMoreVert, MdBookmarkBorder, MdBookmark, MdDownload, MdCheckCircle, MdPrivacyTip, MdHeadphones, MdPlayArrow, MdFavorite } from 'react-icons/md';
 import { FaFacebookF, FaXTwitter, FaWhatsapp } from 'react-icons/fa6';
 import { IoMdMail } from 'react-icons/io';
 import AudioPlayer, { AUDIO_AVAILABLE_LANGUAGE_FOLDERS } from './components/AudioPlayer';
@@ -110,10 +110,14 @@ const MALAY_SOURCE_PATH = '/book-content/txt/GC-Indonesian.txt';
 const URDU_FOLDER = 'Urdu - Ellen G. White';
 const URDU_SOURCE_PATH = '/book-content/txt/GC-Urdu.txt';
 const FRENCH_FOLDER = 'French - Ellen G. White';
+const POLISH_FOLDER = 'Wielki boj - Ellen G. White';
 const ALBANIAN_FOLDER = 'Beteja e Madhe - Ellen G. White';
 const ALBANIAN_SOURCE_PATH = '/book-content/txt/GC-Albanian.txt';
 const HUNGARIAN_FOLDER = 'A nagy küzdelem - Ellen G. White';
 const GREEK_FOLDER = 'Η Μεγάλη Διαμάχη - Ellen G. White';
+const POLISH_QUESTIONS_EMAIL = 'office@fzz.pl';
+const POLISH_PRINT_ORDER_EMAIL = 'marketing@fzz.pl';
+const STRIPE_DONATE_URL = 'https://donate.stripe.com/4gM4gt6Vqb1s4w4e7Kd3i00';
 const DEFAULT_CONTACT_WHATSAPP_NUMBER = '19562447002';
 const CONTACT_WHATSAPP_NUMBERS: Record<string, string> = {
   'Der grosse Kampf - Ellen G. White': '4915753992703',
@@ -3246,6 +3250,24 @@ export default function BookReader() {
     setShowMoreMenu(false);
   };
 
+  const openPolishQuestionsEmail = () => {
+    const subject = 'Pytanie dotyczące książki Wielki bój';
+    window.location.href = `mailto:${POLISH_QUESTIONS_EMAIL}?subject=${encodeURIComponent(subject)}`;
+    setShowMoreMenu(false);
+  };
+
+  const openPolishPrintOrderEmail = () => {
+    const subject = 'Zamówienie drukowanego egzemplarza książki Wielki bój';
+    window.location.href = `mailto:${POLISH_PRINT_ORDER_EMAIL}?subject=${encodeURIComponent(subject)}`;
+    setShowMoreMenu(false);
+  };
+
+  const handleStripeDonate = () => {
+    window.open(STRIPE_DONATE_URL, '_blank', 'noopener,noreferrer');
+    setShowShareMenu(false);
+    setShowMoreMenu(false);
+  };
+
 
   useEffect(() => {
     // When language changes, clear previous content immediately and try to
@@ -4271,6 +4293,11 @@ export default function BookReader() {
   const noContentsAvailableLabel = lang === CHINESE_FOLDER ? '暂无目录' : 'No contents available';
   const contactWhatsAppLabel = CONTACT_WHATSAPP_LABELS[lang] || 'Contact on WhatsApp';
   const contactWhatsAppWithNumberLabel = `${contactWhatsAppLabel}: ${getContactWhatsAppDisplayNumber(lang)}`;
+  const isPolishContactLanguage = lang === POLISH_FOLDER;
+  const contactQuestionsLabel = isPolishContactLanguage
+    ? `Pytania: ${POLISH_QUESTIONS_EMAIL}`
+    : contactWhatsAppLabel;
+  const contactPrintOrderLabel = `Zamów drukowany egzemplarz: ${POLISH_PRINT_ORDER_EMAIL}`;
   const continueLabel = LANGUAGE_CONTINUE_LABELS[lang] || 'Continue';
   const hasLanguageAudio = AUDIO_AVAILABLE_LANGUAGE_FOLDERS.has(lang);
   const playChapterAudioLabel = 'Play chapter audio';
@@ -4508,11 +4535,11 @@ export default function BookReader() {
 
               <button
                 className="reader-whatsapp-icon"
-                onClick={handleWhatsAppContact}
-                aria-label={contactWhatsAppWithNumberLabel}
-                title={contactWhatsAppWithNumberLabel}
+                onClick={isPolishContactLanguage ? openPolishQuestionsEmail : handleWhatsAppContact}
+                aria-label={isPolishContactLanguage ? contactQuestionsLabel : contactWhatsAppWithNumberLabel}
+                title={isPolishContactLanguage ? contactQuestionsLabel : contactWhatsAppWithNumberLabel}
               >
-                <FaWhatsapp size={22} />
+                {isPolishContactLanguage ? <IoMdMail size={22} /> : <FaWhatsapp size={22} />}
               </button>
 
               {/* Mobile expand (More) menu */}
@@ -4616,13 +4643,30 @@ export default function BookReader() {
             <FaXTwitter size={16} />
             <span>X (Twitter)</span>
           </button>
-          <button onClick={handleWhatsAppContact} aria-label={contactWhatsAppLabel}>
-            <FaWhatsapp size={18} />
-            <span>{contactWhatsAppLabel}</span>
-          </button>
+          {isPolishContactLanguage ? (
+            <>
+              <button onClick={openPolishQuestionsEmail} aria-label={contactQuestionsLabel}>
+                <IoMdMail size={18} />
+                <span>{contactQuestionsLabel}</span>
+              </button>
+              <button onClick={openPolishPrintOrderEmail} aria-label={contactPrintOrderLabel}>
+                <IoMdMail size={18} />
+                <span>{contactPrintOrderLabel}</span>
+              </button>
+            </>
+          ) : (
+            <button onClick={handleWhatsAppContact} aria-label={contactWhatsAppLabel}>
+              <FaWhatsapp size={18} />
+              <span>{contactWhatsAppLabel}</span>
+            </button>
+          )}
           <button onClick={() => handleShareApp('email')} aria-label="Share via Email">
             <IoMdMail size={18} />
             <span>Email</span>
+          </button>
+          <button onClick={handleStripeDonate} aria-label="Donate via Stripe">
+            <MdFavorite size={18} />
+            <span>Donate</span>
           </button>
         </div>
       )}
@@ -4697,13 +4741,30 @@ export default function BookReader() {
             <FaXTwitter size={16} />
             <span>X (Twitter)</span>
           </button>
-          <button onClick={handleWhatsAppContact} aria-label={contactWhatsAppLabel}>
-            <FaWhatsapp size={18} />
-            <span>{contactWhatsAppLabel}</span>
-          </button>
+          {isPolishContactLanguage ? (
+            <>
+              <button onClick={openPolishQuestionsEmail} aria-label={contactQuestionsLabel}>
+                <IoMdMail size={18} />
+                <span>{contactQuestionsLabel}</span>
+              </button>
+              <button onClick={openPolishPrintOrderEmail} aria-label={contactPrintOrderLabel}>
+                <IoMdMail size={18} />
+                <span>{contactPrintOrderLabel}</span>
+              </button>
+            </>
+          ) : (
+            <button onClick={handleWhatsAppContact} aria-label={contactWhatsAppLabel}>
+              <FaWhatsapp size={18} />
+              <span>{contactWhatsAppLabel}</span>
+            </button>
+          )}
           <button onClick={() => handleShareApp('email')} aria-label="Share via Email">
             <IoMdMail size={18} />
             <span>Email</span>
+          </button>
+          <button onClick={handleStripeDonate} aria-label="Donate via Stripe">
+            <MdFavorite size={18} />
+            <span>Donate</span>
           </button>
         </div>
       )}
