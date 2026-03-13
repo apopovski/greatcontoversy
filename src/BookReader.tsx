@@ -4542,6 +4542,15 @@ export default function BookReader() {
                 {isPolishContactLanguage ? <IoMdMail size={22} /> : <FaWhatsapp size={22} />}
               </button>
 
+              <button
+                className="reader-donate-icon"
+                onClick={handleStripeDonate}
+                aria-label="Donate via Stripe"
+                title="Donate"
+              >
+                <MdFavorite size={20} />
+              </button>
+
               {/* Mobile expand (More) menu */}
               <button
                 className="reader-more-icon"

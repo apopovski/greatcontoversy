@@ -237,6 +237,22 @@ html,body,#root,.reader-root{height:100%;margin:0;padding:0;background:var(--rea
   background:rgba(37,211,102,0.12);
 }
 
+.reader-donate-icon{
+  background:none;
+  border:0;
+  padding:6px;
+  border-radius:6px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  color:inherit;
+}
+.reader-donate-icon:hover{
+  color:#e2558f;
+  background:rgba(226,85,143,0.12);
+}
+
 
 .reader-more-icon{
   background:none;
@@ -561,10 +577,11 @@ span.dropcap {
   .reader-lang-icon { order: 3; }
   .reader-share-icon { order: 4; }
   .reader-whatsapp-icon { order: 5; }
+  .reader-donate-icon { order: 6; }
   /* Appearance controls at the end */
-  .reader-text-size-controls { order: 6; }
-  .reader-darkmode-toggle { order: 7; }
-  .reader-width-control { order: 8; }
+  .reader-text-size-controls { order: 7; }
+  .reader-darkmode-toggle { order: 8; }
+  .reader-width-control { order: 9; }
 }
 
 /* RTL desktop layout */
@@ -580,9 +597,10 @@ span.dropcap {
   html[dir='rtl'] .reader-lang-icon { order: 5; }
   html[dir='rtl'] .reader-share-icon { order: 4; }
   html[dir='rtl'] .reader-whatsapp-icon { order: 3; }
-  html[dir='rtl'] .reader-text-size-controls { order: 2; }
-  html[dir='rtl'] .reader-darkmode-toggle { order: 1; }
-  html[dir='rtl'] .reader-width-control { order: 0; }
+  html[dir='rtl'] .reader-donate-icon { order: 2; }
+  html[dir='rtl'] .reader-text-size-controls { order: 1; }
+  html[dir='rtl'] .reader-darkmode-toggle { order: 0; }
+  html[dir='rtl'] .reader-width-control { order: -1; }
 }
 .reader-wrapper,.reader-main{position:relative;z-index:1}
 
@@ -634,6 +652,7 @@ span.dropcap {
   .reader-lang-icon { display:none !important; }
   .reader-share-icon { display:none !important; }
   .reader-whatsapp-icon { display:none !important; }
+  .reader-donate-icon { display:none !important; }
   .reader-darkmode-toggle { display:none !important; }
   .reader-bookmark-btn { order: 1; }
   .reader-text-size-controls { order: 3; display:flex !important; align-items:center; gap:6px; }
