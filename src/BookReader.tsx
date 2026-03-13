@@ -4549,6 +4549,7 @@ export default function BookReader() {
                 title="Donate"
               >
                 <MdFavorite size={20} />
+                <span>Donate</span>
               </button>
 
               {/* Mobile expand (More) menu */}

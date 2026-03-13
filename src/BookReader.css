@@ -238,19 +238,30 @@ html,body,#root,.reader-root{height:100%;margin:0;padding:0;background:var(--rea
 }
 
 .reader-donate-icon{
-  background:none;
-  border:0;
-  padding:6px;
-  border-radius:6px;
+  background:linear-gradient(180deg, rgba(226,85,143,0.18), rgba(226,85,143,0.12));
+  border:1px solid rgba(226,85,143,0.34);
+  padding:7px 12px;
+  border-radius:999px;
   display:inline-flex;
   align-items:center;
   justify-content:center;
+  gap:6px;
   cursor:pointer;
   color:inherit;
+  font-weight:700;
+  line-height:1;
+  box-shadow:0 6px 18px rgba(226,85,143,0.14);
+  transition:transform 120ms ease, box-shadow 180ms ease, background 180ms ease, color 180ms ease;
 }
 .reader-donate-icon:hover{
   color:#e2558f;
-  background:rgba(226,85,143,0.12);
+  background:linear-gradient(180deg, rgba(226,85,143,0.24), rgba(226,85,143,0.16));
+  box-shadow:0 10px 24px rgba(226,85,143,0.22);
+  transform:translateY(-1px);
+}
+.reader-donate-icon span{
+  font-size:0.92rem;
+  white-space:nowrap;
 }
 
 
@@ -652,12 +663,18 @@ span.dropcap {
   .reader-lang-icon { display:none !important; }
   .reader-share-icon { display:none !important; }
   .reader-whatsapp-icon { display:none !important; }
-  .reader-donate-icon { display:none !important; }
+  .reader-donate-icon {
+    display:inline-flex !important;
+    order: 5;
+    padding:6px 10px;
+    gap:5px;
+    flex-shrink: 0;
+  }
   .reader-darkmode-toggle { display:none !important; }
   .reader-bookmark-btn { order: 1; }
   .reader-text-size-controls { order: 3; display:flex !important; align-items:center; gap:6px; }
   .reader-search-icon { order: 4; flex-shrink: 0; position: static; right: auto; top: auto; transform: none; }
-  .reader-more-icon { display:inline-flex !important; order: 5; margin-left: 0; }
+  .reader-more-icon { display:inline-flex !important; order: 6; margin-left: 0; }
   
   /* Text size controls - combine into single button visually */
   .reader-text-size-btn { padding:4px 6px; font-size:0.9rem; }
@@ -670,6 +687,8 @@ span.dropcap {
   .reader-next-chapter,
   .reader-search-icon,
   .reader-share-icon { padding: 4px; }
+
+  .reader-donate-icon span { font-size:0.86rem; }
 }
 
 @media (max-width:900px) {
