@@ -1235,11 +1235,14 @@ function extractExternalReadLinkFromChapterHtml(html: string) {
   }
 }
 
-function extractEgwReadableChapterHtml(rawHtml: string, fallbackTitle: string) {
+function extractEgwReadableChapterHtml(rawHtml: string, fallbackTitle: string, preferredTitle?: string | null) {
   try {
     const doc = new DOMParser().parseFromString(rawHtml || '', 'text/html');
 
-    let title = (doc.querySelector('h1')?.textContent || '').trim();
+    let title = (preferredTitle || '').trim();
+    if (!title) {
+      title = (doc.querySelector('h1')?.textContent || '').trim();
+    }
     if (!title) {
       const t = (doc.querySelector('title')?.textContent || '').trim();
       title = t.split('|')[0]?.trim() || '';
@@ -3908,7 +3911,8 @@ export default function BookReader() {
       .then((raw) => {
         if (cancelled) return;
         const fallbackTitle = external.title || toc[chapterIdx]?.title || `${LANGUAGE_CHAPTER_LABELS[lang] || 'Chapter'} ${chapterIdx + 1}`;
-        const hydrated = extractEgwReadableChapterHtml(raw, fallbackTitle);
+        const preferredTitle = lang === DUTCH_FOLDER ? fallbackTitle : null;
+        const hydrated = extractEgwReadableChapterHtml(raw, fallbackTitle, preferredTitle);
         if (!hydrated) return;
         chapterCache.current.set(chapterIdx, hydrated);
         plainTextCache.current.set(chapterIdx, hydrated.replace(/<[^>]+>/g, ' '));
