@@ -107,6 +107,7 @@ const INDONESIAN_FOLDER = 'Indonesian - Ellen G. White';
 const INDONESIAN_SOURCE_PATH = '/book-content/txt/GC-Indonesian.txt';
 const MALAY_FOLDER = 'Kontroversi Besar - Ellen G. White';
 const MALAY_SOURCE_PATH = '/book-content/txt/GC-Indonesian.txt';
+const DUTCH_FOLDER = 'De Grote Strijd - Ellen G. White';
 const URDU_FOLDER = 'Urdu - Ellen G. White';
 const URDU_SOURCE_PATH = '/book-content/txt/GC-Urdu.txt';
 const FRENCH_FOLDER = 'French - Ellen G. White';
@@ -131,6 +132,7 @@ const DEVELOPER_BY_LABELS: Record<string, string> = {
   es: 'Desarrollado por',
   de: 'Entwickelt von',
   it: 'Sviluppato da',
+  nl: 'Ontwikkeld door',
   da: 'Udviklet af',
   no: 'Utviklet av',
   pt: 'Desenvolvido por',
@@ -168,6 +170,7 @@ const CONTACT_WHATSAPP_LABELS: Record<string, string> = {
   'El Conflicto de los Siglos - Ellen G. White': 'Contactar por WhatsApp',
   'Der grosse Kampf - Ellen G. White': 'Kontakt per WhatsApp',
   'Il gran conflitto - Ellen G. White': 'Contatta su WhatsApp',
+  [DUTCH_FOLDER]: 'Contact via WhatsApp',
   'MOD EN BEDRE FREMTID - Ellen G. White': 'Kontakt på WhatsApp',
   'Mot historiens klimaks - Ellen G. White': 'Kontakt på WhatsApp',
   'O Grande Conflito - Ellen G. White': 'Contato no WhatsApp',
@@ -244,6 +247,7 @@ const LANGUAGE_FOLDERS = [
   'El Conflicto de los Siglos - Ellen G. White',
   'Der grosse Kampf - Ellen G. White',
   'Il gran conflitto - Ellen G. White',
+  DUTCH_FOLDER,
   'MOD EN BEDRE FREMTID - Ellen G. White',
   'Mot historiens klimaks - Ellen G. White',
   'O Grande Conflito - Ellen G. White',
@@ -281,6 +285,7 @@ const LANGUAGE_ABBREV: Record<string, string> = {
   'El Conflicto de los Siglos - Ellen G. White': 'es',
   'Der grosse Kampf - Ellen G. White': 'de',
   'Il gran conflitto - Ellen G. White': 'it',
+  [DUTCH_FOLDER]: 'nl',
   'MOD EN BEDRE FREMTID - Ellen G. White': 'da',
   'Mot historiens klimaks - Ellen G. White': 'no',
   'O Grande Conflito - Ellen G. White': 'pt',
@@ -318,6 +323,7 @@ const CONTACT_WHATSAPP_AUTO_MESSAGES: Record<string, string> = {
   es: 'Hola, me gustaría conectar.',
   de: 'Hallo, ich möchte gerne Kontakt aufnehmen.',
   it: 'Ciao, vorrei mettermi in contatto.',
+  nl: 'Hallo, ik wil graag contact opnemen.',
   da: 'Hej, jeg vil gerne komme i kontakt.',
   no: 'Hei, jeg vil gjerne ta kontakt.',
   pt: 'Olá, gostaria de entrar em contato.',
@@ -355,6 +361,7 @@ const BOOK_TITLE_OVERRIDES: Record<string, string> = {
   'El Conflicto de los Siglos - Ellen G. White': 'El Conflicto de los Siglos',
   'Der grosse Kampf - Ellen G. White': 'Der große Kampf',
   'Il gran conflitto - Ellen G. White': 'Il gran conflitto',
+  [DUTCH_FOLDER]: 'De Grote Strijd',
   'MOD EN BEDRE FREMTID - Ellen G. White': 'Mod en bedre fremtid',
   'Mot historiens klimaks - Ellen G. White': 'Mot historiens klimaks',
   'O Grande Conflito - Ellen G. White': 'O Grande Conflito',
@@ -392,6 +399,7 @@ const META_TAGLINES: Record<string, string> = {
   es: 'Conflicto cósmico entre el bien y el mal',
   de: 'Kosmischer Konflikt zwischen Gut und Böse',
   it: 'Conflitto cosmico tra il bene e il male',
+  nl: 'Kosmisch conflict tussen goed en kwaad',
   da: 'Kosmisk konflikt mellem godt og ondt',
   no: 'Kosmisk konflikt mellom godt og ondt',
   pt: 'Conflito cósmico entre o bem e o mal',
@@ -432,6 +440,7 @@ const LANGUAGE_URL_NAMES: Record<string, string> = {
   'El Conflicto de los Siglos - Ellen G. White': 'Español',
   'Der grosse Kampf - Ellen G. White': 'Deutsch',
   'Il gran conflitto - Ellen G. White': 'Italiano',
+  [DUTCH_FOLDER]: 'Nederlands',
   'MOD EN BEDRE FREMTID - Ellen G. White': 'Dansk',
   'Mot historiens klimaks - Ellen G. White': 'Norsk',
   'O Grande Conflito - Ellen G. White': 'Português',
@@ -482,6 +491,7 @@ const LANGUAGE_CHAPTER_LABELS: Record<string, string> = {
   'El Conflicto de los Siglos - Ellen G. White': 'Capítulo',
   'Der grosse Kampf - Ellen G. White': 'Kapitel',
   'Il gran conflitto - Ellen G. White': 'Capitolo',
+  [DUTCH_FOLDER]: 'Hoofdstuk',
   'MOD EN BEDRE FREMTID - Ellen G. White': 'Kapitel',
   'Mot historiens klimaks - Ellen G. White': 'Kapittel',
   'O Grande Conflito - Ellen G. White': 'Capítulo',
@@ -519,6 +529,7 @@ const LANGUAGE_CONTENTS_LABELS: Record<string, string> = {
   'El Conflicto de los Siglos - Ellen G. White': 'Contenido',
   'Der grosse Kampf - Ellen G. White': 'Inhalt',
   'Il gran conflitto - Ellen G. White': 'Indice',
+  [DUTCH_FOLDER]: 'Inhoud',
   'MOD EN BEDRE FREMTID - Ellen G. White': 'Indhold',
   'Mot historiens klimaks - Ellen G. White': 'Innhold',
   'O Grande Conflito - Ellen G. White': 'Conteúdo',
@@ -556,6 +567,7 @@ const LANGUAGE_CONTINUE_LABELS: Record<string, string> = {
   'El Conflicto de los Siglos - Ellen G. White': 'Continuar',
   'Der grosse Kampf - Ellen G. White': 'Weiter',
   'Il gran conflitto - Ellen G. White': 'Continua',
+  [DUTCH_FOLDER]: 'Verder',
   'MOD EN BEDRE FREMTID - Ellen G. White': 'Fortsæt',
   'Mot historiens klimaks - Ellen G. White': 'Fortsett',
   'O Grande Conflito - Ellen G. White': 'Continuar',
@@ -632,6 +644,15 @@ const HERO_COPY: Record<string, {
     startReading: 'Inizia a leggere',
     chooseLanguage: 'Scegli lingua',
     availability: 'Disponibile in 30 lingue • Letto in tutto il mondo',
+  },
+  nl: {
+    line1: 'Rijken zijn opgekomen.',
+    line2: 'De waarheid is onderdrukt.',
+    line3: 'De profetie is vervuld.',
+    line4: 'Wat komt hierna?',
+    startReading: 'Begin met lezen',
+    chooseLanguage: 'Kies taal',
+    availability: 'Beschikbaar in vele talen • Wereldwijd gelezen',
   },
   da: {
     line1: 'Imperier er rejst.',
@@ -901,6 +922,7 @@ const COPY_TOAST_LABELS: Record<string, string> = {
   es: 'Copiado',
   de: 'Kopiert',
   it: 'Copiato',
+  nl: 'Gekopieerd',
   da: 'Kopieret',
   no: 'Kopiert',
   pt: 'Copiado',
@@ -937,6 +959,7 @@ const AUDIO_AVAILABLE_LABELS: Record<string, string> = {
   es: 'Audio disponible',
   de: 'Audio verfügbar',
   it: 'Audio disponibile',
+  nl: 'Audio beschikbaar',
   da: 'Lyd tilgængelig',
   no: 'Lyd tilgjengelig',
   pt: 'Áudio disponível',
@@ -1481,7 +1504,69 @@ function escapeHtml(input: string) {
     .replace(/'/g, '&#39;');
 }
 
-const EXTERNAL_HYDRATION_LANGS = new Set<string>();
+const DUTCH_EXTERNAL_CHAPTERS: Array<{ title: string; href: string }> = [
+  { title: 'Voorwoord', href: 'https://text.egwwritings.org/read/11453.7' },
+  { title: 'Inleiding', href: 'https://text.egwwritings.org/read/11453.24' },
+  { title: 'Hoofdstuk 1 — De Verwoesting van Jeruzalem', href: 'https://text.egwwritings.org/read/11453.69' },
+  { title: 'Hoofdstuk 2 — Vervolging in de Eerste Eeuwen', href: 'https://text.egwwritings.org/read/11453.165' },
+  { title: 'Hoofdstuk 3 — De Afval', href: 'https://text.egwwritings.org/read/11453.210' },
+  { title: 'Hoofdstuk 4 — De Waldenzen', href: 'https://text.egwwritings.org/read/11453.273' },
+  { title: 'Hoofdstuk 5 — Johannes Wycliffe', href: 'https://text.egwwritings.org/read/11453.358' },
+  { title: 'Hoofdstuk 6 — Huss en Jerome', href: 'https://text.egwwritings.org/read/11453.443' },
+  { title: 'Hoofdstuk 7 — Luthers Afscheiding van Rome', href: 'https://text.egwwritings.org/read/11453.563' },
+  { title: 'Hoofdstuk 8 — Luther voor de Rijksdag', href: 'https://text.egwwritings.org/read/11453.688' },
+  { title: 'Hoofdstuk 9 — De Zwitserse Hervormer', href: 'https://text.egwwritings.org/read/11453.816' },
+  { title: 'Hoofdstuk 10 — Voortgang van de Hervorming in Duitschland', href: 'https://text.egwwritings.org/read/11453.882' },
+  { title: 'Hoofdstuk 11 — Protest van de Vorsten', href: 'https://text.egwwritings.org/read/11453.948' },
+  { title: 'Hoofdstuk 12 — De Hervorming in Frankrijk', href: 'https://text.egwwritings.org/read/11453.1019' },
+  { title: 'Hoofdstuk 13 — In de Nederlanden en Skandinavië', href: 'https://text.egwwritings.org/read/11453.1143' },
+  { title: 'Hoofdstuk 14 — Latere Engelse Hervormers', href: 'https://text.egwwritings.org/read/11453.1181' },
+  { title: 'Hoofdstuk 15 — De Bijbel en de Franse Revolutie', href: 'https://text.egwwritings.org/read/11453.1280' },
+  { title: 'Hoofdstuk 16 — De Pelgrimvaders', href: 'https://text.egwwritings.org/read/11453.1397' },
+  { title: 'Hoofdstuk 17 — Voorlopers van de Morgen', href: 'https://text.egwwritings.org/read/11453.1449' },
+  { title: 'Hoofdstuk 18 — Een Amerikaanse Hervormer', href: 'https://text.egwwritings.org/read/11453.1538' },
+  { title: 'Hoofdstuk 19 — Licht in de Duisternis', href: 'https://text.egwwritings.org/read/11453.1655' },
+  { title: 'Hoofdstuk 20 — Een Grote Godsdienstige Opwekking', href: 'https://text.egwwritings.org/read/11453.1710' },
+  { title: 'Hoofdstuk 21 — Een Waarschuwing Verworpen', href: 'https://text.egwwritings.org/read/11453.1803' },
+  { title: 'Hoofdstuk 22 — Profetieen Vervuld', href: 'https://text.egwwritings.org/read/11453.1883' },
+  { title: 'Hoofdstuk 23 — Wat is het Heiligdom?', href: 'https://text.egwwritings.org/read/11453.1967' },
+  { title: 'Hoofdstuk 24 — In het Heilige der Heiligen', href: 'https://text.egwwritings.org/read/11453.2037' },
+  { title: 'Hoofdstuk 25 — Gods Wet Onveranderlik', href: 'https://text.egwwritings.org/read/11453.2081' },
+  { title: 'Hoofdstuk 26 — Een Hervormingswerk', href: 'https://text.egwwritings.org/read/11453.2167' },
+  { title: 'Hoofdstuk 27 — Opwekkingen in de Laatste Tijd', href: 'https://text.egwwritings.org/read/11453.2216' },
+  { title: 'Hoofdstuk 28 — Het Onderzoekend Oordeel', href: 'https://text.egwwritings.org/read/11453.2303' },
+  { title: 'Hoofdstuk 29 — De Oorsprong van het Kwaad', href: 'https://text.egwwritings.org/read/11453.2366' },
+  { title: 'Hoofdstuk 30 — Vijandschap tussen de Mens en Satan', href: 'https://text.egwwritings.org/read/11453.2428' },
+  { title: 'Hoofdstuk 31 — Het Werk van Boze Geesten', href: 'https://text.egwwritings.org/read/11453.2459' },
+  { title: 'Hoofdstuk 32 — Strikken van de Satan', href: 'https://text.egwwritings.org/read/11453.2492' },
+  { title: 'Hoofdstuk 33 — Het Eerste Grote Bedrog', href: 'https://text.egwwritings.org/read/11453.2561' },
+  { title: 'Hoofdstuk 34 — Spiritualisme', href: 'https://text.egwwritings.org/read/11453.2658' },
+  { title: 'Hoofdstuk 35 — Doeleinden van het Pausdom', href: 'https://text.egwwritings.org/read/11453.2709' },
+  { title: 'Hoofdstuk 36 — De Naderende Strijd', href: 'https://text.egwwritings.org/read/11453.2806' },
+  { title: 'Hoofdstuk 37 — De Schriften een Bron van Veiligheid', href: 'https://text.egwwritings.org/read/11453.2858' },
+  { title: 'Hoofdstuk 38 — De Laatste Waarschuwing', href: 'https://text.egwwritings.org/read/11453.2907' },
+  { title: 'Hoofdstuk 39 — “De Tijd der Benauwdheid”', href: 'https://text.egwwritings.org/read/11453.2951' },
+  { title: 'Hoofdstuk 40 — Gods Volk Verlost', href: 'https://text.egwwritings.org/read/11453.3055' },
+  { title: 'Hoofdstuk 41 — Verwoesting van de Aarde', href: 'https://text.egwwritings.org/read/11453.3136' },
+  { title: 'Hoofdstuk 42 — Het Einde van de Strijd', href: 'https://text.egwwritings.org/read/11453.3181' },
+  { title: 'Aanhangsel', href: 'https://text.egwwritings.org/read/11453.3268' },
+  { title: 'Algemene aantekeningen', href: 'https://text.egwwritings.org/read/11453.3269' },
+  { title: 'De katholieke encyclopedie', href: 'https://text.egwwritings.org/read/11453.3271' },
+  { title: 'Biografiese aantekeningen', href: 'https://text.egwwritings.org/read/11453.3385' },
+];
+
+function buildExternalChapterBook(entries: Array<{ title: string; href: string }>, linkLabel: string) {
+  const toc = entries.map((entry, idx) => ({ title: entry.title, href: `#external-ch-${idx + 1}` }));
+  const chapterIds = toc.map((entry) => entry.href.replace(/^#/, ''));
+  const chapterHtml = entries.map((entry, idx) => {
+    const chapterId = chapterIds[idx];
+    return `<div id="${chapterId}"><h2 class="chapterhead">${escapeHtml(entry.title)}</h2><p><a href="${escapeHtml(entry.href)}" target="_blank" rel="noreferrer">${escapeHtml(linkLabel)}</a></p></div>`;
+  });
+
+  return { toc, chapterIds, chapterHtml };
+}
+
+const EXTERNAL_HYDRATION_LANGS = new Set<string>([DUTCH_FOLDER]);
 
 function parseAmharicBook(raw: string): { toc: TocEntry[]; chapterIds: string[]; chapterHtml: string[] } {
   const lines = (raw || '').replace(/\r\n?/g, '\n').split('\n');
@@ -3302,6 +3387,36 @@ export default function BookReader() {
       }
       throw new Error('Not found');
     };
+
+    if (lang === DUTCH_FOLDER) {
+      const parsed = buildExternalChapterBook(DUTCH_EXTERNAL_CHAPTERS, 'Lees brontekst');
+      setToc(parsed.toc);
+      setChapterIds(parsed.chapterIds);
+      setBookDoc(null);
+
+      chapterCache.current.clear();
+      plainTextCache.current.clear();
+      parsed.chapterHtml.forEach((html, i) => {
+        chapterCache.current.set(i, html);
+        plainTextCache.current.set(i, html.replace(/<[^>]+>/g, ' '));
+      });
+
+      const desiredNumber = pendingChapterNumberRef.current;
+      const desiredIdx = pendingChapterIdxRef.current;
+      if (typeof desiredNumber === 'number') {
+        const matchIdx = parsed.toc.findIndex((entry) => getChapterNumber(entry.title) === desiredNumber);
+        setChapterIdx(matchIdx >= 0 ? matchIdx : 0);
+      } else if (typeof desiredIdx === 'number' && desiredIdx >= 0 && desiredIdx < parsed.chapterIds.length) {
+        setChapterIdx(desiredIdx);
+      } else {
+        setChapterIdx(0);
+      }
+
+      pendingChapterIdxRef.current = null;
+      pendingChapterNumberRef.current = null;
+      setLoading(false);
+      return;
+    }
 
     if (lang === AMHARIC_FOLDER || lang === CHINESE_FOLDER || lang === KOREAN_FOLDER || lang === JAPANESE_FOLDER || lang === SERBIAN_FOLDER || lang === FARSI_FOLDER || lang === AFRIKAANS_FOLDER || lang === HINDI_FOLDER || lang === BENGALI_FOLDER || lang === INDONESIAN_FOLDER || lang === MALAY_FOLDER || lang === URDU_FOLDER || lang === ALBANIAN_FOLDER) {
       const sourcePath =

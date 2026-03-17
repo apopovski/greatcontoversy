@@ -16,6 +16,7 @@ export const LANGUAGE_NAMES: Record<string, string> = {
   'El Conflicto de los Siglos - Ellen G. White': 'Spanish',
   'Der grosse Kampf - Ellen G. White': 'German',
   'Il gran conflitto - Ellen G. White': 'Italian',
+  'De Grote Strijd - Ellen G. White': 'Dutch',
   'MOD EN BEDRE FREMTID - Ellen G. White': 'Danish',
   'Mot historiens klimaks - Ellen G. White': 'Norwegian',
   'O Grande Conflito - Ellen G. White': 'Portuguese',
